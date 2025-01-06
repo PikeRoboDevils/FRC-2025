@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -11,6 +12,7 @@ import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
+import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
 import swervelib.motors.SwerveMotor;
@@ -65,6 +67,24 @@ public class RealSwerve implements SwerveIO {
 
     }
 
+    @Override
+    public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX,double headingY) {
+        return swerveDrive.swerveController.getTargetSpeeds(xInput, yInput, headingX, headingY, getHeading().getRadians(), maxSpeed);
+    }
+    @Override
+    public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d heading) {
+        return swerveDrive.swerveController.getTargetSpeeds(xInput,yInput,heading.getRadians(),getHeading().getRadians(),maxSpeed);
+    }
+    
+    @Override
+    public double getMaxVelocity() {
+        return swerveDrive.getMaximumChassisVelocity();
+    }
+
+    @Override
+    public SwerveController getController() {
+        return swerveDrive.getSwerveController();
+    }
 
     @Override
     public void driveChasisSpeeds(ChassisSpeeds velocity) {
@@ -117,7 +137,7 @@ public class RealSwerve implements SwerveIO {
     }
 
     @Override
-    public void moduleLock() {
+    public void lockPose() {
         swerveDrive.lockPose();
     }
 

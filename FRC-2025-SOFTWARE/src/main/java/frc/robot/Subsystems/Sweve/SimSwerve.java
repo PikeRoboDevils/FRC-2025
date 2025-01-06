@@ -61,7 +61,7 @@ public void updateInputs(SwerveIOInputs inputs) {}
     public void zeroGyro() {}
 
     @Override
-    public void moduleLock() {}
+    public void lockPose() {}
 
     @Override
     public boolean isRedAlliance() {

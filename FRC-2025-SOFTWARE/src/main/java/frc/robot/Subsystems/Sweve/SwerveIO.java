@@ -9,7 +9,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Force;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveDriveConfiguration;
 
@@ -88,16 +90,26 @@ public interface SwerveIO {
 
     public default void zeroGyro() {}
 
-    public default void moduleLock() {}
+    public default void lockPose() {}
+
+    public default double getMaxVelocity() {
+        return 0;
+    }
+    public default double getMaxAnglularVelocity() {
+        return 0;
+    }
 
     public default boolean isRedAlliance() {
         return false;
     }
 
-    public default ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle) {
+    public default ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX,double headingY) {
         return null;
     }
-
+    public default ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d heading) {
+        return null;
+    }
+    
     public default Pose2d getPose() {
         return null;
     }
@@ -122,6 +134,7 @@ public interface SwerveIO {
         return null;
     }
 
+
     public default SwerveDriveConfiguration getSwerveDriveConfiguration() {
         return null;
     }
@@ -139,6 +152,9 @@ public interface SwerveIO {
     }
 
     public default SwerveDrive getSwerve() {
+        return null;
+    }
+    public default SwerveController getController() {
         return null;
     }
 
