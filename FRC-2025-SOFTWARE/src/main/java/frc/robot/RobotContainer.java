@@ -29,7 +29,7 @@ public class RobotContainer {
 
   final CommandXboxController driverXbox = new CommandXboxController(0); //driver Controller
 
-  private final Swerve drivebase = new Swerve(SwerveIO.isReal());
+  private final Swerve drivebase = new Swerve(new RealSwerve());
 
   private final SendableChooser<Command> autoChooser;
 

@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -17,13 +18,13 @@ import frc.robot.Constants;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
+import swervelib.math.SwerveMath;
 import swervelib.motors.SwerveMotor;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class RealSwerve implements SwerveIO {
-    private double maxSpeed= Constants.Swerve.MAXSPEED;
     private File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
     private SwerveDrive swerveDrive;
     SwerveModule[] modules;
@@ -39,17 +40,32 @@ public class RealSwerve implements SwerveIO {
 
     public RealSwerve()
     {
-        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.NONE;
+            // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
+    //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
+    //  The encoder resolution per motor revolution is 1 per motor revolution.
+    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8);
+    // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER RESOLUTION).
+    //  In this case the wheel diameter is 4 inches, which must be converted to meters to get meters/second.
+    //  The gear ratio is 6.75 motor revolutions per wheel rotation.
+    //  The encoder resolution per motor revolution is 1 per motor revolution.
+    double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75);
+    System.out.println("\"conversionFactors\": {");
+    System.out.println("\t\"angle\": {\"factor\": " + angleConversionFactor + " },");
+    System.out.println("\t\"drive\": {\"factor\": " + driveConversionFactor + " }");
+    System.out.println("}");
+
+        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
         try {
-            SwerveDrive  swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maxSpeed);
-        } catch (IOException e) {}
+            swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(Constants.Swerve.MAXSPEED);
+
+        } catch (IOException e) {throw new RuntimeException(e);}
 
         
         swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
         swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
         swerveDrive.setAngularVelocityCompensation(true, true, 0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
         swerveDrive.setModuleEncoderAutoSynchronize(true, 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
-        // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+        swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
 
         
         modules = swerveDrive.getModules();
@@ -71,11 +87,11 @@ public class RealSwerve implements SwerveIO {
 
     @Override
     public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX,double headingY) {
-        return swerveDrive.swerveController.getTargetSpeeds(xInput, yInput, headingX, headingY, getHeading().getRadians(), maxSpeed);
+        return swerveDrive.swerveController.getTargetSpeeds(xInput, yInput, headingX, headingY, getHeading().getRadians(), Constants.Swerve.MAXSPEED);
     }
     @Override
     public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d heading) {
-        return swerveDrive.swerveController.getTargetSpeeds(xInput,yInput,heading.getRadians(),getHeading().getRadians(),maxSpeed);
+        return swerveDrive.swerveController.getTargetSpeeds(xInput,yInput,heading.getRadians(),getHeading().getRadians(),Constants.Swerve.MAXSPEED);
     }
     
     @Override
