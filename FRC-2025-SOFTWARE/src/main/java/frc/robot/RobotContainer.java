@@ -6,8 +6,16 @@ package frc.robot;
 
 import java.io.File;
 
+import org.littletonrobotics.junction.Logger;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.PathPlannerLogging;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -18,11 +26,34 @@ import frc.robot.Subsystems.Sweve.SwerveIO;
 import frc.robot.commands.AbsoluteDriveAdv;
 
 public class RobotContainer {
+
   final CommandXboxController driverXbox = new CommandXboxController(0); //driver Controller
-  private final Swerve drivebase = new Swerve(new RealSwerve());
+
+  private final Swerve drivebase = new Swerve(SwerveIO.isReal());
+
+  private final SendableChooser<Command> autoChooser;
+
+  private final Field2d field;
 
   public RobotContainer() {
     configureBindings();
+    field = new Field2d();
+    SmartDashboard.putData("Pathplanner", field);
+
+    // Logging callback for current robot pose
+        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+            Logger.recordOutput("PathPlanner/CurrentPose", pose);
+            field.setRobotPose(pose);
+        });
+
+        // Logging callback for target robot pose
+        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+            Logger.recordOutput("PathPlanner/targetPose", pose);
+            field.getObject("target pose").setPose(pose);
+        });
+
+    autoChooser = AutoBuilder.buildAutoChooser(Constants.PathPlanner.DEFAULT);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
         // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -65,8 +96,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand()
   {
-    // An example command will be run in autonomous
-    //return drivebase.getAutonomousCommand("AHH");
+    return autoChooser.getSelected();
   }
 
   public void setDriveMode()

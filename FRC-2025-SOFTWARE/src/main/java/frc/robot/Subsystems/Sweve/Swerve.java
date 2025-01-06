@@ -6,6 +6,9 @@ package frc.robot.Subsystems.Sweve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -47,33 +50,46 @@ public class Swerve extends SubsystemBase
       
     private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
   
-  
-    /**
-     * Enable vision odometry updates while driving.
-     */
-    private boolean visionEnabled = false;
-  
-    /**
-     * Initialize {@link SwerveDrive} with the directory provided.
-     *
-     * @param directory Directory of swerve drive config files.
-     */
     public Swerve(SwerveIO swerveIO)
     {
       this.io = swerveIO;
   
   
-      if (visionEnabled)
+      if (Constants.Swerve.VISION)
       {
         setupPhotonVision();
         // Stop the odometry thread if we are using vision that way we can synchronize updates better.
         io.getSwerve().stopOdometryThread();
       }
   
-      //setupPathPlanner();
+      setupPathPlanner();
+          }
+        
+         
+         
+  private void setupPathPlanner() {
+    // Configure AutoBuilder last
+    AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> io.driveRobotRelative(speeds,feedforwards), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            Constants.PathPlanner.DRIVE_CONTROLLER,
+            Constants.PathPlanner.config, // The robot configuration
+            io::isRedAlliance,
+            this // Reference to this subsystem to set requirements
+    );
+    PathfindingCommand.warmupCommand().schedule();
     }
-  
-    public void setupPhotonVision()
+
+// Since AutoBuilder is configured, we can use it to build pathfinding commands
+Command pathfindingCommand = AutoBuilder.pathfindToPose(
+        Constants.PathPlanner.targetPose,
+        Constants.PathPlanner.constraints,
+        0.0 // Goal end velocity in meters/sec
+);
+
+  public void setupPhotonVision()
   {
     vision = new VisionSwerve(io::getPose, io.getField());
 }
@@ -112,7 +128,7 @@ public class Swerve extends SubsystemBase
   public void periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionEnabled)
+    if (Constants.Swerve.VISION)
     {
       io.updateOdometry();
       //vision
@@ -144,7 +160,7 @@ public class Swerve extends SubsystemBase
    */
   public Pose2d getPose() 
   {
-    return !visionEnabled ? io.getPose() : getVisionPose();
+    return !Constants.Swerve.VISION ? io.getPose() : getVisionPose();//inline if statement
     // return io.swerveDrive.getPose();
     // Made it simple, can still use getMesPose for the normal pose
   }
@@ -153,7 +169,14 @@ public class Swerve extends SubsystemBase
     return io.getPose();
     // use getPose() for the default pose
   }
-
+  public void resetPose(Pose2d pose) 
+  {
+    io.resetOdometry(pose);
+  }
+  public ChassisSpeeds getRobotRelativeSpeeds() 
+  {
+    return io.getRobotVelocity();
+  }
   /**
    * Set chassis speeds with closed-loop velocity control.
    *

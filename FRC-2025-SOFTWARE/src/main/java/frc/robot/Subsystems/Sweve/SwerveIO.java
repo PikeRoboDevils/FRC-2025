@@ -1,6 +1,10 @@
 package frc.robot.Subsystems.Sweve;
 
+import java.awt.Robot;
+
 import org.littletonrobotics.junction.AutoLog;
+
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -69,6 +74,8 @@ public interface SwerveIO {
         
     }
    public default void updateInputs(SwerveIOInputs inputs) {}
+
+    public default void driveRobotRelative(ChassisSpeeds velocity,DriveFeedforwards feedforwards) {}
 
     public default void driveChasisSpeeds(ChassisSpeeds velocity) {}
 
@@ -159,5 +166,13 @@ public interface SwerveIO {
     }
 
     public default void zeroGyroWithAlliance() {}
+
+    public static SwerveIO isReal() {
+        if (RobotBase.isReal()) {
+          return new RealSwerve();
+        } else {
+          return new RealSwerve();
+        }
+      }
 }
  
