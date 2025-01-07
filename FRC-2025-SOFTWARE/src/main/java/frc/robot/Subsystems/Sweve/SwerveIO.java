@@ -122,7 +122,7 @@ public interface SwerveIO {
     }
 
     public default Pose2d getSimPose() {
-        return null;
+        return new Pose2d();
     }
 
     public default SwerveModuleState[] getModuleState() {
@@ -171,7 +171,7 @@ public interface SwerveIO {
         if (RobotBase.isReal()) {
           return new RealSwerve();
         } else {
-          return new RealSwerve();
+          return null;
         }
       }
 }

@@ -3,6 +3,8 @@ package frc.robot.Subsystems.Sweve;
 import java.io.File;
 import java.io.IOException;
 
+import org.littletonrobotics.junction.AutoLog;
+
 import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,6 +25,7 @@ import swervelib.motors.SwerveMotor;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+
 
 public class RealSwerve implements SwerveIO {
     private File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
@@ -168,6 +171,11 @@ public class RealSwerve implements SwerveIO {
     public boolean isRedAlliance() {
         var alliance = DriverStation.getAlliance();
         return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+    }
+
+    @Override
+    public ChassisSpeeds getRobotVelocity() {
+        return swerveDrive.getRobotVelocity();
     }
 
 @Override

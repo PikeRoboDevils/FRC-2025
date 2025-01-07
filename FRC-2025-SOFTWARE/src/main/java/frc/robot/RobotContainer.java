@@ -12,15 +12,15 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Subsystems.Sweve.RealSwerve;
+import frc.robot.Subsystems.Sweve.SimSwerve;
 import frc.robot.Subsystems.Sweve.Swerve;
 import frc.robot.Subsystems.Sweve.SwerveIO;
 import frc.robot.commands.AbsoluteDriveAdv;
@@ -29,7 +29,7 @@ public class RobotContainer {
 
   final CommandXboxController driverXbox = new CommandXboxController(0); //driver Controller
 
-  private final Swerve drivebase = new Swerve(new RealSwerve());
+  private final Swerve drivebase = new Swerve(new SimSwerve());
 
   private final SendableChooser<Command> autoChooser;
 
@@ -87,9 +87,10 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX() * 0.5);
 
-    drivebase.setDefaultCommand(closedAbsoluteDriveAdv); 
+        //this is a mess
+        //could probbalbly do 
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
   }
-
 
 
   private void configureBindings() {}

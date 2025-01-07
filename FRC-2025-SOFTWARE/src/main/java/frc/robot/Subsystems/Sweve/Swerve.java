@@ -31,6 +31,9 @@ import frc.robot.Constants;
 
 
 import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.Logger;
+
 // import org.photonvision.PhotonCamera;
 // import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
@@ -82,12 +85,12 @@ public class Swerve extends SubsystemBase
     PathfindingCommand.warmupCommand().schedule();
     }
 
-// Since AutoBuilder is configured, we can use it to build pathfinding commands
-Command pathfindingCommand = AutoBuilder.pathfindToPose(
-        Constants.PathPlanner.targetPose,
-        Constants.PathPlanner.constraints,
-        0.0 // Goal end velocity in meters/sec
-);
+// // Since AutoBuilder is configured, we can use it to build pathfinding commands
+// Command pathfindingCommand = AutoBuilder.pathfindToPose(
+//         Constants.PathPlanner.targetPose,
+//         Constants.PathPlanner.constraints,
+//         0.0 // Goal end velocity in meters/sec
+// );
 
   public void setupPhotonVision()
   {
@@ -127,10 +130,12 @@ Command pathfindingCommand = AutoBuilder.pathfindToPose(
   @Override
   public void periodic()
   {
+    Logger.recordOutput("Odometry/MesPose", io.getPose());
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (Constants.Swerve.VISION)
     {
       io.updateOdometry();
+      
       //vision
     }
   }
@@ -138,6 +143,7 @@ Command pathfindingCommand = AutoBuilder.pathfindToPose(
   @Override
   public void simulationPeriodic()
   {
+    Logger.recordOutput("Odometry/SimPose", io.getSimPose());
   }
 
 
@@ -223,12 +229,10 @@ Command pathfindingCommand = AutoBuilder.pathfindToPose(
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX, double headingY)
   {
     Translation2d scaledInputs = SwerveMath.cubeTranslation(new Translation2d(xInput, yInput));
-    return io.getController().getTargetSpeeds(scaledInputs.getX(),
-                                                        scaledInputs.getY(),
+    return io.getTargetSpeeds(scaledInputs.getX(),
+                              scaledInputs.getY(),
                                                         headingX,
-                                                        headingY,
-                                                        getHeading().getRadians(),
-                                                        Constants.Swerve.MAXSPEED);
+                                                        headingY);
   }
 
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d heading)

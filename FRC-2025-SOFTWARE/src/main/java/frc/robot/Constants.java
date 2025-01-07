@@ -1,5 +1,13 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Volts;
+
+import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
+import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
+
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -22,11 +30,32 @@ public class Constants {
         public static boolean VISION = false;
 
         public static final double MAXSPEED = Units.feetToMeters(14.5);
+        public static final double MAX_ANGULAR_VELOCITY = Units.degreesToRotations(540.00);//idk if right just the same as pathplanner
         //taken from offseason swerve 
         public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
         public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
         public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-        
+        // Create and configure a drivetrain simulation configuration
+public static final DriveTrainSimulationConfig driveTrainSimulationConfig = DriveTrainSimulationConfig.Default()
+        // Specify gyro type (for realistic gyro drifting and error simulation)
+        .withGyro(COTS.ofPigeon2())
+        // Specify swerve module (for realistic swerve dynamics)
+        .withSwerveModule(new SwerveModuleSimulationConfig(
+                DCMotor.getNEO(1), // Drive motor is a NEO
+                DCMotor.getNEO(1), // Steer motor is a NEO
+                6.12, // Drive motor gear ratio.
+                12.8, // Steer motor gear ratio.
+                Volts.of(0.1), // Drive friction voltage.
+                Volts.of(0.1), // Steer friction voltage
+                Inches.of(2), // Wheel radius
+                KilogramSquareMeters.of(0.03), // Steer MOI
+                1.2)) // Wheel COF
+        // Configures the track length and track width (spacing between swerve modules)
+        .withTrackLengthTrackWidth(Inches.of(24), Inches.of(24))
+        // Configures the bumper size (dimensions of the robot bumper)
+        .withBumperSize(Inches.of(29), Inches.of(28.5));
+
+
     }
     public static class OperatorConstants
     {
