@@ -14,11 +14,13 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -53,6 +55,8 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
         .withTrackLengthTrackWidth(Inches.of(27), Inches.of(27))
         // Configures the bumper size (dimensions of the robot bumper)
         .withBumperSize(Inches.of(29), Inches.of(28.5));
+
+    public static final Pose2d STARTING_POSE = new Pose2d(3,3, new Rotation2d());
 
 
     }

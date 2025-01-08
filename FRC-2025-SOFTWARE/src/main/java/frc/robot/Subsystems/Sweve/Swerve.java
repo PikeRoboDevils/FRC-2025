@@ -130,7 +130,7 @@ public class Swerve extends SubsystemBase
   @Override
   public void periodic()
   {
-    Logger.recordOutput("Odometry/MesPose", io.getPose());
+    Logger.recordOutput("Odometry/Pose", io.getPose());
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (Constants.Swerve.VISION)
     {
@@ -139,7 +139,12 @@ public class Swerve extends SubsystemBase
       //vision
     }
   }
+  @Override
+  public void simulationPeriodic()
+  {
+    Logger.recordOutput("Odometry/SimPose", io.getSimPose());
 
+  }
 
   /**
    * Resets odometry to the given pose. Gyro angle and module positions do not need to be reset when calling this

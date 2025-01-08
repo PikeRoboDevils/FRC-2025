@@ -2,7 +2,9 @@ package frc.robot.Subsystems.Sweve;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
+import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.AutoLog;
 
 import com.pathplanner.lib.util.DriveFeedforwards;
@@ -22,6 +24,7 @@ import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
 import swervelib.math.SwerveMath;
 import swervelib.motors.SwerveMotor;
+import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -63,13 +66,13 @@ public class SwerveUtil implements SwerveIO {
 
         } catch (IOException e) {throw new RuntimeException(e);}
 
-        
+
         swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
         swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
         swerveDrive.setAngularVelocityCompensation(true, true, 0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
         swerveDrive.setModuleEncoderAutoSynchronize(true, 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
         swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
-
+        resetOdometry(Constants.Swerve.STARTING_POSE);
         
         modules = swerveDrive.getModules();
 
@@ -85,7 +88,7 @@ public class SwerveUtil implements SwerveIO {
         rrAngleMotor = modules[3].getAngleMotor();
         rrDriveMotor = modules[3].getDriveMotor();
 
-
+        
     }
 
     @Override
@@ -96,7 +99,11 @@ public class SwerveUtil implements SwerveIO {
     public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d heading) {
         return swerveDrive.swerveController.getTargetSpeeds(xInput,yInput,heading.getRadians(),getHeading().getRadians(),Constants.Swerve.MAXSPEED);
     }
-    
+    @Override
+    public ChassisSpeeds getFieldVelocity() {
+        return swerveDrive.getFieldVelocity();
+    }
+
     @Override
     public double getMaxVelocity() {
         return swerveDrive.getMaximumChassisVelocity();
@@ -184,6 +191,14 @@ public class SwerveUtil implements SwerveIO {
     @Override
     public Pose2d getPose() {
         return swerveDrive.getPose();
+    }
+    @Override
+    public Pose2d getSimPose() {
+        return swerveDrive.getSimulationDriveTrainPose().get();
+    }
+    @Override
+    public SwerveDriveConfiguration getSwerveDriveConfiguration() {
+        return swerveDrive.swerveDriveConfiguration; 
     }
 
 @Override
