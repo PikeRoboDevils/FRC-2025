@@ -29,8 +29,7 @@ public class Constants {
 
         public static boolean VISION = false;
 
-        public static final double MAXSPEED = Units.feetToMeters(14.5);
-        public static final double MAX_ANGULAR_VELOCITY = Units.degreesToRotations(540.00);//idk if right just the same as pathplanner
+        public static final double MAXSPEED = Units.feetToMeters(16);
         //taken from offseason swerve 
         public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
         public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
@@ -43,15 +42,15 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
         .withSwerveModule(new SwerveModuleSimulationConfig(
                 DCMotor.getNEO(1), // Drive motor is a NEO
                 DCMotor.getNEO(1), // Steer motor is a NEO
-                6.12, // Drive motor gear ratio.
-                12.8, // Steer motor gear ratio.
+                6.75, // Drive motor gear ratio. SDS L2 GEAR RATIO
+                150/7, // Steer motor gear ratio. SDS L2 GEAR RATIO
                 Volts.of(0.1), // Drive friction voltage.
                 Volts.of(0.1), // Steer friction voltage
-                Inches.of(2), // Wheel radius
+                Inches.of(3), // Wheel radius
                 KilogramSquareMeters.of(0.03), // Steer MOI
                 1.2)) // Wheel COF
         // Configures the track length and track width (spacing between swerve modules)
-        .withTrackLengthTrackWidth(Inches.of(24), Inches.of(24))
+        .withTrackLengthTrackWidth(Inches.of(27), Inches.of(27))
         // Configures the bumper size (dimensions of the robot bumper)
         .withBumperSize(Inches.of(29), Inches.of(28.5));
 

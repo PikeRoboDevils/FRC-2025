@@ -140,12 +140,6 @@ public class Swerve extends SubsystemBase
     }
   }
 
-  @Override
-  public void simulationPeriodic()
-  {
-    Logger.recordOutput("Odometry/SimPose", io.getSimPose());
-  }
-
 
   /**
    * Resets odometry to the given pose. Gyro angle and module positions do not need to be reset when calling this

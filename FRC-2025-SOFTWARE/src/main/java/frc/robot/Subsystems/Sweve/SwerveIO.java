@@ -167,12 +167,6 @@ public interface SwerveIO {
 
     public default void zeroGyroWithAlliance() {}
 
-    public static SwerveIO isReal() {
-        if (RobotBase.isReal()) {
-          return new RealSwerve();
-        } else {
-          return null;
-        }
-      }
 }
+
  

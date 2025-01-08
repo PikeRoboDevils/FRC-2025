@@ -4,32 +4,28 @@
 
 package frc.robot;
 
-import java.io.File;
-
+import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Subsystems.Sweve.RealSwerve;
-import frc.robot.Subsystems.Sweve.SimSwerve;
+import frc.robot.Subsystems.Sweve.SwerveUtil;
 import frc.robot.Subsystems.Sweve.Swerve;
-import frc.robot.Subsystems.Sweve.SwerveIO;
-import frc.robot.commands.AbsoluteDriveAdv;
+import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
 
 public class RobotContainer {
 
   final CommandXboxController driverXbox = new CommandXboxController(0); //driver Controller
 
-  private final Swerve drivebase = new Swerve(new SimSwerve());
+  private final Swerve drivebase = new Swerve(new SwerveUtil());
 
   private final SendableChooser<Command> autoChooser;
 
@@ -38,6 +34,8 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
     field = new Field2d();
+    SimulatedArena.getInstance().placeGamePiecesOnField();
+
     SmartDashboard.putData("Pathplanner", field);
 
     // Logging callback for current robot pose
@@ -89,7 +87,7 @@ public class RobotContainer {
 
         //this is a mess
         //could probbalbly do 
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
   }
 
 

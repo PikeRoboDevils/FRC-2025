@@ -63,10 +63,10 @@ if (isReal()) {
 public void simulationPeriodic() {
     SimulatedArena.getInstance().simulationPeriodic();
       // Get the positions of the notes (both on the field and in the air)
-      Pose3d[] notesPoses = SimulatedArena.getInstance()
-            .getGamePiecesArrayByType("Note");
+      Pose3d[] coralPoses = SimulatedArena.getInstance()
+            .getGamePiecesArrayByType("Coral");
       // Publish to telemetry using AdvantageKit
-      Logger.recordOutput("FieldSimulation/NotesPositions", notesPoses);
+      Logger.recordOutput("FieldSimulation/CoralPositions", coralPoses);
 }
 
   @Override

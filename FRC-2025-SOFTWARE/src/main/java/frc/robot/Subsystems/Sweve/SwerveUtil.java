@@ -27,7 +27,7 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 
-public class RealSwerve implements SwerveIO {
+public class SwerveUtil implements SwerveIO {
     private File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
     private SwerveDrive swerveDrive;
     SwerveModule[] modules;
@@ -41,7 +41,7 @@ public class RealSwerve implements SwerveIO {
     SwerveMotor rrDriveMotor;
     
 
-    public RealSwerve()
+    public SwerveUtil()
     {
             // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
     //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
@@ -176,6 +176,14 @@ public class RealSwerve implements SwerveIO {
     @Override
     public ChassisSpeeds getRobotVelocity() {
         return swerveDrive.getRobotVelocity();
+    }
+    @Override
+    public Rotation2d getHeading() {
+        return getPose().getRotation();
+    }
+    @Override
+    public Pose2d getPose() {
+        return swerveDrive.getPose();
     }
 
 @Override
