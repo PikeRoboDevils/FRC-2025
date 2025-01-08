@@ -1,8 +1,12 @@
 package frc.robot.Subsystems.Sweve;
 
+
+
+//NOT taken from mason because i cant figure out how to make mine work😀
+//ok mine didnt work cuz it was a bug and i thought I made a mistake but no its wasnt even my code...
+//I DID THIS ALL ON MY OWN
+
 import static edu.wpi.first.units.Units.Amp;
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Newton;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
@@ -11,55 +15,29 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ironmaple.simulation.SimulatedArena;
-import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
 import org.ironmaple.simulation.drivesims.SelfControlledSwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
-import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
-import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.Logger;
-
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.CurrentUnit;
-import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.robot.Subsystems.Sweve.SimulatedHardware.GyroIOSim;
-import frc.robot.Subsystems.Sweve.SimulatedHardware.ModuleIOSim;
-import swervelib.SwerveController;
 import swervelib.SwerveDrive;
-import swervelib.SwerveModule;
-import swervelib.imu.Pigeon2Swerve;
-import swervelib.imu.SwerveIMU;
-import swervelib.math.SwerveMath;
-import swervelib.motors.SwerveMotor;
-import swervelib.parser.PIDFConfig;
-import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
-import swervelib.parser.SwerveModuleConfiguration;
-import swervelib.parser.SwerveModulePhysicalCharacteristics;
 import swervelib.parser.SwerveParser;
-import swervelib.parser.json.modules.ConversionFactorsJson;
-import swervelib.telemetry.SwerveDriveTelemetry;
-import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 
 public class SimSwerve implements SwerveIO {
     private File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
         private final SelfControlledSwerveDriveSimulation simulatedDrive;
+        SwerveDrive swerveDrive;
         SwerveDriveSimulation swerveDriveSimulation;
         SwerveModuleSimulation[] modules;
         SwerveModuleSimulation lf;
@@ -69,7 +47,10 @@ public class SimSwerve implements SwerveIO {
         
             public SimSwerve()
             {
-
+        //for taget speeds
+        try {
+            swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(Constants.Swerve.MAXSPEED);
+        } catch (IOException e) {}
         /* Create a swerve drive simulation */
         this.simulatedDrive = new SelfControlledSwerveDriveSimulation(new SwerveDriveSimulation(
             // Specify Configuration
