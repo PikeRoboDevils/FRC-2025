@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -34,7 +33,6 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
     field = new Field2d();
-    SimulatedArena.getInstance().placeGamePiecesOnField();
 
     SmartDashboard.putData("Pathplanner", field);
 

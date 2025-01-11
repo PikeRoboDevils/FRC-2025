@@ -19,6 +19,7 @@ import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
@@ -190,11 +191,7 @@ public class SwerveHardware implements SwerveIO {
     }
     @Override
     public Pose2d getPose() {
-        return swerveDrive.getPose();
-    }
-    @Override
-    public Pose2d getSimPose() {
-        return swerveDrive.getSimulationDriveTrainPose().get();
+        return Robot.isReal() ? swerveDrive.getPose() : swerveDrive.getSimulationDriveTrainPose().get();
     }
     @Override
     public SwerveDriveConfiguration getSwerveDriveConfiguration() {

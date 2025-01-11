@@ -37,9 +37,11 @@ if (isReal()) {
     new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
 } else {
   if (Constants.currentMode == Constants.Mode.SIM) {
-  // Obtains the default instance of the simulation world, which is a Crescendo Arena.
+    // will be moved to maple subsystem
+  // Obtains the default instance of the simulation world, which is a REEFSCAPE Arena.
   SimulatedArena.getInstance();
-  SimulatedArena.getInstance().placeGamePiecesOnField();
+  //SimulatedArena.getInstance().placeGamePiecesOnField();
+  SimulatedArena.getInstance().resetFieldForAuto();// better 
 
   } else {
     setUseTiming(false); // Run as fast as possible
@@ -61,12 +63,16 @@ if (isReal()) {
 // simulation period method in your Robot.java
 @Override
 public void simulationPeriodic() {
+  // will be moved to maple subsystem
     SimulatedArena.getInstance().simulationPeriodic();
       // Get the positions of the notes (both on the field and in the air)
       Pose3d[] coralPoses = SimulatedArena.getInstance()
             .getGamePiecesArrayByType("Coral");
+      Pose3d[] algaePoses = SimulatedArena.getInstance()
+            .getGamePiecesArrayByType("Algae");
       // Publish to telemetry using AdvantageKit
       Logger.recordOutput("FieldSimulation/CoralPositions", coralPoses);
+      Logger.recordOutput("FieldSimulation/AlgeePositions", algaePoses);
 }
 
   @Override

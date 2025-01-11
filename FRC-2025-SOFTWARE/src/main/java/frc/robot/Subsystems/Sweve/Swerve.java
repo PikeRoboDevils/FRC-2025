@@ -51,7 +51,8 @@ public class Swerve extends SubsystemBase
 
   private VisionSwerve vision;
       
-    private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+  //not 2025 yet
+   //private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
   
     public Swerve(SwerveIO swerveIO)
     {
@@ -82,7 +83,7 @@ public class Swerve extends SubsystemBase
             io::isRedAlliance,
             this // Reference to this subsystem to set requirements
     );
-    PathfindingCommand.warmupCommand().schedule();
+    //PathfindingCommand.warmupCommand().schedule();
     }
 
 // // Since AutoBuilder is configured, we can use it to build pathfinding commands
@@ -142,7 +143,6 @@ public class Swerve extends SubsystemBase
   @Override
   public void simulationPeriodic()
   {
-    Logger.recordOutput("Odometry/SimPose", io.getSimPose());
 
   }
 
