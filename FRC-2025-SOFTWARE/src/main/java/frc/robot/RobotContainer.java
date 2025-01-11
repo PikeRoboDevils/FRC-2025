@@ -17,15 +17,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Subsystems.Sweve.SwerveUtil;
 import frc.robot.Subsystems.Sweve.Swerve;
+import frc.robot.Subsystems.Sweve.SwerveHardware;
 import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
 
 public class RobotContainer {
 
   final CommandXboxController driverXbox = new CommandXboxController(0); //driver Controller
 
-  private final Swerve drivebase = new Swerve(new SwerveUtil());
+  private final Swerve drivebase = new Swerve(new SwerveHardware());
 
   private final SendableChooser<Command> autoChooser;
 
