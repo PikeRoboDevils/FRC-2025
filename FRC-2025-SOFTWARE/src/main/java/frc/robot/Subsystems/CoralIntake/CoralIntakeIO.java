@@ -5,4 +5,4 @@
 package frc.robot.Subsystems.CoralIntake;
 
 /** Add your docs here. */
-public class CoralIntakeIO {}
+public interface CoralIntakeIO {}
