@@ -120,6 +120,15 @@ public class Swerve extends SubsystemBase
     });
   }
 
+  public Command fieldRelativeTeleop(DoubleSupplier LeftX, DoubleSupplier LeftY, DoubleSupplier RightX, DoubleSupplier steerSens) {
+    return run(() -> {
+    ChassisSpeeds desiredSpeeds = io.getTargetSpeeds(LeftY.getAsDouble(), LeftX.getAsDouble(), new Rotation2d(RightX.getAsDouble() * Math.PI));
+    desiredSpeeds.omegaRadiansPerSecond = RightX.getAsDouble() * Math.PI * steerSens.getAsDouble();
+
+    io.driveFieldOriented(desiredSpeeds);
+    });
+  }
+
   public void drive(Translation2d translation, double rotation, boolean fieldRelative)
   {
     io.drive(translation,

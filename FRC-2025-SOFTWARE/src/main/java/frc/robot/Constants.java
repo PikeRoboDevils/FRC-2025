@@ -14,17 +14,15 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
+
 
 public class Constants {
     
@@ -72,6 +70,7 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
     }
 
    //For Easier camera setup to be used with already made vision examples  
+   //Camera initiation can be found on line 376 of Vision swerve
   public static class PoseCameraConstants
   {
     public static final String CAM1N = "W";
