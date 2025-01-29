@@ -63,8 +63,8 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
     {
   
       // Joystick Deadband
-      public static final double LEFT_X_DEADBAND  = 0.1;
-      public static final double LEFT_Y_DEADBAND  = 0.1;
+      public static final double LEFT_X_DEADBAND  = 0.15;
+      public static final double LEFT_Y_DEADBAND  = 0.15;
       public static final double RIGHT_X_DEADBAND = 0.1;
       public static final double TURN_CONSTANT    = 6;
     }

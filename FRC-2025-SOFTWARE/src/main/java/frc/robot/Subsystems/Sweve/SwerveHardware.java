@@ -116,15 +116,18 @@ public class SwerveHardware implements SwerveIO {
     }
 
     @Override
+    public SwerveDrive getSwerve() {
+        return swerveDrive;
+    }
+    @Override
     public void driveChasisSpeeds(ChassisSpeeds velocity) {
         swerveDrive.drive(velocity);
     }
-
     @Override
-    public void driveRobotRelative(ChassisSpeeds velocity,DriveFeedforwards feedforwards) {
-        swerveDrive.drive(velocity,swerveDrive.getStates(),feedforwards.linearForces());
+    public SwerveModuleState[] getModuleState() {
+        return swerveDrive.getStates();
     }
-    
+
     @Override
     public void driveTeleop(double translationX, double translationY, double angularRotationX, boolean fieldRelative) {
         drive(new Translation2d(translationX,translationY), angularRotationX, fieldRelative);
@@ -158,6 +161,11 @@ public class SwerveHardware implements SwerveIO {
     @Override
     public void setBrakeMode(boolean enabled) {
         swerveDrive.setMotorIdleMode(enabled);
+    }
+
+    @Override
+    public void setModuleStates(SwerveModuleState[] modules) {
+        swerveDrive.setModuleStates(modules, isRedAlliance());
     }
 
     @Override

@@ -11,6 +11,10 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.swerve.SwerveSetpoint;
+import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -49,7 +54,11 @@ public class Swerve extends SubsystemBase
 
   private final SwerveIO io;
 
+  private final SwerveSetpointGenerator setpointGenerator;
+  private SwerveSetpoint previousSetpoint;
+
   private VisionSwerve vision;
+
       
   //not 2025 yet
    //private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
@@ -66,7 +75,20 @@ public class Swerve extends SubsystemBase
         io.getSwerve().stopOdometryThread();
       }
   
+
+
+    // Initialize the previous setpoint to the robot's current speeds & module states
+    ChassisSpeeds currentSpeeds = io.getRobotVelocity(); // Method to get current robot-relative chassis speeds
+    SwerveModuleState[] currentStates = io.getModuleState(); // Method to get the current swerve module states
+    previousSetpoint = new SwerveSetpoint(currentSpeeds, currentStates, DriveFeedforwards.zeros(Constants.PathPlanner.config.numModules));
       setupPathPlanner();
+
+
+    setpointGenerator = new SwerveSetpointGenerator(
+        Constants.PathPlanner.config, // The robot configuration. This is the same config used for generating trajectories and running path following commands.
+        Units.rotationsToRadians(10.0) // The max rotation velocity of a swerve module in radians per second. This should probably be stored in your Constants file
+    );
+
           }
         
          
@@ -86,6 +108,7 @@ public class Swerve extends SubsystemBase
     //PathfindingCommand.warmupCommand().schedule();
     }
 
+// this crashes the robot idk why 
 // // Since AutoBuilder is configured, we can use it to build pathfinding commands
 // Command pathfindingCommand = AutoBuilder.pathfindToPose(
 //         Constants.PathPlanner.targetPose,
@@ -96,6 +119,17 @@ public class Swerve extends SubsystemBase
   public void setupPhotonVision()
   {
     vision = new VisionSwerve(io::getPose, io.getField());
+}
+
+public void driveRobotRelative(ChassisSpeeds speeds) {
+  // Note: it is important to not discretize speeds before or after
+  // using the setpoint generator, as it will discretize them for you
+  previousSetpoint = setpointGenerator.generateSetpoint(
+      previousSetpoint, // The previous setpoint
+      speeds, // The desired target speeds
+      0.02 // The loop time of the robot code, in seconds
+  );
+  io.setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
 }
 
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,

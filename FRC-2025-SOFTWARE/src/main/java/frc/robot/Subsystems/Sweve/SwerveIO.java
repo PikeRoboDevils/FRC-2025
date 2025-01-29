@@ -93,6 +93,9 @@ public interface SwerveIO {
     public default void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {}
 
     public default void setBrakeMode(boolean enabled) {}
+    
+
+    public default void setModuleStates(SwerveModuleState[] modules) {}
 
     public default void updateOdometry() {}
 

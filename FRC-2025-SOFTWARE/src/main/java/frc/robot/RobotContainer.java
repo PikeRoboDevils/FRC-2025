@@ -51,13 +51,7 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser(Constants.PathPlanner.DEFAULT);
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        // Applies deadbands and inverts controls because joysticks
-    // are back-right positive while robot
-    // controls are front-left positive
-    // left stick controls translation
-    // right stick controls the rotational velocity 
-    // buttons are quick rotation positions to different ways to face
-    // WARNING: default buttons are on the same buttons as the ones defined in configureBindings
+//closedAbsoluteDriveAdv does not work at least in sim dont use it :)
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
         () -> -MathUtil.applyDeadband(driverXbox.getLeftY(),
         OperatorConstants.LEFT_Y_DEADBAND),
@@ -79,13 +73,13 @@ public class RobotContainer {
 
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity = drivebase.fieldRelativeTeleop(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverXbox.getRightX(),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> -driverXbox.getRightX(),
         () -> 2.5);
+     // im not sure where the inversions are supposed to be but right now 
+    // it takes inverted controls and returns the correct speeds
 
-        //this is a mess
-        //could probbalbly do 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
   }
 
