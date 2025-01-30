@@ -4,7 +4,7 @@
   "rotations": [
     {
       "axis": "x",
-      "degrees": 0
+      "degrees": 90
     },
     {
       "axis": "z",
