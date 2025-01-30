@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Simulation;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
@@ -63,7 +64,6 @@ if (isReal()) {
 // simulation period method in your Robot.java
 @Override
 public void simulationPeriodic() {
-  // will be moved to maple subsystem
     SimulatedArena.getInstance().simulationPeriodic();
       // Get the positions of the notes (both on the field and in the air)
       Pose3d[] coralPoses = SimulatedArena.getInstance()
@@ -73,6 +73,11 @@ public void simulationPeriodic() {
       // Publish to telemetry using AdvantageKit
       Logger.recordOutput("FieldSimulation/CoralPositions", coralPoses);
       Logger.recordOutput("FieldSimulation/AlgeePositions", algaePoses);
+      if (Constants.OperatorConstants.driverPractice) {
+      Logger.recordOutput("FieldSimulation/OpponentRobotPositions", Simulation.getOpponentRobotPoses());
+      Logger.recordOutput(
+              "FieldSimulation/AlliancePartnerRobotPositions", Simulation.getAlliancePartnerRobotPoses());
+      }
 }
 
   @Override
@@ -95,4 +100,10 @@ public void simulationPeriodic() {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
   }
+@Override
+public void simulationInit() {
+  if (Constants.OperatorConstants.driverPractice){
+    Simulation.startOpponentRobotSimulations();
+  }
+}
 }

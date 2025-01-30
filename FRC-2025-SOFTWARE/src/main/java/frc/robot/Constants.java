@@ -13,6 +13,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,6 +22,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Subsystems.Simulation;
 import swervelib.math.Matter;
 
 
@@ -67,6 +72,9 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
       public static final double LEFT_Y_DEADBAND  = 0.15;
       public static final double RIGHT_X_DEADBAND = 0.1;
       public static final double TURN_CONSTANT    = 6;
+    
+    //DRIVER PRACTICE
+    public static final boolean driverPractice = false; // advantage scope has peformance issues when running mutiple robots change rendering mode to standard or low
     }
 
    //For Easier camera setup to be used with already made vision examples  
