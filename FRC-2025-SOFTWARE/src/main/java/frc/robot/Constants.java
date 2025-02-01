@@ -33,7 +33,12 @@ public class Constants {
     
     public class Swerve {
 
-        public static boolean VISION = false;
+      public static Pose2d[][] targetPosition = new Pose2d[23][3];
+
+      
+
+
+        public static boolean VISION = true;
 
         public static final double MAXSPEED = Units.feetToMeters(16);
         //taken from offseason swerve 
@@ -119,7 +124,7 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
 
     }
 
-    public static final Mode currentMode = Mode.REAL; // TODO:IS MODE SET CURRECTLY??
+    public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??
 
     public static enum Mode {
       /** Running on a real robot. */

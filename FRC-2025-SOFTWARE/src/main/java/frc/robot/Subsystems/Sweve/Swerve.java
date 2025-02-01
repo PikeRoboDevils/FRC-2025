@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
-
+import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
 
 import java.util.function.DoubleSupplier;
 
@@ -66,6 +66,7 @@ public class Swerve extends SubsystemBase
     public Swerve(SwerveIO swerveIO)
     {
       this.io = swerveIO;
+      Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
   
   
       if (Constants.Swerve.VISION)
@@ -170,6 +171,17 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
                       fieldRelative);
     }
 
+           //TODO: add to robot container
+
+    public Command autoAlign(int position){
+
+      int tagId = vision.getBestTagId(Cameras.CAM_1);
+       //TODO: filter out bad tag ids
+      Pose2d pose = Constants.Swerve.targetPosition[tagId][position]; 
+      PathConstraints constraints = new PathConstraints(io.getSwerve().getMaximumChassisVelocity(),
+       2.0, 2.5, Math.toRadians(720));
+      return AutoBuilder.pathfindToPose(pose, constraints, 0);
+    } 
 
   @Override
   public void periodic()
@@ -179,7 +191,9 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
     if (Constants.Swerve.VISION)
     {
       io.updateOdometry();
-      
+      vision.visionSim.update(io.getPose());
+
+      Logger.recordOutput("bestTarget",vision.getBestTagId(Cameras.CAM_1));
       //vision
     }
   }
