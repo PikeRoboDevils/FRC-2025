@@ -115,7 +115,7 @@ public class Swerve extends SubsystemBase
       // Make the robot move
       io.drive(new Translation2d(translationX.getAsDouble() * io.getMaxVelocity(),
                                           translationY.getAsDouble() * io.getMaxVelocity()),
-                        angularRotationX.getAsDouble() * io.getMaxAnglularVelocity(),
+                        angularRotationX.getAsDouble() * 2.5,
                         true);
     });
   }

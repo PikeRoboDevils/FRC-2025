@@ -112,7 +112,7 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
 
     }
 
-    public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??
+    public static final Mode currentMode = Mode.REAL; // TODO:IS MODE SET CURRECTLY??
 
     public static enum Mode {
       /** Running on a real robot. */
