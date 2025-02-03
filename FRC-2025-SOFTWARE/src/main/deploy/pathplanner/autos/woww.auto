@@ -15,12 +15,6 @@
           "data": {
             "pathName": "WOW2"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "WOW3"
-          }
         }
       ]
     }
