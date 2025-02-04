@@ -86,7 +86,7 @@ public interface SwerveIO {
 
     public default void driveFieldOriented(ChassisSpeeds velocity) {}
 
-    public  default void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[] forwardForce) {}
+    public  default void drivePathPlanner(ChassisSpeeds speedsRobotRelative,DriveFeedforwards moduleFeedForwards) {}
 
     public default  void resetOdometry(Pose2d initialHolonomicPose) {}
 

@@ -18,6 +18,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import swervelib.SwerveController;
@@ -104,6 +105,10 @@ public class SwerveHardware implements SwerveIO {
     public ChassisSpeeds getFieldVelocity() {
         return swerveDrive.getFieldVelocity();
     }
+    @Override
+    public Field2d getField() {
+        return swerveDrive.field;
+    }
 
     @Override
     public double getMaxVelocity() {
@@ -141,11 +146,6 @@ public class SwerveHardware implements SwerveIO {
     @Override
     public void driveFieldOriented(ChassisSpeeds velocity) {
         swerveDrive.driveFieldOriented(velocity);
-    }
-
-    @Override
-    public void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[] forwardForce) {
-        swerveDrive.drive(speeds, modules, forwardForce);
     }
 
     @Override
@@ -204,6 +204,15 @@ public class SwerveHardware implements SwerveIO {
     @Override
     public SwerveDriveConfiguration getSwerveDriveConfiguration() {
         return swerveDrive.swerveDriveConfiguration; 
+    }
+    @Override   
+    public void drivePathPlanner(ChassisSpeeds speedsRobotRelative,DriveFeedforwards moduleFeedForwards) {
+          swerveDrive.drive(
+                speedsRobotRelative,
+                //swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
+                swerveDrive.kinematics.toWheelSpeeds(speedsRobotRelative),
+                moduleFeedForwards.linearForces()
+                             );
     }
 
 @Override

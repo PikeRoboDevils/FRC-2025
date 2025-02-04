@@ -4,46 +4,26 @@
 
 package frc.robot.Subsystems.Sweve;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.DriveFeedforwards;
-import com.pathplanner.lib.util.swerve.SwerveSetpoint;
-import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
-
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import frc.robot.Constants;
-import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
-
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
-// import org.photonvision.PhotonCamera;
-// import org.photonvision.targeting.PhotonPipelineResult;
-import swervelib.SwerveController;
-import swervelib.SwerveDrive;
-import swervelib.SwerveDriveTest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.swerve.SwerveSetpoint;
+import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveDriveConfiguration;
 
@@ -95,27 +75,29 @@ public class Swerve extends SubsystemBase
          
          
   private void setupPathPlanner() {
+
     // Configure AutoBuilder last
     AutoBuilder.configure(
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> io.driveRobotRelative(speeds,feedforwards), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+              // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+          (speedsRobotRelative, moduleFeedForwards) -> {io.drivePathPlanner(speedsRobotRelative, moduleFeedForwards);},
             Constants.PathPlanner.DRIVE_CONTROLLER,
             Constants.PathPlanner.config, // The robot configuration
             io::isRedAlliance,
             this // Reference to this subsystem to set requirements
     );
-    //PathfindingCommand.warmupCommand().schedule();
+    
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+  Command pathfindingCommand = AutoBuilder.pathfindToPose(
+  Constants.PathPlanner.targetPose,
+  Constants.PathPlanner.constraints,
+  0.0 // Goal end velocity in meters/sec
+);
     }
 
-// this crashes the robot idk why 
-// // Since AutoBuilder is configured, we can use it to build pathfinding commands
-// Command pathfindingCommand = AutoBuilder.pathfindToPose(
-//         Constants.PathPlanner.targetPose,
-//         Constants.PathPlanner.constraints,
-//         0.0 // Goal end velocity in meters/sec
-// );
+
 
   public void setupPhotonVision()
   {

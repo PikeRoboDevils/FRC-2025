@@ -75,28 +75,28 @@ public class Simulation implements Subsystem {
                     1);
             instances[1] = new Simulation(
                     PathPlannerPath.fromPathFile("opponent robot cycle path 1"),
-                    shootAtSpeaker(1),
+                    placeholder(),
                     PathPlannerPath.fromPathFile("opponent robot cycle path 1 backwards"),
                     Commands.none(),
                     ROBOT_QUEENING_POSITIONS[1],
                     2);
             instances[2] = new Simulation(
                     PathPlannerPath.fromPathFile("opponent robot cycle path 2"),
-                    shootAtSpeaker(2),
+                    placeholder(),
                     PathPlannerPath.fromPathFile("opponent robot cycle path 2 backwards"),
                     Commands.none(),
                     ROBOT_QUEENING_POSITIONS[2],
                     3);
             instances[3] = new Simulation(
                     PathPlannerPath.fromPathFile("opponent robot cycle path 3"),
-                    feedShotLow(),
+                    placeholder(),
                     PathPlannerPath.fromPathFile("opponent robot cycle path 3 backwards"),
                     Commands.none(),
                     ROBOT_QUEENING_POSITIONS[3],
                     4);
             instances[4] = new Simulation(
                     PathPlannerPath.fromPathFile("opponent robot cycle path 4"),
-                    feedShotHigh(),
+                    placeholder(),
                     PathPlannerPath.fromPathFile("opponent robot cycle path 4 backwards"),
                     Commands.none(),
                     ROBOT_QUEENING_POSITIONS[4],
@@ -106,63 +106,10 @@ public class Simulation implements Subsystem {
         }
     }
 
-    private static Command shootAtSpeaker(int index) {
-        return Commands.runOnce(() -> SimulatedArena.getInstance()
-                .addGamePieceProjectile(new NoteOnFly(
-                                instances[index]
-                                        .driveSimulation
-                                        .getActualPoseInSimulationWorld()
-                                        .getTranslation(),
-                                new Translation2d(0.3, 0),
-                                instances[index].driveSimulation.getActualSpeedsFieldRelative(),
-                                instances[index]
-                                        .driveSimulation
-                                        .getActualPoseInSimulationWorld()
-                                        .getRotation(),
-                                0.5,
-                                10,
-                                Math.toRadians(60))
-                        .asSpeakerShotNote(() -> {})));
-    }
 
-    private static Command feedShotLow() {
-        final int index = 3;
-        return Commands.runOnce(() -> SimulatedArena.getInstance()
-                .addGamePieceProjectile(new NoteOnFly(
-                                instances[index]
-                                        .driveSimulation
-                                        .getActualPoseInSimulationWorld()
-                                        .getTranslation(),
-                                new Translation2d(0.3, 0),
-                                instances[index].driveSimulation.getActualSpeedsFieldRelative(),
-                                instances[index]
-                                        .driveSimulation
-                                        .getActualPoseInSimulationWorld()
-                                        .getRotation(),
-                                0.5,
-                                10,
-                                Math.toRadians(20))
-                        .enableBecomeNoteOnFieldAfterTouchGround()));
-    }
 
-    private static Command feedShotHigh() {
-        final int index = 4;
-        return Commands.runOnce(() -> SimulatedArena.getInstance()
-                .addGamePieceProjectile(new NoteOnFly(
-                                instances[index]
-                                        .driveSimulation
-                                        .getActualPoseInSimulationWorld()
-                                        .getTranslation(),
-                                new Translation2d(0.3, 0),
-                                instances[index].driveSimulation.getActualSpeedsFieldRelative(),
-                                instances[index]
-                                        .driveSimulation
-                                        .getActualPoseInSimulationWorld()
-                                        .getRotation(),
-                                0.5,
-                                10,
-                                Math.toRadians(55))
-                        .enableBecomeNoteOnFieldAfterTouchGround()));
+    private static Command placeholder() {
+        return Commands.none();
     }
 
     private final SelfControlledSwerveDriveSimulation driveSimulation;
