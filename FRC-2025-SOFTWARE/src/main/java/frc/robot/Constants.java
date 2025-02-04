@@ -86,6 +86,7 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
    //Camera initiation can be found on line 376 of Vision swerve
   public static class PoseCameraConstants
   {
+    public static double maxVisionStdDevsDistance = 30; //the distance at which std devs start to increase with distance
     public static final String CAM1N = "W";
    public static final Rotation3d CAM1R = new Rotation3d(0, 0, 0);
    public static final Translation3d CAM1T = new Translation3d(Units.inchesToMeters(-4.628),

@@ -125,6 +125,10 @@ public interface SwerveIO {
         return null;
     }
 
+    public default Optional<Pose2d> getSimPose() {
+        return null;
+    }
+
     public default SwerveModuleState[] getModuleState() {
         return null;
     }
