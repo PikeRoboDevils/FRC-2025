@@ -4,23 +4,43 @@
 
 package frc.robot.Subsystems.Wrist;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
 /** Add your docs here. */
 public class WristSim implements WristIO {
 
     private SingleJointedArmSim _wrist;
 
+    public Mechanism2d _mech;
+    private MechanismRoot2d _root;
+    private MechanismLigament2d _wristMech;
+
     private ArmFeedforward _feedforward;
     private PIDController _pid;
 
     public WristSim() {
-        _wrist = new SingleJointedArmSim(DCMotor.getNEO(1), 50, SingleJointedArmSim.estimateMOI(Units.inchesToMeters(5), 15), Units.inchesToMeters(5), -90, 90, true, 0, Units.degreesToRadians(10));
+        _wrist = new SingleJointedArmSim(DCMotor.getNEO(1),
+         50,
+        SingleJointedArmSim.estimateMOI(Units.inchesToMeters(5),
+         15),
+          Units.inchesToMeters(5),
+          -90,
+           90,
+            true,
+              Units.degreesToRadians(10));
+        _mech = new Mechanism2d(0,0);
+        _root = _mech.getRoot("climber", 0, 0);
+        _wristMech = _root.append(new MechanismLigament2d("Wrist", 3, 90));
 
         _feedforward = new ArmFeedforward(0, 0, 0);
         _pid = new PIDController(0, 0, 0);
@@ -32,7 +52,8 @@ public class WristSim implements WristIO {
     public void updateInputs(WristIOInputs inputs) {
         
         _wrist.update(0.02);
-
+        _wristMech.setAngle(getAngleDeg());
+        
         inputs.WristCurrent = _wrist.getCurrentDrawAmps();
         inputs.WristEncoderAngle = Units.radiansToDegrees(_wrist.getAngleRads());
         inputs.WristVolt = _wrist.getInput(0); //I think this is the reference for voltage. Still needs checked
@@ -63,6 +84,10 @@ public class WristSim implements WristIO {
 
     public double getVoltage() {
         return _wrist.getInput(0); //I think this is the reference for voltage. Still needs checked
+    }
+    @Override
+    public Mechanism2d getMech() {
+        return _mech; 
     }
 
 }

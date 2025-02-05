@@ -38,7 +38,6 @@ if (isReal()) {
     new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
 } else {
   if (Constants.currentMode == Constants.Mode.SIM) {
-    // will be moved to maple subsystem
   // Obtains the default instance of the simulation world, which is a REEFSCAPE Arena.
   SimulatedArena.getInstance();
   //SimulatedArena.getInstance().placeGamePiecesOnField();

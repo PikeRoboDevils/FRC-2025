@@ -5,6 +5,9 @@
 package frc.robot.Subsystems.Wrist;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 
 
 /** Add your docs here. */
@@ -34,7 +37,7 @@ public interface WristIO {
     public default double getAngleDeg(){return 0;}
     public default double getAngleRad(){return 0;}
     public default double getVoltage(){return 0;}
-
+    public default Mechanism2d getMech(){return new Mechanism2d(0, 0);}
 
 
 }

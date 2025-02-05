@@ -18,8 +18,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Subsystems.Simulation;
+import frc.robot.Subsystems.Climber.Climber;
+import frc.robot.Subsystems.Climber.ClimberHardware;
+import frc.robot.Subsystems.CoralIntake.CoralIntake;
+import frc.robot.Subsystems.CoralIntake.CoralIntakeHardware;
+import frc.robot.Subsystems.Elevator.Elevator;
+import frc.robot.Subsystems.Elevator.ElevatorHardware;
 import frc.robot.Subsystems.Sweve.Swerve;
 import frc.robot.Subsystems.Sweve.SwerveHardware;
+import frc.robot.Subsystems.Wrist.Wrist;
+import frc.robot.Subsystems.Wrist.WristHardware;
+import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
 
 public class RobotContainer {
@@ -28,11 +37,28 @@ public class RobotContainer {
 
   private final Swerve drivebase = new Swerve(new SwerveHardware());
 
+  private Wrist wrist;
+  private Elevator elevator;
+  private Climber climb;
+  private CoralIntake intake;
+
   private final SendableChooser<Command> autoChooser;
 
   private final Field2d field;
 
   public RobotContainer() {
+    if (Robot.isReal()) {
+      wrist = new Wrist(new WristHardware());
+      // elevator = new Elevator(new ElevatorHardware());
+      climb = new Climber(new ClimberHardware());
+      intake = new CoralIntake(new CoralIntakeHardware());
+    } else {
+      wrist = new Wrist(new WristSim());
+      // elevator = new Elevator(new ElevatorSim());
+      // climb = new Climber(new ClimberSim());
+      // intake = new CoralIntake(new CoralIntakeSim());
+    }
+    
     configureBindings();
     field = new Field2d();
 
