@@ -169,13 +169,25 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
   public void periodic()
   {
     Logger.recordOutput("Odometry/Pose", io.getPose());
+    if (frc.robot.Robot.isSimulation()) {
+      if(io.getSimPose().isPresent()) {
+        Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
+      }
+
+      
+    }
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (Constants.Swerve.VISION)
     {
       io.updateOdometry();
-      vision.visionSim.update(io.getPose());
+      
+      updatePoseWithVision();
 
       Logger.recordOutput("bestTarget",vision.getBestTagId(Cameras.CAM_1));
+
+      Logger.recordOutput("Odometry/Vision", vision.ReturnPhotonPose());
+      
+      
       //vision
     }
   }

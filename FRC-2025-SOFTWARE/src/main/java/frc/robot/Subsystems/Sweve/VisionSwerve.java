@@ -2,6 +2,7 @@ package frc.robot.Subsystems.Sweve;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,6 +17,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Constants.PoseCameraConstants;
 
@@ -81,6 +83,8 @@ public class VisionSwerve {
    */
   private Field2d field2d;
 
+  private Pose3d lastPose;
+
   /**
    * Constructor for the Vision class.
    *
@@ -91,6 +95,8 @@ public class VisionSwerve {
   public VisionSwerve(Supplier<Pose2d> currentPose, Field2d field) {
     this.currentPose = currentPose;
     this.field2d = field;
+
+    lastPose = new Pose3d();
 
     if (Robot.isSimulation()) {
       visionSim = new VisionSystemSim("Vision");
@@ -104,6 +110,7 @@ public class VisionSwerve {
       openSimCameraViews();
     }
   }
+
 
   /**
    * Calculates a target pose relative to an AprilTag on the field.
@@ -144,6 +151,7 @@ public class VisionSwerve {
        */
       visionSim.update(swerveDrive.getSimulationDriveTrainPose().get());
     }
+
     for (Cameras camera : Cameras.values()) {
       Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
       if (poseEst.isPresent()) {
@@ -152,7 +160,7 @@ public class VisionSwerve {
         if (filterPose(poseEst).isPresent()) {
           swerveDrive.addVisionMeasurement(pose.estimatedPose.toPose2d(),
               pose.timestampSeconds,
-              camera.singleTagStdDevs);
+              getEstimationStdDevs(camera));
         }
       }
     }
@@ -171,13 +179,52 @@ public class VisionSwerve {
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Cameras camera) {
     // Alternative method if you want to use both a pose filter and standard
     // deviations based on distance + tags seen.
-    // Optional<EstimatedRobotPose> poseEst =
-    // filterPose(camera.poseEstimator.update());
+    //Optional<EstimatedRobotPose> poseEst = filterPose(camera.poseEstimator.update(getLatestResult(camera)));
+    camera.cameraSim.getCamera().getAllUnreadResults();
     Optional<EstimatedRobotPose> poseEst = camera.poseEstimator.update(getLatestResult(camera));
     poseEst.ifPresent(estimatedRobotPose -> field2d.getObject(camera + " est pose")
         .setPose(estimatedRobotPose.estimatedPose.toPose2d()));
     return poseEst;
   }
+
+  public Pose3d ReturnPhotonPose()
+  {
+    if (SwerveDriveTelemetry.isSimulation)
+    {
+      /*
+       * In the maple-sim, odometry is simulated using encoder values, accounting for factors like skidding and drifting.
+       * As a result, the odometry may not always be 100% accurate.
+       * However, the vision system should be able to provide a reasonably accurate pose estimation, even when odometry is incorrect.
+       * (This is why teams implement vision system to correct odometry.)
+       * Therefore, we must ensure that the actual robot pose is provided in the simulator when updating the vision simulation during the simulation.
+       */
+
+      lastPose = visionSim.getRobotPose();
+
+    }
+    for (Cameras camera : Cameras.values())
+    {
+      Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
+      if (poseEst.isPresent())
+      {
+        var pose = poseEst.get();
+
+        lastPose = pose.estimatedPose;
+
+        return pose.estimatedPose;
+      } else {
+
+        return lastPose;
+
+      }
+    }
+
+    return lastPose;
+
+    
+
+  }
+
 
   /**
    * The standard deviations of the estimated pose from
@@ -217,7 +264,7 @@ public class VisionSwerve {
     if (numTags == 1 && avgDist > 4) {
       estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
     } else {
-      estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+      estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / Constants.PoseCameraConstants.maxVisionStdDevsDistance));
     }
 
     return estStdDevs;
@@ -241,7 +288,7 @@ public class VisionSwerve {
         }
       }
       // ambiguity to high dont use estimate
-      if (bestTargetAmbiguity > 0.3) {
+      if (bestTargetAmbiguity > 0.5) {
         return Optional.empty();
       }
 
@@ -330,7 +377,7 @@ public class VisionSwerve {
       try {
         Desktop.getDesktop().browse(new URI("http://localhost:1182/"));
         Desktop.getDesktop().browse(new URI("http://localhost:1184/"));
-        Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
+        //Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
       } catch (IOException | URISyntaxException e) {
         e.printStackTrace();
       }
@@ -363,15 +410,26 @@ public class VisionSwerve {
   /**
    * Camera Enum to select each camera
    */
+  private static double n1StndardDevs = 4.5;
+  private static double n2StandardDevs = 4.5;
+  private static double n4StandardDevs = 8.5;
   enum Cameras {
-    CAM_1(PoseCameraConstants.CAM1N,
-        PoseCameraConstants.CAM1R,
-        PoseCameraConstants.CAM1T,
-        VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
-    CAM_2(PoseCameraConstants.CAM2N,
-        PoseCameraConstants.CAM2R,
-        PoseCameraConstants.CAM2T,
-        VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),;
+
+  CAM_1
+    (
+      PoseCameraConstants.CAM1N,
+      PoseCameraConstants.CAM1R, //rotation of camera
+      PoseCameraConstants.CAM1T, //transform of camera (dont forget forwatd+ left+ up+)
+      VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs), VecBuilder.fill(n1StndardDevs*0.25, n2StandardDevs*0.25, n4StandardDevs*0.25) //std devs
+    ),
+
+  CAM_2
+    (
+      PoseCameraConstants.CAM2N,
+      PoseCameraConstants.CAM2R, //rotation of camera
+      PoseCameraConstants.CAM2T, //transform of camera (dont forget forwatd+ left+ up+)
+      VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs), VecBuilder.fill(n1StndardDevs*0.25, n2StandardDevs*0.25, n4StandardDevs*0.25) //std devs
+    );
     // CAM_3("CAM3",
     // CameraConstants.CAM1R,
     // CameraConstants.CAM1T,
