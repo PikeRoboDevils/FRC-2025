@@ -4,5 +4,25 @@
 
 package frc.robot.Subsystems.CoralIntake;
 
+import org.littletonrobotics.junction.AutoLog;
+
 /** Add your docs here. */
-public interface CoralIntakeIO {}
+public interface CoralIntakeIO {
+
+       @AutoLog
+    public static class CoralIOInputs{
+        public double IntakeVelocity = 0.0;
+        public double IntakeVolt = 0.0;
+        public double IntakeCurrent = 0.0;
+        public boolean hasCoral = false;
+    }
+
+    /** Set voltage from 0-1 */
+    public default void setVoltage(double speed) {}
+    public default void updateInputs(){}
+    
+    public default void setVelocity(double speed) {}
+    public default double getVelocity(){return 0;}
+    public default double getVoltage(){return 0;}
+    public default boolean hasCoral(){return false;} 
+}

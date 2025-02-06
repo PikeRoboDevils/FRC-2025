@@ -34,6 +34,9 @@ public interface WristIO {
     /** Set voltage from 0-1 */
     public default void setVoltage(double speed) {}
 
+    public default void setVelocity(double speed) {}
+    public default double getVelocity(){return 0;}
+    
     public default double getAngleDeg(){return 0;}
     public default double getAngleRad(){return 0;}
     public default double getVoltage(){return 0;}
