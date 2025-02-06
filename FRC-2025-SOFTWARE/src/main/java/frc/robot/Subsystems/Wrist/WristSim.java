@@ -9,6 +9,9 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
@@ -21,7 +24,8 @@ public class WristSim implements WristIO {
 
     private SingleJointedArmSim _wrist;
 
-    public Mechanism2d _mech;
+    public Mechanism2d Mech;
+    private Pose3d _wristPose;
     private MechanismRoot2d _root;
     private MechanismLigament2d _wristMech;
 
@@ -38,14 +42,15 @@ public class WristSim implements WristIO {
            90,
             true,
               Units.degreesToRadians(10));
-        _mech = new Mechanism2d(0,0);
-        _root = _mech.getRoot("climber", 0, 0);
+        Mech = new Mechanism2d(0,0);
+        _root = Mech.getRoot("climber", 0, 0);
         _wristMech = _root.append(new MechanismLigament2d("Wrist", 3, 90));
+       
 
         _feedforward = new ArmFeedforward(0, 0, 0);
         _pid = new PIDController(0, 0, 0);
 
-
+        _wristPose = new Pose3d(new Translation3d(0,0,0), new Rotation3d(0,0,0));
     } 
 
     @Override
@@ -53,7 +58,9 @@ public class WristSim implements WristIO {
         
         _wrist.update(0.02);
         _wristMech.setAngle(getAngleDeg());
+        _wristPose = new Pose3d(new Translation3d(0,0,0), new Rotation3d(0,getAngleDeg(),0));
         
+        inputs.WristPose = _wristPose;
         inputs.WristCurrent = _wrist.getCurrentDrawAmps();
         inputs.WristEncoderAngle = Units.radiansToDegrees(_wrist.getAngleRads());
         inputs.WristVolt = _wrist.getInput(0); //I think this is the reference for voltage. Still needs checked
@@ -87,7 +94,7 @@ public class WristSim implements WristIO {
     }
     @Override
     public Mechanism2d getMech() {
-        return _mech; 
+        return Mech; 
     }
 
 }
