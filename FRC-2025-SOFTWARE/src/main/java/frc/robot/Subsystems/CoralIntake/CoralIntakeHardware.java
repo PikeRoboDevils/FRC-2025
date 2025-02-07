@@ -5,4 +5,8 @@
 package frc.robot.Subsystems.CoralIntake;
 
 /** Add your docs here. */
-public class CoralIntakeHardware implements CoralIntakeIO {}
+public class CoralIntakeHardware implements CoralIntakeIO {
+
+
+
+}

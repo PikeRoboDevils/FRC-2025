@@ -24,6 +24,7 @@ import frc.robot.Subsystems.CoralIntake.CoralIntake;
 import frc.robot.Subsystems.CoralIntake.CoralIntakeHardware;
 import frc.robot.Subsystems.Elevator.Elevator;
 import frc.robot.Subsystems.Elevator.ElevatorHardware;
+import frc.robot.Subsystems.Elevator.ElevatorSim;
 import frc.robot.Subsystems.Sweve.Swerve;
 import frc.robot.Subsystems.Sweve.SwerveHardware;
 import frc.robot.Subsystems.Wrist.Wrist;
@@ -48,13 +49,13 @@ public class RobotContainer {
 
   public RobotContainer() {
     if (Robot.isReal()) {
-      wrist = new Wrist(new WristHardware());
+      // wrist = new Wrist(new WristHardware());
       // elevator = new Elevator(new ElevatorHardware());
-      climb = new Climber(new ClimberHardware());
-      intake = new CoralIntake(new CoralIntakeHardware());
+      // climb = new Climber(new ClimberHardware());
+      // intake = new CoralIntake(new CoralIntakeHardware());
     } else {
       wrist = new Wrist(new WristSim());
-      // elevator = new Elevator(new ElevatorSim());
+      elevator = new Elevator(new ElevatorSim());
       // climb = new Climber(new ClimberSim());
       // intake = new CoralIntake(new CoralIntakeSim());
     }

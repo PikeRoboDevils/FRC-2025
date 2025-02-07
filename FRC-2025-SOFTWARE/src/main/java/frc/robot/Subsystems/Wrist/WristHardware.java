@@ -28,7 +28,7 @@ public class WristHardware implements WristIO {
    SparkMaxConfig motorConfig;
 
     public WristHardware() {
-        wristMotor = new SparkMax(0, MotorType.kBrushless);
+        wristMotor = new SparkMax(2, MotorType.kBrushless);
 
       /*
      * Initialize the SPARK MAX and get its encoder and closed loop controller
