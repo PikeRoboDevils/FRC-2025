@@ -7,6 +7,7 @@ package frc.robot.Subsystems.Wrist;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 
 
@@ -20,6 +21,7 @@ public interface WristIO {
         public double WristVolt = 0.0;
         public double WristCurrent = 0.0;
         public double WristInternalAngle = 0.0;
+        public Pose3d WristPose = new Pose3d();
     }
 
     public default void updateInputs(WristIOInputs inputs) {}
