@@ -34,6 +34,7 @@ public class Constants {
     public class Swerve {
 
       public static Pose2d[][] targetPosition = new Pose2d[23][3];
+      
 
       
 
@@ -111,8 +112,8 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
         private static final ModuleConfig modConfig = new ModuleConfig(3, Swerve.MAXSPEED, 1, DCMotor.getNEO(1), AUTO_CURRENT_LIMIT, 1);
 
         public static final RobotConfig config = new RobotConfig(Swerve.ROBOT_MASS, 1, modConfig, FL,FR,BL,BR);
-        public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-        public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
+        public static final PIDConstants TRANSLATION_PID = new PIDConstants(1.7, 0, 0);
+        public static final PIDConstants ANGLE_PID       = new PIDConstants(1.4, 0, 0.01);
         public static final PPHolonomicDriveController DRIVE_CONTROLLER = new PPHolonomicDriveController(TRANSLATION_PID,ANGLE_PID);
         // PPHolonomicController is the built in path following controller for holonomic drive trains
 

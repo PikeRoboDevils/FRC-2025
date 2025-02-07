@@ -324,8 +324,9 @@ public class VisionSwerve {
     PhotonPipelineResult result = getLatestResult(camera);
     if (result.hasTargets()){
       return result.getBestTarget().fiducialId;
+    } else {
+      return 0; //TODO should be changed this is temporary
     }
-      return -1;
   }
 
   /**

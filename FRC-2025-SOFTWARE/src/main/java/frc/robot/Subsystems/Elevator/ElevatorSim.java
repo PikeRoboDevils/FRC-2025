@@ -21,7 +21,10 @@ public class ElevatorSim implements ElevatorIO {
 
     public ElevatorSim() {
 
-        //idk any of this yet
+        double[] stdDevs = new double[2];
+        stdDevs[0] = 0.02;
+        stdDevs[1] = 0.02;
+        //idk any of this yet //niether do I
         _elevator = new edu.wpi.first.wpilibj.simulation.ElevatorSim(
         DCMotor.getNEO(2),
         1,
@@ -30,8 +33,8 @@ public class ElevatorSim implements ElevatorIO {
         0,
         10,
         true,
-        2,
-        null);
+        2, stdDevs
+        );
 
          _mech = new Mechanism2d(0,0);
          _root = _mech.getRoot("Elevator", 0, 0);

@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Subsystems.Simulation;
@@ -77,7 +80,7 @@ public class RobotContainer {
             field.getObject("target pose").setPose(pose);
         });
 
-    autoChooser = AutoBuilder.buildAutoChooser(Constants.PathPlanner.DEFAULT);
+    autoChooser = AutoBuilder.buildAutoChooser(Constants.PathPlanner.DEFAULT); //BE aware this does not remove old paths automatically
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
 //closedAbsoluteDriveAdv does not work at least in sim dont use it :)
@@ -107,13 +110,21 @@ public class RobotContainer {
         () -> -driverXbox.getRightX(),
         () -> 2.5);
      // im not sure where the inversions are supposed to be but right now 
-    // it takes inverted controls and returns the correct speeds
+    // it takes inverted controls and returns the correct speeds 
+    //IT IS BACKWARDS. lol I forgot it defaults to RED not BLUE
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+
+    configureBindings();
+
   }
 
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    
+    driverXbox.leftBumper().onTrue(drivebase.autoAlign(0, drivebase.BestTag()));
+
+  }
 
   public Command getAutonomousCommand()
   {

@@ -42,8 +42,8 @@ public class WristSim implements WristIO {
            90,
             true,
               Units.degreesToRadians(10));
-        _mech = new Mechanism2d(0,0);
-        _root = _mech.getRoot("Elevator", 0, 0);//should be the actual elevator
+        Mech = new Mechanism2d(0,0);
+        _root = Mech.getRoot("Elevator", 0, 0);//should be the actual elevator
         _wristMech = _root.append(new MechanismLigament2d("Wrist", 0.1, 90));
 
         _feedforward = new ArmFeedforward(0, 0, 0);

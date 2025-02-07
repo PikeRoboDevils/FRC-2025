@@ -9,8 +9,14 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 
@@ -20,7 +26,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
@@ -39,6 +47,8 @@ public class Swerve extends SubsystemBase
 
   private VisionSwerve vision;
 
+  private Pose2d[][] targetPosition = new Pose2d[23][3];
+
       
   //not 2025 yet
    //private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
@@ -46,9 +56,20 @@ public class Swerve extends SubsystemBase
     public Swerve(SwerveIO swerveIO)
     {
       this.io = swerveIO;
-      Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
-  
-  
+      //Set Pose for tag ID and location (0 = alliance wall left 1 = alliance wall right) //this is blue alliance
+      targetPosition[17][0] = new Pose2d(new Translation2d(3.666, 3.003), new Rotation2d(Units.degreesToRadians(55.5))); //should probably be named constants but Im in a time crunch (they also need tuned)
+      targetPosition[17][1] = new Pose2d(new Translation2d(3.94, 2.820), new Rotation2d(Units.degreesToRadians(55.5)));
+      targetPosition[18][0] = new Pose2d(new Translation2d(3.183, 4.181), new Rotation2d(Units.degreesToRadians(0)));
+      targetPosition[18][1] = new Pose2d(new Translation2d(3.183, 3.857), new Rotation2d(Units.degreesToRadians(0)));
+      targetPosition[19][0] = new Pose2d(new Translation2d(4.0, 5.258), new Rotation2d(Units.degreesToRadians(-60)));
+      targetPosition[19][1] = new Pose2d(new Translation2d(3.663, 5.086), new Rotation2d(Units.degreesToRadians(-60)));
+      targetPosition[20][0] = new Pose2d(new Translation2d(5.011, 5.240), new Rotation2d(Units.degreesToRadians(-121)));
+      targetPosition[20][1] = new Pose2d(new Translation2d(5.318, 5.079), new Rotation2d(Units.degreesToRadians(-121)));
+      targetPosition[21][0] = new Pose2d(new Translation2d(5.803, 4.184), new Rotation2d(Units.degreesToRadians(180)));
+      targetPosition[21][1] = new Pose2d(new Translation2d(5.803,3.862), new Rotation2d(Units.degreesToRadians(180)));
+      targetPosition[22][0] = new Pose2d(new Translation2d(5.301, 2.982), new Rotation2d(Units.degreesToRadians(121)));
+      targetPosition[22][1] = new Pose2d(new Translation2d(5.011,2.802), new Rotation2d(Units.degreesToRadians(121)));
+
       if (Constants.Swerve.VISION)
       {
         setupPhotonVision();
@@ -62,7 +83,9 @@ public class Swerve extends SubsystemBase
     ChassisSpeeds currentSpeeds = io.getRobotVelocity(); // Method to get current robot-relative chassis speeds
     SwerveModuleState[] currentStates = io.getModuleState(); // Method to get the current swerve module states
     previousSetpoint = new SwerveSetpoint(currentSpeeds, currentStates, DriveFeedforwards.zeros(Constants.PathPlanner.config.numModules));
-      setupPathPlanner();
+      
+    
+    setupPathPlanner();
 
 
     setpointGenerator = new SwerveSetpointGenerator(
@@ -75,26 +98,39 @@ public class Swerve extends SubsystemBase
          
          
   private void setupPathPlanner() {
-
-    // Configure AutoBuilder last
-    AutoBuilder.configure(
-            this::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        // Load the RobotConfig from the GUI settings. You should probably
+        // store this in your Constants file
+        RobotConfig config;
+        try
+        {
+          config = RobotConfig.fromGUISettings();
+          // Configure AutoBuilder last
+          AutoBuilder.configure(
+            io::getPose, // Robot pose supplier
+            io::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            io::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
               // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-          (speedsRobotRelative, moduleFeedForwards) -> {io.drivePathPlanner(speedsRobotRelative, moduleFeedForwards);},
+            (speedsRobotRelative, moduleFeedForwards) -> {io.drivePathPlanner(speedsRobotRelative, moduleFeedForwards);},
             Constants.PathPlanner.DRIVE_CONTROLLER,
-            Constants.PathPlanner.config, // The robot configuration
+            config, // The robot configuration
             io::isRedAlliance,
             this // Reference to this subsystem to set requirements
-    );
-    
-    // Since AutoBuilder is configured, we can use it to build pathfinding commands
-  Command pathfindingCommand = AutoBuilder.pathfindToPose(
-  Constants.PathPlanner.targetPose,
-  Constants.PathPlanner.constraints,
-  0.0 // Goal end velocity in meters/sec
-);
+          );
+
+        } 
+        catch (Exception e)
+        {
+            // Handle exception as needed
+            e.printStackTrace();
+        }
+
+        //Preload PathPlanner Path finding
+        // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
+      
+        PathPlannerLogging.setLogActivePathCallback((activePath) -> {Logger.recordOutput("Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));});//loging stuff
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) -> {Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);});//logging stuff
+        Pathfinding.setPathfinder(new LocalADStar());
+        PathfindingCommand.warmupCommand().schedule();
     }
 
 
@@ -155,14 +191,24 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
 
            //TODO: add to robot container
 
-    public Command autoAlign(int position){
+    public Command autoAlign(int position, int tagId){
 
-      int tagId = vision.getBestTagId(Cameras.CAM_1);
-       //TODO: filter out bad tag ids
-      Pose2d pose = Constants.Swerve.targetPosition[tagId][position]; 
-      PathConstraints constraints = new PathConstraints(io.getSwerve().getMaximumChassisVelocity(),
-       2.0, 2.5, Math.toRadians(720));
-      return AutoBuilder.pathfindToPose(pose, constraints, 0);
+      Pose2d pose = targetPosition[tagId][position]; 
+
+      if (pose == null) { 
+        return Commands.none();
+      }
+        //POSE and TAG ID return Properly. not sure what is happening with path planner. (CD is showing that it should be replaced anyways)
+      PathConstraints constraints = new PathConstraints(
+        io.getSwerve().getMaximumChassisVelocity(), 2.0,
+        io.getSwerve().getMaximumChassisAngularVelocity(), Units.degreesToRadians(720)
+      );
+// Since AutoBuilder is configured, we can use it to build pathfinding commands
+    return AutoBuilder.pathfindToPose( //somethin aint workin
+        pose,
+        constraints,
+        0 // Goal end velocity in meters/sec
+      );
     } 
 
   @Override
@@ -262,7 +308,9 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
     io.zeroGyroWithAlliance();
   }
 
-
+  public int BestTag() {
+    return vision.getBestTagId(Cameras.CAM_1);
+  }
 
   /**
    * Gets the current yaw angle of the robot, as reported by the swerve pose estimator in the underlying drivebase.
