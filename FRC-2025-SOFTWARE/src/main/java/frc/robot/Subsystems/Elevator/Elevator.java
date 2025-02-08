@@ -4,7 +4,11 @@
 
 package frc.robot.Subsystems.Elevator;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
@@ -16,5 +20,9 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+  @Override
+  public void simulationPeriodic(){
+    SmartDashboard.putData("Mechinisms/Elevator",io.getMech());
   }
 }

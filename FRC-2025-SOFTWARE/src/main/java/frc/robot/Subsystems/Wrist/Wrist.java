@@ -27,6 +27,6 @@ public class Wrist extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putData("Wrist/Mech",io.getMech());
+    SmartDashboard.putData("Mechinisms/Wrist",io.getMech());
   }
 }

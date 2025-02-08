@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import frc.robot.RobotContainer;
+import frc.robot.Subsystems.Elevator.Elevator;
 
 /** Add your docs here. */
 public class WristSim implements WristIO {
@@ -42,9 +44,11 @@ public class WristSim implements WristIO {
            90,
             true,
               Units.degreesToRadians(10));
+
         Mech = new Mechanism2d(0,0);
-        _root = Mech.getRoot("Elevator", 0, 0);//should be the actual elevator
-        _wristMech = _root.append(new MechanismLigament2d("Wrist", 0.1, 90));
+        _root = Mech.getRoot("Elevator", 0, 2);
+        _wristMech = _root.append(new MechanismLigament2d("Wrist", .5, 45));
+        
 
         _feedforward = new ArmFeedforward(0, 0, 0);
         _pid = new PIDController(0, 0, 0);
@@ -83,11 +87,11 @@ public class WristSim implements WristIO {
     public double getAngleDeg() {
         return Units.radiansToDegrees(_wrist.getAngleRads());
     }
-
+    @Override
     public double getAngleRad() {
         return _wrist.getAngleRads();
     }
-
+    @Override
     public double getVoltage() {
         return _wrist.getInput(0); //I think this is the reference for voltage. Still needs checked
     }

@@ -1,6 +1,14 @@
-Swerve - 3,4,5,6,7,8,9,10
-Pigeon - 11
-PDP - 1
 
-Wrist -2
-Elevator - 12,14
+1 - PDP
+2 - CoralIntake
+3-10 SWERVE ONLY Canivore??
+11 - Pigeon
+12 - Elevator Right
+13 - Wrist
+14- Elevator Left
+15 - Climber
+16
+17
+18
+19
+20

@@ -117,7 +117,7 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
         public static final PPHolonomicDriveController DRIVE_CONTROLLER = new PPHolonomicDriveController(TRANSLATION_PID,ANGLE_PID);
         // PPHolonomicController is the built in path following controller for holonomic drive trains
 
-        public static final String DEFAULT = "";
+        public static final String DEFAULT = "TestAuto";
 
         public static Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
         public static PathConstraints constraints = new PathConstraints(

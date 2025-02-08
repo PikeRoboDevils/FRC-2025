@@ -23,7 +23,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class ElevatorHardware implements ElevatorIO {
     SparkMax Leader;
     SparkMax Follower;
-    SparkAbsoluteEncoder wristEncoder;
+    SparkAbsoluteEncoder elevatorEncoder;
     RelativeEncoder internalEncoder;
     SparkClosedLoopController closedLoopController;
     SparkMaxConfig motorConfig;
@@ -36,7 +36,7 @@ public class ElevatorHardware implements ElevatorIO {
 
         closedLoopController = Leader.getClosedLoopController();
         internalEncoder = Leader.getEncoder();
-        wristEncoder = Leader.getAbsoluteEncoder();
+        elevatorEncoder = Leader.getAbsoluteEncoder();
 
         /*
         * Create a new SPARK MAX configuration object. This will store the
@@ -103,7 +103,7 @@ public class ElevatorHardware implements ElevatorIO {
         inputs.ElevatorVelocity = getVelocity();
         inputs.ElevatorVolt = getVoltage();
         inputs.ElevatorCurrent = Leader.getOutputCurrent();
-        inputs.ElevatorInternalAngle = internalEncoder.getPosition();
+        inputs.ElevatorPosition = internalEncoder.getPosition();
     }
     
 
@@ -124,11 +124,11 @@ public class ElevatorHardware implements ElevatorIO {
 
     @Override
     public double getVelocity(){
-        return wristEncoder.getVelocity();}
+        return elevatorEncoder.getVelocity();}
 
     @Override
     public double getPosition(){
-        return wristEncoder.getPosition();}
+        return elevatorEncoder.getPosition();}
 
     @Override
     public double getVoltage(){

@@ -15,7 +15,7 @@ public interface ElevatorIO {
         public double ElevatorVelocity = 0.0;
         public double ElevatorVolt = 0.0;
         public double ElevatorCurrent = 0.0;
-        public double ElevatorInternalAngle = 0.0;
+        public double ElevatorPosition = 0.0;
     }
     
     public default void updateInputs(ElevatorIOInputs inputs){}
