@@ -17,11 +17,13 @@ public interface ElevatorIO {
         public double ElevatorCurrent = 0.0;
         public double ElevatorInternalAngle = 0.0;
     }
+    
+    public default void updateInputs(ElevatorIOInputs inputs){}
 
     /** Set voltage from 0-1 */
     public default void setVoltage(double speed) {}
     public default void setPosition(double position){}
-    public default void updateInputs(){}
+
     public default void setVelocity(double speed) {}
     public default double getVelocity(){return 0;}
 
