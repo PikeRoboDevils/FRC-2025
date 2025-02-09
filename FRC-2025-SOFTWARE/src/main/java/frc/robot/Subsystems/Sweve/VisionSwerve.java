@@ -324,7 +324,7 @@ public class VisionSwerve {
     if (result.hasTargets()){
       return result.getBestTarget().fiducialId;
     } else {
-      return 0; //TODO should be changed this is temporary
+      return 0;
     }
   }
 
@@ -377,7 +377,7 @@ public class VisionSwerve {
       try {
         Desktop.getDesktop().browse(new URI("http://localhost:1182/"));
         Desktop.getDesktop().browse(new URI("http://localhost:1184/"));
-        //Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
+        Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
       } catch (IOException | URISyntaxException e) {
         e.printStackTrace();
       }
@@ -429,16 +429,17 @@ public class VisionSwerve {
       PoseCameraConstants.CAM2R, //rotation of camera
       PoseCameraConstants.CAM2T, //transform of camera (dont forget forwatd+ left+ up+)
       VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs), VecBuilder.fill(n1StndardDevs*0.25, n2StandardDevs*0.25, n4StandardDevs*0.25) //std devs
-    );
-    // CAM_3("CAM3",
-    // CameraConstants.CAM1R,
-    // CameraConstants.CAM1T,
-    // VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
-    // CAM_4("CAM4",
-    // CameraConstants.CAM1R,
-    // CameraConstants.CAM1T,
-    // VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
-    // ;
+    ),
+       CAM_3(PoseCameraConstants.CAM3N,
+       PoseCameraConstants.CAM3R,
+       PoseCameraConstants.CAM3T,
+       VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
+      //CAM_4("CAM4",
+      //CameraConstants.CAM1R,
+      //CameraConstants.CAM1T,
+      //VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)
+      //),
+     ;
 
     /**
      * Latency alert to use when high latency is detected.
