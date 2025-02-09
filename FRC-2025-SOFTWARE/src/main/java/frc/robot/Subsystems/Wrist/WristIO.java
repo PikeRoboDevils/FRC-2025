@@ -41,8 +41,6 @@ public interface WristIO {
     public default double getAngleDeg(){return 0;}
     public default double getAngleRad(){return 0;}
     public default double getVoltage(){return 0;}
-    
-    public default Mechanism2d getMech(){return new Mechanism2d(0, 0);}
 
 
 }

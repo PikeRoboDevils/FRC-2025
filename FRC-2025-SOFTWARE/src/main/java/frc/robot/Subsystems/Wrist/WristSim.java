@@ -22,10 +22,7 @@ public class WristSim implements WristIO {
 
     private SingleJointedArmSim _wrist;
 
-    public Mechanism2d Mech;
     private Pose3d _wristPose;
-    private MechanismRoot2d _root;
-    private MechanismLigament2d _wristMech;
 
     private ArmFeedforward _feedforward;
     private PIDController _pid;
@@ -40,10 +37,6 @@ public class WristSim implements WristIO {
            90,
             true,
               Units.degreesToRadians(10));
-
-        Mech = new Mechanism2d(0,0);
-        _root = Mech.getRoot("Elevator", 0, 2);
-        _wristMech = _root.append(new MechanismLigament2d("Wrist", .5, 45));
         
 
         _feedforward = new ArmFeedforward(0, 0, 0);
@@ -56,7 +49,6 @@ public class WristSim implements WristIO {
     public void updateInputs(WristIOInputs inputs) {
         
         _wrist.update(0.02);
-        _wristMech.setAngle(getAngleDeg());
         _wristPose = new Pose3d(new Translation3d(0,0,0), new Rotation3d(0,getAngleDeg(),0));
         
         inputs.WristPose = _wristPose;
@@ -89,11 +81,7 @@ public class WristSim implements WristIO {
     }
     @Override
     public double getVoltage() {
-        return _wrist.getInput(0); //I think this is the reference for voltage. Still needs checked
-    }
-    @Override
-    public Mechanism2d getMech() {
-        return Mech; 
+        return 0;
     }
 
 }

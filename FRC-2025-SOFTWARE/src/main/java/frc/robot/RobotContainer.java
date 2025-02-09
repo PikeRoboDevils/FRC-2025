@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,7 +43,7 @@ public class RobotContainer {
   private final Swerve drivebase = new Swerve(new SwerveHardware());
 
   private Wrist wrist;
-  private Elevator elevator;
+  public static Elevator elevator; //TODO: temp solution
   private Climber climb;
   private CoralIntake intake;
 

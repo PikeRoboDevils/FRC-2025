@@ -13,6 +13,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -93,6 +94,16 @@ public void simulationPeriodic() {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+  }
+
+  //TODO: temporary
+  @Override
+  public void disabledPeriodic() {
+    RobotContainer.elevator.disabled();;
+  }
+  @Override
+  public void teleopPeriodic() {
+    RobotContainer.elevator.setPoint(Units.inchesToMeters(82));
   }
   
   @Override

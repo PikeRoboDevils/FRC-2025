@@ -4,12 +4,15 @@
 
 package frc.robot.Subsystems.Wrist;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Wrist extends SubsystemBase {
 
   WristIO io;
+  private final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
   /** Creates a new Wrist. */
   public Wrist(WristIO wristIo) {
     this.io = wristIo;
@@ -19,12 +22,7 @@ public class Wrist extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     //SmartDashboard.putData("Wrist/Mech",io.getMech());
-  }
-
-  
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putData("Mechinisms/Wrist",io.getMech());
+    io.updateInputs(inputs);
+    Logger.processInputs("wrist", inputs);
   }
 }

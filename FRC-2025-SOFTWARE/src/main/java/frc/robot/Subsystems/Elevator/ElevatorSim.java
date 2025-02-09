@@ -4,7 +4,13 @@
 
 package frc.robot.Subsystems.Elevator;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -13,33 +19,39 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 public class ElevatorSim implements ElevatorIO {
 
     private edu.wpi.first.wpilibj.simulation.ElevatorSim _elevator;
-    public Mechanism2d _mech;
-    private MechanismRoot2d _root;
-    private MechanismLigament2d _elevatorMech;
+
+    private ElevatorFeedforward _feedforward;
+    private ProfiledPIDController _profiledPIDController;
 
     public ElevatorSim() {
 
         double[] stdDevs = new double[2];
-        stdDevs[0] = 0.02;
-        stdDevs[1] = 0.02;
+        stdDevs[0] = 0.000002;
+        stdDevs[1] = 0.000002;
+        
         _elevator = new edu.wpi.first.wpilibj.simulation.ElevatorSim(
-        DCMotor.getNEO(2),
-        1,
-        10, 
-        0.01905,// .75 inches not sure
-        0.2527554,// 9.951 inches
-        2.1336,// 84 inches 
-        true,
-        2.1336, stdDevs
+            DCMotor.getNEO(2),
+            9,
+            10, 
+            Units.inchesToMeters(0.75),// .75 inches not sure
+            Units.inchesToMeters(0),//
+            Units.inchesToMeters(74),// 84 inches //74 because of model rigging
+            true,
+            0, stdDevs
         );
 
-         _mech = new Mechanism2d(0,0);
-         _root = _mech.getRoot("Elevator", 0, 0);
-         _elevatorMech = _root.append(new MechanismLigament2d("Elevator", 2, 90));
+        //TODO: fix the PID and FEED Forward to not be cursed
+        //position control
+        _feedforward = new ElevatorFeedforward(2, 0,0);
+        _profiledPIDController = new ProfiledPIDController(6, 0,0, new Constraints(2, 1));
 
+        _elevator.setState(0, 0);
     }
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
+
+        _elevator.update(0.02);
+
         inputs.ElevatorVelocity = getVelocity();
         inputs.ElevatorVolt = getVoltage();
         inputs.ElevatorCurrent = _elevator.getCurrentDrawAmps();
@@ -54,12 +66,14 @@ public class ElevatorSim implements ElevatorIO {
 
     @Override
     public  void setPosition(double position){
-        _elevator.setState(position,0);
+        double volts = MathUtil.clamp(_feedforward.calculate(position-getPosition()) + _profiledPIDController.calculate(getPosition(), position), -12, 12);
+        _elevator.setInputVoltage(volts);
     }
 
     @Override
     public void setVelocity(double speed) {
-       _elevator.setState(getPosition(), speed);
+        double volts = MathUtil.clamp(_profiledPIDController.calculate(speed, getVelocity()), 0, 0); //im lazy (also dont know if we need a set velocity)
+       _elevator.setInputVoltage(volts);
     }
 
     @Override
@@ -68,14 +82,12 @@ public class ElevatorSim implements ElevatorIO {
 
     @Override
     public double getPosition(){
-        return _elevator.getPositionMeters();}
+        return _elevator.getPositionMeters();
+    }
 
     @Override
     public double getVoltage(){
-        return 0;} //no direct way  
-        
-    @Override
-    public Mechanism2d getMech(){
-            return _mech;} 
+        return 0;
+    } //no direct way  
 
 }
