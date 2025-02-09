@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.Set;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.Logger;
 
@@ -51,6 +53,9 @@ public class RobotContainer {
 
   private final Field2d field;
 
+  private boolean debounce = false;
+  private int id = 0;
+
   public RobotContainer() {
     if (Robot.isReal()) {
       // wrist = new Wrist(new WristHardware());
@@ -64,8 +69,9 @@ public class RobotContainer {
       // intake = new CoralIntake(new CoralIntakeSim());
     }
     
-    configureBindings();
     field = new Field2d();
+
+    configureBindings();
 
     SmartDashboard.putData("Pathplanner", field);
 
@@ -84,7 +90,14 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser(Constants.PathPlanner.DEFAULT); //BE aware this does not remove old paths automatically
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-//closedAbsoluteDriveAdv does not work at least in sim dont use it :)
+   
+
+  }
+
+
+  private void configureBindings() {
+
+    //closedAbsoluteDriveAdv does not work at least in sim dont use it :)
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
         () -> -MathUtil.applyDeadband(driverXbox.getLeftY(),
         OperatorConstants.LEFT_Y_DEADBAND),
@@ -115,15 +128,11 @@ public class RobotContainer {
     //IT IS BACKWARDS. lol I forgot it defaults to RED not BLUE
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-
-    configureBindings();
-
-  }
-
-
-  private void configureBindings() {
     
-    driverXbox.leftBumper().onTrue(drivebase.autoAlign(0, drivebase.BestTag()));
+    
+
+    driverXbox.leftBumper().whileTrue(Commands.defer(() -> drivebase.autoAlign(0), Set.of(drivebase)));
+    driverXbox.rightBumper().whileTrue(Commands.defer(() -> drivebase.autoAlign(1), Set.of(drivebase)));
 
   }
 

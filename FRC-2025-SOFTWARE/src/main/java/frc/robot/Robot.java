@@ -23,7 +23,7 @@ import frc.robot.Subsystems.Simulation;
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
+  private RobotContainer m_robotContainer;
 
   public Robot() {
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);

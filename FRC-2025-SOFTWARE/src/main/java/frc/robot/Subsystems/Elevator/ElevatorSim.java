@@ -42,7 +42,7 @@ public class ElevatorSim implements ElevatorIO {
 
         //position control
         _feedforward = new ElevatorFeedforward(0.05, 0.34,6.91); //based on random numbers in recalc
-        _profiledPIDController = new ProfiledPIDController(12, 0,0.1, new Constraints(2.73, 2));
+        _profiledPIDController = new ProfiledPIDController(12, 0,0.1, new Constraints(2.73, -2)); //for some reason if the accell isnt negative the first motion is slowed or wonky
 
     }
     @Override

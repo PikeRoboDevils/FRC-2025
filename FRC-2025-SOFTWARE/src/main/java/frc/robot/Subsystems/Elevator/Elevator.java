@@ -23,7 +23,6 @@ public class Elevator extends SubsystemBase {
 
   public Elevator(ElevatorIO elevatorIO) {
     this.io = elevatorIO;
-    
 
     _stage1Visuals = new Pose3d(new Translation3d(), new Rotation3d());
     _stage2Visuals = new Pose3d(new Translation3d(), new Rotation3d());
