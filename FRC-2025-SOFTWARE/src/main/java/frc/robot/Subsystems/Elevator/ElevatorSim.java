@@ -32,20 +32,18 @@ public class ElevatorSim implements ElevatorIO {
         _elevator = new edu.wpi.first.wpilibj.simulation.ElevatorSim(
             DCMotor.getNEO(2),
             9,
-            10, 
-            Units.inchesToMeters(0.75),// .75 inches not sure
+            15, 
+            Units.inchesToMeters(2),// .75 inches not sure
             Units.inchesToMeters(0),//
             Units.inchesToMeters(74),// 84 inches //74 because of model rigging
             true,
             0, stdDevs
         );
 
-        //TODO: fix the PID and FEED Forward to not be cursed
         //position control
-        _feedforward = new ElevatorFeedforward(2, 0,0);
-        _profiledPIDController = new ProfiledPIDController(6, 0,0, new Constraints(2, 1));
+        _feedforward = new ElevatorFeedforward(0.05, 0.34,6.91); //based on random numbers in recalc
+        _profiledPIDController = new ProfiledPIDController(12, 0,0.1, new Constraints(2.73, 2));
 
-        _elevator.setState(0, 0);
     }
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {

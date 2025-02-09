@@ -103,7 +103,7 @@ public void simulationPeriodic() {
   }
   @Override
   public void teleopPeriodic() {
-    RobotContainer.elevator.setPoint(Units.inchesToMeters(82));
+    RobotContainer.elevator.setPoint(Units.inchesToMeters(40));
   }
   
   @Override
