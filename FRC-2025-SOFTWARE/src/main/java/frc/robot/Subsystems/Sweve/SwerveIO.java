@@ -1,6 +1,5 @@
 package frc.robot.Subsystems.Sweve;
 
-import java.awt.Robot;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLog;
@@ -13,9 +12,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.measure.Force;
-import edu.wpi.first.units.measure.Velocity;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;

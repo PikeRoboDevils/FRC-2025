@@ -4,12 +4,7 @@
 
 package frc.robot.Subsystems.Elevator;
 
-import com.revrobotics.spark.SparkBase.ControlType;
-
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;

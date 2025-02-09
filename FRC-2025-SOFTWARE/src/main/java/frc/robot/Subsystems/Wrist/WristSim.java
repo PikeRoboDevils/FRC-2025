@@ -4,8 +4,6 @@
 
 package frc.robot.Subsystems.Wrist;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -18,8 +16,6 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import frc.robot.RobotContainer;
-import frc.robot.Subsystems.Elevator.Elevator;
 
 /** Add your docs here. */
 public class WristSim implements WristIO {

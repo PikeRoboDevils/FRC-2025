@@ -13,7 +13,6 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,10 +21,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Subsystems.Simulation;
 import swervelib.math.Matter;
 
 
@@ -104,16 +99,16 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
 }
     public static class PathPlanner 
     {
-        private static final double AUTO_CURRENT_LIMIT = 40; 
+        private static final double AUTO_CURRENT_LIMIT = 60; 
         private static final Translation2d FL = new Translation2d(12,12);
         private static final Translation2d FR = new Translation2d(12,-12);
         private static final Translation2d BL = new Translation2d(-12,12);
         private static final Translation2d BR = new Translation2d(-12,-12);
-        private static final ModuleConfig modConfig = new ModuleConfig(3, Swerve.MAXSPEED, 1, DCMotor.getNEO(1), AUTO_CURRENT_LIMIT, 1);
+        private static final ModuleConfig modConfig = new ModuleConfig(2, Swerve.MAXSPEED, 1.15, DCMotor.getNEO(1), AUTO_CURRENT_LIMIT, 1);
 
         public static final RobotConfig config = new RobotConfig(Swerve.ROBOT_MASS, 1, modConfig, FL,FR,BL,BR);
-        public static final PIDConstants TRANSLATION_PID = new PIDConstants(1.7, 0, 0);
-        public static final PIDConstants ANGLE_PID       = new PIDConstants(1.4, 0, 0.01);
+        public static final PIDConstants TRANSLATION_PID = new PIDConstants(5.7, 0, 0);
+        public static final PIDConstants ANGLE_PID       = new PIDConstants(5.4, 0, 0.01);
         public static final PPHolonomicDriveController DRIVE_CONTROLLER = new PPHolonomicDriveController(TRANSLATION_PID,ANGLE_PID);
         // PPHolonomicController is the built in path following controller for holonomic drive trains
 

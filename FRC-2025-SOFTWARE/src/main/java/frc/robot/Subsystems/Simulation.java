@@ -29,7 +29,6 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SelfControlledSwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
-import org.ironmaple.simulation.seasonspecific.crescendo2024.NoteOnFly;
 import org.ironmaple.utils.FieldMirroringUtils;
 
 public class Simulation implements Subsystem {

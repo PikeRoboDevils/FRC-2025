@@ -3,12 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.Subsystems.Elevator;
-
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */

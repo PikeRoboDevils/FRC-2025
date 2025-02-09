@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.ironmaple.simulation.SimulatedArena;
-import org.littletonrobotics.junction.AutoLog;
-
 import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,17 +11,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
-import swervelib.math.SwerveMath;
 import swervelib.motors.SwerveMotor;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;

@@ -5,7 +5,6 @@
 package frc.robot.Subsystems.Wrist;
 
 import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
