@@ -5,9 +5,79 @@
   "rotations": [{ "axis": "x", "degrees": 90 },
    { "axis": "z", "degrees": 90 }], 
   "position": [0, 0, 0], 
-  "cameras": [],
-  "components": [
+  "cameras": [
 	{
+      "name": "W",
+      "rotations": [
+        {
+          "axis": "y",
+          "degrees": -5
+        },
+        {
+          "axis": "z",
+          "degrees": 30
+        }
+      ],
+      "position": [
+        0.1016,
+        -0.3048,
+        0.3048
+      ],
+      "resolution": [
+        960,
+        720
+      ],
+      "fov": 100
+    },
+	{
+      "name": "RearOUT",
+      "rotations": [
+        {
+          "axis": "y",
+          "degrees": -15
+        },
+        {
+          "axis": "z",
+          "degrees": 190
+        }
+      ],
+      "position": [
+        -0.1016,
+        0.2714,
+        0.531241
+      ],
+      "resolution": [
+        960,
+        720
+      ],
+      "fov": 100
+    },
+	{
+      "name": "FrontIn",
+      "rotations": [
+        {
+          "axis": "y",
+          "degrees": -15
+        },
+        {
+          "axis": "z",
+          "degrees": 20
+        }
+      ],
+      "position": [
+        0.1016,
+        -0.3048,
+        0.531241
+      ],
+      "resolution": [
+        960,
+        720
+      ],
+      "fov": 100
+    }
+  ],
+  "components": [
+  {
       "zeroedRotations": [
         {
           "axis": "z",
@@ -28,7 +98,7 @@
         0.0
 		
       ]
-    }
+    },
 	{ 
       "zeroedRotations": [
         {
@@ -50,7 +120,7 @@
         0.0
 		
       ]
-    }
+    },
 	{
       "zeroedRotations": [
         {
@@ -64,6 +134,32 @@
 		{
 			"axis": "y",
 			"degrees": 0
+		}
+      ],
+      "zeroedPosition": [
+        0.0,
+        0.0,
+        0.0
+		
+      ]
+    },
+	{
+      "zeroedRotations": [
+        {
+          "axis": "z",
+          "degrees": 0
+        },
+		{
+			"axis": "x",
+			"degrees": 0
+		},
+		{
+			"axis": "y",
+			"degrees": 180
+		},
+		{
+			"axis": "z",
+			"degrees": 90
 		}
       ],
       "zeroedPosition": [
