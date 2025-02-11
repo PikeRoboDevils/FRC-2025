@@ -86,9 +86,9 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
 
     public static final String CAM1N = "W"; //Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef tags.
    public static final Rotation3d CAM1R = new Rotation3d(0, Units.degreesToRadians(-5), Units.degreesToRadians(30));
-   public static final Translation3d CAM1T = new Translation3d(Units.inchesToMeters(5),//transform of camera (dont forget forward+ left+ up+)
-                      Units.inchesToMeters(-14),
-                      Units.inchesToMeters(8));
+   public static final Translation3d CAM1T = new Translation3d(Units.inchesToMeters(4),//transform of camera (dont forget forward+ left+ up+)
+                      Units.inchesToMeters(-12),
+                      Units.inchesToMeters(12));
 
     public static final String CAM2N = "RearOut"; //cam 2 and 3 are roughly halfway up the elevator bracing and mounted to the outside looking the direction of thier name. (this is important as looking directly (same plane) at a tag is bad)
    public static final Rotation3d CAM2R = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(180+10)); 
@@ -97,8 +97,8 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
                       Units.inchesToMeters(20.915));
 
   public static final String CAM3N = "FrontIn";
-   public static final Rotation3d CAM3R = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(-10)); 
-   public static final Translation3d CAM3T = new Translation3d(Units.inchesToMeters(-4), //transform of camera (dont forget forward+ left+ up+)
+   public static final Rotation3d CAM3R = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20)); 
+   public static final Translation3d CAM3T = new Translation3d(Units.inchesToMeters(4), //transform of camera (dont forget forward+ left+ up+)
                       Units.inchesToMeters(-10.687),
                       Units.inchesToMeters(20.915));
 

@@ -6,8 +6,6 @@ package frc.robot.Subsystems.Elevator;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-
 /** Add your docs here. */
 public interface ElevatorIO {
     @AutoLog

@@ -44,7 +44,7 @@ public class RobotContainer {
 
   private final Swerve drivebase = new Swerve(new SwerveHardware());
 
-  private Wrist wrist;
+  public static Wrist wrist; //TODO: temp solution
   public static Elevator elevator; //TODO: temp solution
   private Climber climb;
   private CoralIntake intake;
@@ -58,13 +58,13 @@ public class RobotContainer {
 
   public RobotContainer() {
     if (Robot.isReal()) {
-      // wrist = new Wrist(new WristHardware());
       // elevator = new Elevator(new ElevatorHardware());
+      // wrist = new Wrist(new WristHardware(), elevator);
       // climb = new Climber(new ClimberHardware());
       // intake = new CoralIntake(new CoralIntakeHardware());
     } else {
-      wrist = new Wrist(new WristSim());
       elevator = new Elevator(new ElevatorSim());
+      wrist = new Wrist(new WristSim(), elevator); //pass the current location of the wrist due to the stacked dof with seperate subsystems
       // climb = new Climber(new ClimberSim());
       // intake = new CoralIntake(new CoralIntakeSim());
     }

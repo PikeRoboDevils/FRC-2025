@@ -7,13 +7,9 @@ package frc.robot.Subsystems.Elevator;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
 /** Add your docs here. */
 public class ElevatorSim implements ElevatorIO {
@@ -85,7 +81,7 @@ public class ElevatorSim implements ElevatorIO {
 
     @Override
     public double getVoltage(){
-        return 0;
-    } //no direct way  
+        return _elevator.getInput(0); //I think this is the reference for voltage. Still needs checked, it would apear to be;
+    }
 
 }
