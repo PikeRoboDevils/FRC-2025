@@ -9,7 +9,7 @@ import org.littletonrobotics.junction.AutoLog;
 /** Add your docs here. */
 public interface CoralIntakeIO {
 
-       @AutoLog
+    @AutoLog
     public static class CoralIOInputs{
         public double IntakeVelocity = 0.0;
         public double IntakeVolt = 0.0;
@@ -19,7 +19,7 @@ public interface CoralIntakeIO {
 
     /** Set voltage from 0-1 */
     public default void setVoltage(double speed) {}
-    public default void updateInputs(){}
+    public default void updateInputs(CoralIOInputsAutoLogged inputs){}
     
     public default void setVelocity(double speed) {}
     public default double getVelocity(){return 0;}

@@ -4,12 +4,15 @@
 
 package frc.robot.Subsystems.Climber;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
 
   ClimberIO io;
+  ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
 
   public Climber(ClimberIO climberIO) {
     this.io = climberIO;
@@ -17,7 +20,8 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    io.updateInputs(inputs);
+    Logger.processInputs("Climber", inputs);
   }
 }
 

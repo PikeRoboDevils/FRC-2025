@@ -33,6 +33,7 @@ public class ClimberSim implements ClimberIO {
         _feedforward = new ArmFeedforward(1, 1,1);
         _profiledPIDController = new ProfiledPIDController(5, 3, 6, new Constraints(1, 2));
     }
+
     @Override
     public void setAngle(double angleDeg){
         double ffw = _feedforward.calculate(Units.degreesToRadians(angleDeg), _Climber.getAngleRads() - Units.degreesToRadians(angleDeg));
@@ -41,5 +42,6 @@ public class ClimberSim implements ClimberIO {
         _Climber.setInputVoltage(MathUtil.clamp(ffw+pid, -12, 12));
     }
 
-
+    //TODO add update inputs and update the sim loop
+    //TODO add voltage drive
 }

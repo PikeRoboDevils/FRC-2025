@@ -4,11 +4,14 @@
 
 package frc.robot.Subsystems.CoralIntake;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralIntake extends SubsystemBase {
   /** Creates a new CoralIntake. */
   CoralIntakeIO io;
+  CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
 
   public CoralIntake(CoralIntakeIO coralIntakeIO) {
     this.io = coralIntakeIO;
@@ -16,6 +19,7 @@ public class CoralIntake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    io.updateInputs(inputs);
+    Logger.processInputs("Coral Intake", inputs);
   }
 }

@@ -33,9 +33,9 @@ public class CoralIntakeHardware implements CoralIntakeIO {
      * Initialize the SPARK MAX and get its encoder and closed loop controller
      * objects for later use.
      */
-    closedLoopController = CoralintakeMotor.closedLoopController();
+    closedLoopController = CoralintakeMotor.getClosedLoopController();
     internalEncoder = CoralintakeMotor.getEncoder();
-    coralintakeencoder = CoralintakeMotor.getAbsoluteEncoder()
+    coralintakeencoder = CoralintakeMotor.getAbsoluteEncoder();
     
     /*
      * Create a new SPARK MAX configuration object. This will store the
@@ -58,11 +58,11 @@ public class CoralIntakeHardware implements CoralIntakeIO {
      * Configure the closed loop controller. We want to make sure we set the
      * feedback sensor as the primary encooder.
      */
-motorConfig.closedLoop
-        .feedbackSensor(feedbackSensor.kAlternateOrExternalEncoder)
+    motorConfig.closedLoop
+        .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);
         // Set PID values for posotion control. We don't need to pass a closed
         // loop slot, as it will default to slot 0.
-
+    }
 
 
 }
