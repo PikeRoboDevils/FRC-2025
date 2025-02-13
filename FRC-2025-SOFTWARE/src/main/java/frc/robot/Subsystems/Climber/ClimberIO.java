@@ -12,16 +12,16 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 public interface ClimberIO {
         @AutoLog
     public static class ClimberIOInputs{
-        public double WristEncoderAngle = 0.0;
-        public double WristVelocity = 0.0;
-        public double WristVolt = 0.0;
-        public double WristCurrent = 0.0;
-        public double WristInternalAngle = 0.0;
+        public double ClimberEncoderAngle = 0.0;
+        public double ClimberVelocity = 0.0;
+        public double ClimberVolt = 0.0;
+        public double ClimberCurrent = 0.0;
+        public double ClimberInternalAngle = 0.0;
     }
 
     public default void updateInputs(ClimberIOInputs inputs) {}
         /** 
-     * Set wrist angle in degrees
+     * Set Climber angle in degrees
      * 
      * @param angleDeg
     */

@@ -29,8 +29,8 @@ public class ElevatorSim implements ElevatorIO {
             DCMotor.getNEO(2),
             9,
             15, 
-            Units.inchesToMeters(2),// .75 inches not sure
-            Units.inchesToMeters(0),//
+            Units.inchesToMeters(2),// 2 inches 
+            Units.inchesToMeters(0),
             Units.inchesToMeters(74),// 84 inches //74 because of model rigging
             true,
             0, stdDevs
