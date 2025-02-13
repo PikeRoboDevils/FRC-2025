@@ -6,6 +6,6 @@ package frc.robot.Subsystems.CoralIntake;
 
 /** Add your docs here. */
 public class CoralIntakeSim {
-    //TODO add a flywheel sim and set up MappleSim game piece simulation.
-    //https://shenzhen-robotics-alliance.github.io/maple-sim/simulating-intake/
+  // TODO add a flywheel sim and set up MappleSim game piece simulation.
+  // https://shenzhen-robotics-alliance.github.io/maple-sim/simulating-intake/
 }

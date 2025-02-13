@@ -4,14 +4,13 @@
 
 package frc.robot.Subsystems.Climber;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
-
   ClimberIO io;
+
   ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
 
   public Climber(ClimberIO climberIO) {
@@ -24,5 +23,3 @@ public class Climber extends SubsystemBase {
     Logger.processInputs("Climber", inputs);
   }
 }
-
-

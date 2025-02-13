@@ -4,13 +4,13 @@
 
 package frc.robot.Subsystems.CoralIntake;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class CoralIntake extends SubsystemBase {
   /** Creates a new CoralIntake. */
   CoralIntakeIO io;
+
   CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
 
   public CoralIntake(CoralIntakeIO coralIntakeIO) {
