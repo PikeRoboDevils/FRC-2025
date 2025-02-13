@@ -29,6 +29,7 @@ public class WristHardware implements WristIO {
 
     public WristHardware() {
         wristMotor = new SparkMax(2, MotorType.kBrushless);
+        wristMotor.setControlFramePeriodMs(30); //defualt is 20 ms. This system should be fine with slightly lower polling
 
       /*
      * Initialize the SPARK MAX and get its encoder and closed loop controller
@@ -43,6 +44,8 @@ public class WristHardware implements WristIO {
      * configuration parameters for the SPARK MAX that we will set below.
      */
     motorConfig = new SparkMaxConfig();
+
+    motorConfig.voltageCompensation(12); //may be tweaked depending on voltage drain. Highly reccomended from a consistancy and smoothness standpoint
 
     /*
      * Configure the encoder. For this specific example, we are using the

@@ -31,6 +31,8 @@ public class ElevatorHardware implements ElevatorIO {
         Leader = new SparkMax(12, MotorType.kBrushless);
         Follower = new SparkMax(14, MotorType.kBrushless);
         
+        Follower.setControlFramePeriodMs(50); //defualt is 20 ms. The follower motor should be fine with slightly lower polling
+        
 
         closedLoopController = Leader.getClosedLoopController();
         internalEncoder = Leader.getEncoder();
@@ -41,6 +43,8 @@ public class ElevatorHardware implements ElevatorIO {
         * configuration parameters for the SPARK MAX that we will set below.
         */
         motorConfig = new SparkMaxConfig();
+
+        motorConfig.voltageCompensation(12); //may be tweaked depending on voltage drain. Highly reccomended from a consistancy and smoothness standpoint
 
         /*
         * Configure the encoder. For this specific example, we are using the
