@@ -7,30 +7,31 @@ package frc.robot.Subsystems.Wrist;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 
 /** Add your docs here. */
 public class WristHardware implements WristIO {
 
-    SparkMax wristMotor;
-    SparkAbsoluteEncoder wristEncoder;
-    RelativeEncoder internalEncoder;
-    SparkClosedLoopController closedLoopController;
+  SparkMax wristMotor;
+  SparkAbsoluteEncoder wristEncoder;
+  RelativeEncoder internalEncoder;
+  SparkClosedLoopController closedLoopController;
 
-   SparkMaxConfig motorConfig;
+  SparkMaxConfig motorConfig;
 
-    public WristHardware() {
-        wristMotor = new SparkMax(0, MotorType.kBrushless);
+  public WristHardware() {
+    wristMotor = new SparkMax(2, MotorType.kBrushless);
+    wristMotor.setControlFramePeriodMs(
+        30); // defualt is 20 ms. This system should be fine with slightly lower polling
 
-      /*
+    /*
      * Initialize the SPARK MAX and get its encoder and closed loop controller
      * objects for later use.
      */
@@ -44,21 +45,24 @@ public class WristHardware implements WristIO {
      */
     motorConfig = new SparkMaxConfig();
 
+    motorConfig.voltageCompensation(
+        12); // may be tweaked depending on voltage drain. Highly reccomended from a consistancy and
+    // smoothness standpoint
+
     /*
      * Configure the encoder. For this specific example, we are using the
      * integrated encoder of the NEO, and we don't need to configure it. If
      * needed, we can adjust values like the position or velocity conversion
      * factors.
      */
-    motorConfig.encoder
-        .positionConversionFactor(1)
-        .velocityConversionFactor(1);
+    motorConfig.encoder.positionConversionFactor(1).velocityConversionFactor(1);
 
     /*
      * Configure the closed loop controller. We want to make sure we set the
      * feedback sensor as the primary encoder.
      */
-    motorConfig.closedLoop
+    motorConfig
+        .closedLoop
         .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
         // Set PID values for position control. We don't need to pass a closed
         // loop slot, as it will default to slot 0.
@@ -73,7 +77,9 @@ public class WristHardware implements WristIO {
         .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
         .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-    motorConfig.closedLoop.maxMotion
+    motorConfig
+        .closedLoop
+        .maxMotion
         // Set MAXMotion parameters for position control. We don't need to pass
         // a closed loop slot, as it will default to slot 0.
         .maxVelocity(1000)
@@ -94,7 +100,8 @@ public class WristHardware implements WristIO {
      * the SPARK MAX loses power. This is useful for power cycles that may occur
      * mid-operation.
      */
-    wristMotor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    wristMotor.configure(
+        motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     // // Initialize dashboard values
     // SmartDashboard.setDefaultNumber("Target Position", 0);
@@ -102,46 +109,44 @@ public class WristHardware implements WristIO {
     // SmartDashboard.setDefaultBoolean("Control Mode", false);
     // SmartDashboard.setDefaultBoolean("Reset Encoder", false);
 
+  }
 
-    }
+  @Override
+  public void updateInputs(WristIOInputs inputs) {
 
-    @Override
-    public void updateInputs(WristIOInputs inputs) {
+    inputs.WristCurrent = wristMotor.getOutputCurrent();
+    inputs.WristEncoderAngle = getAngleDeg();
+    inputs.WristVolt = getVoltage();
+    inputs.WristVelocity = wristEncoder.getVelocity();
+    inputs.WristInternalAngle = internalEncoder.getPosition();
+  }
 
-        inputs.WristCurrent = wristMotor.getOutputCurrent();
-        inputs.WristEncoderAngle = getAngleDeg();
-        inputs.WristVolt = getVoltage();
-        inputs.WristVelocity = wristEncoder.getVelocity();
-        inputs.WristInternalAngle = internalEncoder.getPosition();
+  // set wrist angle in degrees
+  @Override
+  public void setAngle(double angleDeg) {
+    closedLoopController.setReference(
+        angleDeg, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+  }
 
-    }
+  // set voltage from 0-1
+  @Override
+  public void setVoltage(double speed) {
+    wristMotor.set(speed);
+  }
 
-    // set wrist angle in degrees
-    @Override
-    public void setAngle(double angleDeg) {
-        closedLoopController.setReference(angleDeg, ControlType.kMAXMotionPositionControl,
-          ClosedLoopSlot.kSlot0);
-    }
+  @Override
+  public double getAngleDeg() {
+    return wristEncoder.getPosition();
+  }
 
-    // set voltage from 0-1
-    @Override
-    public void setVoltage(double speed) {
-        wristMotor.set(speed);
-    }
+  @Override
+  public double getAngleRad() {
+    double radians = wristEncoder.getPosition() * (Math.PI / 180);
+    return radians;
+  }
 
-    @Override
-    public double getAngleDeg() {
-        return wristEncoder.getPosition();
-    }
-
-    @Override
-    public double getAngleRad() {
-        double radians = wristEncoder.getPosition() * (Math.PI/180);
-        return radians;
-    }
-
-    @Override
-    public double getVoltage() {
-        return wristMotor.getAppliedOutput();
-    }
+  @Override
+  public double getVoltage() {
+    return wristMotor.getAppliedOutput();
+  }
 }
