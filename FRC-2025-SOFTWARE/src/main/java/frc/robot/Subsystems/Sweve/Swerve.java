@@ -226,15 +226,19 @@ public class Swerve extends SubsystemBase {
                   headingY.getAsDouble()));
         });
   }
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
-  {
-    return run(() -> {
-      // Make the robot move
-      io.drive(new Translation2d(translationX.getAsDouble() * io.getMaxVelocity(),
-                                          translationY.getAsDouble() * io.getMaxVelocity()),
-                        angularRotationX.getAsDouble() * 2.5,
-                        false);
-    });
+
+  public Command driveCommand(
+      DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
+    return run(
+        () -> {
+          // Make the robot move
+          io.drive(
+              new Translation2d(
+                  translationX.getAsDouble() * io.getMaxVelocity(),
+                  translationY.getAsDouble() * io.getMaxVelocity()),
+              angularRotationX.getAsDouble() * 2.5,
+              false);
+        });
   }
 
   public Command fieldRelativeTeleop(

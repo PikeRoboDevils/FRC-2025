@@ -27,7 +27,7 @@ public class Constants {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];
 
-        public static boolean VISION = false;
+    public static boolean VISION = false;
 
     public static final double MAXSPEED = Units.feetToMeters(16);
     // taken from offseason swerve
