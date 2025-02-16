@@ -116,7 +116,7 @@ public class Swerve extends SubsystemBase
       io.drive(new Translation2d(translationX.getAsDouble() * io.getMaxVelocity(),
                                           translationY.getAsDouble() * io.getMaxVelocity()),
                         angularRotationX.getAsDouble() * 2.5,
-                        true);
+                        false);
     });
   }
 
