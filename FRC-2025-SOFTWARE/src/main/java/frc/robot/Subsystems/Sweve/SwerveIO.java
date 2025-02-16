@@ -1,172 +1,169 @@
 package frc.robot.Subsystems.Sweve;
 
-import java.awt.Robot;
-import java.util.Optional;
-
-import org.littletonrobotics.junction.AutoLog;
-
 import com.pathplanner.lib.util.DriveFeedforwards;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.measure.Force;
-import edu.wpi.first.units.measure.Velocity;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import java.util.Optional;
+import org.littletonrobotics.junction.AutoLog;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveDriveConfiguration;
 
-
 public interface SwerveIO {
-   
-    @AutoLog
-    public static class SwerveIOInputs{
-         //Left Front
-         public double LeftFrontModuleAngleEncoderAngle = 0.0;
-         public double LeftFrontModuleAngleVelocity = 0.0;
-         public double LeftFrontModuleAngleVolt = 0.0;
-         public double LeftFrontModuleAngleCurrent = 0.0;
-         public double LeftFrontModuleAngleInternalAngle = 0.0;
- 
-         public double LeftFrontModuleDrivePosition = 0.0;
-         public double LeftFrontModuleDriveVelocity = 0.0;
-         public double LeftFrontModuleDriveVolt = 0.0;
-         public double LeftFrontModuleDriveCurrent = 0.0;
- 
-         //Right Front
-         public double RightFrontModuleAngleEncoderAngle = 0.0;
-         public double RightFrontModuleAngleVelocity = 0.0;
-         public double RightFrontModuleAngleVolt = 0.0;
-         public double RightFrontModuleAngleCurrent = 0.0;
-         public double RightFrontModuleAngleInternalAngle = 0.0;
- 
-         public double RightFrontModuleDrivePosition = 0.0;
-         public double RightFrontModuleDriveVelocity = 0.0;
-         public double RightFrontModuleDriveVolt = 0.0;
-         public double RightFrontModuleDriveCurrent = 0.0;
- 
-         // Left Rear
-         public double LeftRearModuleAngleEncoderAngle = 0.0;
-         public double LeftRearModuleAngleVelocity = 0.0;
-         public double LeftRearModuleAngleVolt = 0.0;
-         public double LeftRearModuleAngleCurrent = 0.0;
-         public double LeftRearModuleAngleInternalAngle = 0.0;
- 
-         public double LeftRearModuleDrivePosition = 0.0;
-         public double LeftRearModuleDriveVelocity = 0.0;
-         public double LeftRearModuleDriveVolt = 0.0;
-         public double LeftRearModuleDriveCurrent = 0.0;
- 
-         public double RightRearModuleAngleEncoderAngle = 0.0;
-         public double RightRearModuleAngleVelocity = 0.0;
-         public double RightRearModuleAngleVolt = 0.0;
-         public double RightRearModuleAngleCurrent = 0.0;
-         public double RightRearModuleAngleInternalAngle = 0.0;
- 
-         public double RightRearModuleDrivePosition = 0.0;
-         public double RightRearModuleDriveVelocity = 0.0;
-         public double RightRearModuleDriveVolt = 0.0;
-         public double RightRearModuleDriveCurrent = 0.0;
-        
-    }
-   public default void updateInputs(SwerveIOInputs inputs) {}
 
-    public default void driveRobotRelative(ChassisSpeeds velocity,DriveFeedforwards feedforwards) {}
+  @AutoLog
+  public static class SwerveIOInputs {
+    // Left Front
+    public double LeftFrontModuleAngleEncoderAngle = 0.0;
+    public double LeftFrontModuleAngleVelocity = 0.0;
+    public double LeftFrontModuleAngleVolt = 0.0;
+    public double LeftFrontModuleAngleCurrent = 0.0;
+    public double LeftFrontModuleAngleInternalAngle = 0.0;
 
-    public default void driveChasisSpeeds(ChassisSpeeds velocity) {}
+    public double LeftFrontModuleDrivePosition = 0.0;
+    public double LeftFrontModuleDriveVelocity = 0.0;
+    public double LeftFrontModuleDriveVolt = 0.0;
+    public double LeftFrontModuleDriveCurrent = 0.0;
 
-    public default void driveTeleop(double translationX, double translationY, double angularRotationX, boolean fieldRelative) {}
+    // Right Front
+    public double RightFrontModuleAngleEncoderAngle = 0.0;
+    public double RightFrontModuleAngleVelocity = 0.0;
+    public double RightFrontModuleAngleVolt = 0.0;
+    public double RightFrontModuleAngleCurrent = 0.0;
+    public double RightFrontModuleAngleInternalAngle = 0.0;
 
-    public default void drive(Translation2d translation, double rotation, boolean fieldRelative) {}
+    public double RightFrontModuleDrivePosition = 0.0;
+    public double RightFrontModuleDriveVelocity = 0.0;
+    public double RightFrontModuleDriveVolt = 0.0;
+    public double RightFrontModuleDriveCurrent = 0.0;
 
-    public default void driveFieldOriented(ChassisSpeeds velocity) {}
+    // Left Rear
+    public double LeftRearModuleAngleEncoderAngle = 0.0;
+    public double LeftRearModuleAngleVelocity = 0.0;
+    public double LeftRearModuleAngleVolt = 0.0;
+    public double LeftRearModuleAngleCurrent = 0.0;
+    public double LeftRearModuleAngleInternalAngle = 0.0;
 
-    public  default void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[] forwardForce) {}
+    public double LeftRearModuleDrivePosition = 0.0;
+    public double LeftRearModuleDriveVelocity = 0.0;
+    public double LeftRearModuleDriveVolt = 0.0;
+    public double LeftRearModuleDriveCurrent = 0.0;
 
-    public default  void resetOdometry(Pose2d initialHolonomicPose) {}
+    public double RightRearModuleAngleEncoderAngle = 0.0;
+    public double RightRearModuleAngleVelocity = 0.0;
+    public double RightRearModuleAngleVolt = 0.0;
+    public double RightRearModuleAngleCurrent = 0.0;
+    public double RightRearModuleAngleInternalAngle = 0.0;
 
-    public default void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {}
+    public double RightRearModuleDrivePosition = 0.0;
+    public double RightRearModuleDriveVelocity = 0.0;
+    public double RightRearModuleDriveVolt = 0.0;
+    public double RightRearModuleDriveCurrent = 0.0;
+  }
 
-    public default void setBrakeMode(boolean enabled) {}
-    
+  public default void updateInputs(SwerveIOInputs inputs) {}
 
-    public default void setModuleStates(SwerveModuleState[] modules) {}
+  public default void driveRobotRelative(ChassisSpeeds velocity, DriveFeedforwards feedforwards) {}
 
-    public default void updateOdometry() {}
+  public default void driveChasisSpeeds(ChassisSpeeds velocity) {}
 
-    public default void zeroGyro() {}
+  public default void driveTeleop(
+      double translationX, double translationY, double angularRotationX, boolean fieldRelative) {}
 
-    public default void lockPose() {}
+  public default void drive(Translation2d translation, double rotation, boolean fieldRelative) {}
 
-    public default double getMaxVelocity() {
-        return 0;
-    }
-    public default double getMaxAnglularVelocity() {
-        return 0;
-    }
+  public default void driveFieldOriented(ChassisSpeeds velocity) {}
 
-    public default boolean isRedAlliance() {
-        return false;
-    }
+  public default void drivePathPlanner(
+      ChassisSpeeds speedsRobotRelative, DriveFeedforwards moduleFeedForwards) {}
 
-    public default ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX,double headingY) {
-        return null;
-    }
-    public default ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d heading) {
-        return null;
-    }
-    
-    public default Pose2d getPose() {
-        return null;
-    }
+  public default void resetOdometry(Pose2d initialHolonomicPose) {}
 
-    public default SwerveModuleState[] getModuleState() {
-        return null;
-    }
+  public default void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {}
 
-    public default SwerveModuleState[] getSetpoint() {
-        return null;
-    }
+  public default void setBrakeMode(boolean enabled) {}
 
-    public default Field2d getField() {
-        return null;
-    }
+  public default void setModuleStates(SwerveModuleState[] modules) {}
 
-    public default Rotation2d getHeading() {
-        return null;
-    }
+  public default void updateOdometry() {}
 
+  public default void zeroGyro() {}
 
-    public default SwerveDriveConfiguration getSwerveDriveConfiguration() {
-        return null;
-    }
+  public default void lockPose() {}
 
-    public default ChassisSpeeds getFieldVelocity() {
-        return null;
-    }
+  public default double getMaxVelocity() {
+    return 0;
+  }
 
-    public default ChassisSpeeds getRobotVelocity() {
-        return null;
-    }
+  public default double getMaxAnglularVelocity() {
+    return 0;
+  }
 
-    public default SwerveDriveKinematics getKinematics() {
-        return null;
-    }
+  public default boolean isRedAlliance() {
+    return false;
+  }
 
-    public default SwerveDrive getSwerve() {
-        return null;
-    }
-    public default SwerveController getController() {
-        return null;
-    }
+  public default ChassisSpeeds getTargetSpeeds(
+      double xInput, double yInput, double headingX, double headingY) {
+    return null;
+  }
 
-    public default void zeroGyroWithAlliance() {}
+  public default ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d heading) {
+    return null;
+  }
 
+  public default Pose2d getPose() {
+    return null;
+  }
+
+  public default Optional<Pose2d> getSimPose() {
+    return null;
+  }
+
+  public default SwerveModuleState[] getModuleState() {
+    return null;
+  }
+
+  public default SwerveModuleState[] getSetpoint() {
+    return null;
+  }
+
+  public default Field2d getField() {
+    return null;
+  }
+
+  public default Rotation2d getHeading() {
+    return null;
+  }
+
+  public default SwerveDriveConfiguration getSwerveDriveConfiguration() {
+    return null;
+  }
+
+  public default ChassisSpeeds getFieldVelocity() {
+    return null;
+  }
+
+  public default ChassisSpeeds getRobotVelocity() {
+    return null;
+  }
+
+  public default SwerveDriveKinematics getKinematics() {
+    return null;
+  }
+
+  public default SwerveDrive getSwerve() {
+    return null;
+  }
+
+  public default SwerveController getController() {
+    return null;
+  }
+
+  public default void zeroGyroWithAlliance() {}
 }
-
- 
