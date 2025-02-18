@@ -38,7 +38,7 @@ public class Constants {
       
 
 
-        public static boolean VISION = true;
+        public static boolean VISION = false;
 
         public static final double MAXSPEED = Units.feetToMeters(16);
         //taken from offseason swerve 
