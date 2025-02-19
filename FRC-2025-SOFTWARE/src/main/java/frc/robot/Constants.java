@@ -97,7 +97,7 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
    public static final Translation3d CAM2T = new Translation3d(Units.inchesToMeters(-4.628),
                       Units.inchesToMeters(-10.687),
                       Units.inchesToMeters(16.129));
-public static final double maxVisionStdDevsDistance = 0;
+public static final double maxVisionStdDevsDistance = 30;
 
     //it goes up to 4 but it is commented out in SwerveVision
 }

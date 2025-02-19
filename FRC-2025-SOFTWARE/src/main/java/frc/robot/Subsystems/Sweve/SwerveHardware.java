@@ -18,6 +18,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import swervelib.SwerveController;
@@ -103,6 +104,11 @@ public class SwerveHardware implements SwerveIO {
     @Override
     public ChassisSpeeds getFieldVelocity() {
         return swerveDrive.getFieldVelocity();
+    }
+
+    @Override
+    public Field2d getField() {
+        return swerveDrive.field;
     }
 
     @Override
