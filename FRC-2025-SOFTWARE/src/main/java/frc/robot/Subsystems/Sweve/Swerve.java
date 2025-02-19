@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
 
 import java.util.function.DoubleSupplier;
@@ -287,6 +288,13 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
     Logger.recordOutput("Odometry/driveToPose/translateXPID", translateX.getPositionError());
     Logger.recordOutput("Odometry/driveToPose/translateYPID", translateY.getPositionError());
     Logger.recordOutput("Odometry/driveToPose/rotatePID", rotateControl.getPositionError());
+
+    if (Robot.isSimulation()) {
+      if (io.getSimPose().isPresent()) { //might be able to merge the ifs but just to be safe against null errors it isnt
+        Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
+      }
+    }
+
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (Constants.Swerve.VISION)
     {
