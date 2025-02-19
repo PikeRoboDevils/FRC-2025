@@ -17,6 +17,9 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,11 +28,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
@@ -60,6 +65,15 @@ public class Swerve extends SubsystemBase
 
   private VisionSwerve vision;
 
+  private Pose2d[][] targetPosition = new Pose2d[23][3];
+
+  private ProfiledPIDController translateX;
+  private SimpleMotorFeedforward feedX;
+  private ProfiledPIDController translateY;
+  private SimpleMotorFeedforward feedY;
+  private ProfiledPIDController rotateControl;
+
+
       
   //not 2025 yet
    //private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
@@ -68,7 +82,68 @@ public class Swerve extends SubsystemBase
     {
       this.io = swerveIO;
       Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
+
+      // Set Pose for tag ID and location (0 = alliance wall left 1 = alliance wall right) //this is
+    // blue alliance
+      targetPosition[17][0] =
+      new Pose2d(
+          new Translation2d(3.666, 3.003),
+          new Rotation2d(
+              Units.degreesToRadians(
+                 55.5))); // should probably be named constants but Im in a time crunch (they
+    // also need tuned)
+      targetPosition[17][1] =
+          new Pose2d(new Translation2d(3.94, 2.820), new Rotation2d(Units.degreesToRadians(55.5)));
+      targetPosition[18][0] =
+          new Pose2d(new Translation2d(3.183, 4.181), new Rotation2d(Units.degreesToRadians(0)));
+      targetPosition[18][1] =
+          new Pose2d(new Translation2d(3.183, 3.857), new Rotation2d(Units.degreesToRadians(0)));
+      targetPosition[19][0] =
+          new Pose2d(new Translation2d(4.0, 5.258), new Rotation2d(Units.degreesToRadians(-60)));
+      targetPosition[19][1] =
+          new Pose2d(new Translation2d(3.663, 5.086), new Rotation2d(Units.degreesToRadians(-60)));
+      targetPosition[20][0] =
+          new Pose2d(new Translation2d(5.011, 5.240), new Rotation2d(Units.degreesToRadians(-121)));
+      targetPosition[20][1] =
+          new Pose2d(new Translation2d(5.318, 5.079), new Rotation2d(Units.degreesToRadians(-121)));
+      targetPosition[21][0] =
+          new Pose2d(new Translation2d(5.803, 4.184), new Rotation2d(Units.degreesToRadians(180)));
+      targetPosition[21][1] =
+          new Pose2d(new Translation2d(5.803, 3.862), new Rotation2d(Units.degreesToRadians(180)));
+      targetPosition[22][0] =
+          new Pose2d(new Translation2d(5.301, 2.982), new Rotation2d(Units.degreesToRadians(121)));
+      targetPosition[22][1] =
+          new Pose2d(new Translation2d(5.011, 2.802), new Rotation2d(Units.degreesToRadians(121)));
   
+
+      double TkP = 1;
+      double TkI = 0;
+      double TkD = 0.5;
+      TrapezoidProfile.Constraints tConstraints =
+          new TrapezoidProfile.Constraints(
+              io.getMaxVelocity(),
+              -io.getMaxVelocity()
+                  / 2); // not making the accel limit negative causes it to do weird stuff with its
+    // first move
+
+      double fS = 0.03;
+      double fV = 2;
+
+      double RkP = 6;
+      double RkI = 0;
+      double RkD = 0;
+      TrapezoidProfile.Constraints rConstraints =
+          new TrapezoidProfile.Constraints(
+              io.getMaxAnglularVelocity(), io.getMaxAnglularVelocity() / 1.5);
+
+      translateX = new ProfiledPIDController(TkP, TkI, TkD, tConstraints, 0.02);
+      feedX = new SimpleMotorFeedforward(fS, fV);
+      translateY = new ProfiledPIDController(TkP, TkI, TkD, tConstraints, 0.02);
+      feedY = new SimpleMotorFeedforward(fS, fV);
+      rotateControl = new ProfiledPIDController(RkP, RkI, RkD, rConstraints, 0.02);
+      rotateControl.enableContinuousInput(0, 360);
+
+
   
       if (Constants.Swerve.VISION)
       {
@@ -177,11 +252,31 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
     public Command autoAlign(int position){
 
       int tagId = vision.getBestTagId(Cameras.CAM_1);
-       //TODO: filter out bad tag ids
+
       Pose2d pose = Constants.Swerve.targetPosition[tagId][position]; 
-      PathConstraints constraints = new PathConstraints(io.getSwerve().getMaximumChassisVelocity(),
-       2.0, 2.5, Math.toRadians(720));
-      return AutoBuilder.pathfindToPose(pose, constraints, 0);
+      
+      if (pose == null) {
+        return Commands.none();
+      }
+
+      translateX.setGoal(pose.getX());
+      translateY.setGoal(pose.getY());
+      rotateControl.setGoal(pose.getRotation().getDegrees());
+
+      return run(
+        () -> {
+          double x = translateX.calculate(getPose().getX());
+          double y = translateY.calculate(getPose().getY());
+          double rotate = rotateControl.calculate(getPose().getRotation().getDegrees());
+          double xF = feedX.calculate(pose.getX() - getPose().getX());
+          double yF = feedY.calculate(pose.getY() - getPose().getY());
+          double xS = MathUtil.clamp(x + xF, -io.getMaxVelocity(), io.getMaxVelocity());
+          double yS = MathUtil.clamp(y + yF, -io.getMaxVelocity(), io.getMaxVelocity());
+
+          ChassisSpeeds speeds = new ChassisSpeeds(xS, yS, Units.degreesToRadians(rotate));
+
+          io.driveFieldOriented(speeds);
+        });
     } 
 
   @Override
@@ -189,6 +284,9 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
   {
     Logger.processInputs("Swerve", inputs);
     Logger.recordOutput("Odometry/Pose", io.getPose());
+    Logger.recordOutput("Odometry/driveToPose/translateXPID", translateX.getPositionError());
+    Logger.recordOutput("Odometry/driveToPose/translateYPID", translateY.getPositionError());
+    Logger.recordOutput("Odometry/driveToPose/rotatePID", rotateControl.getPositionError());
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (Constants.Swerve.VISION)
     {
