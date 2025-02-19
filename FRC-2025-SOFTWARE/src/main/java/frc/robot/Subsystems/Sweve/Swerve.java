@@ -146,7 +146,7 @@ public class Swerve extends SubsystemBase
 
 
   
-      if (Constants.Swerve.VISION)
+      if (Constants.Swerve.VISION || Robot.isSimulation())
       {
         setupPhotonVision();
         // Stop the odometry thread if we are using vision that way we can synchronize updates better.
@@ -254,7 +254,7 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
 
       int tagId = vision.getBestTagId(Cameras.CAM_1);
 
-      Pose2d pose = Constants.Swerve.targetPosition[tagId][position]; 
+      Pose2d pose = targetPosition[tagId][position]; 
       
       if (pose == null) {
         return Commands.none();
@@ -296,10 +296,11 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
     }
 
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (Constants.Swerve.VISION)
+    if (Constants.Swerve.VISION || Robot.isSimulation())
     {
       io.updateOdometry();
-      updatePoseWithVision();
+      vision.visionSim.update(io.getPose());
+      //updatePoseWithVision();
       Logger.recordOutput("Odometry/Vision", vision.ReturnPhotonPose());
       Logger.recordOutput("bestTarget",vision.getBestTagId(Cameras.CAM_1));
       //vision
