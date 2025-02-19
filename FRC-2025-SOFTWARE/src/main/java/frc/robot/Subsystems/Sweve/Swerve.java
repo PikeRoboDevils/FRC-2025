@@ -45,14 +45,14 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
-// import org.photonvision.PhotonCamera;
-// import org.photonvision.targeting.PhotonPipelineResult;
+
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveDriveConfiguration;
-
+// import org.photonvision.PhotonCamera;
+// import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Swerve extends SubsystemBase
 {
@@ -299,8 +299,8 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
     if (Constants.Swerve.VISION)
     {
       io.updateOdometry();
-      vision.visionSim.update(io.getPose());
-
+      updatePoseWithVision();
+      Logger.recordOutput("Odometry/Vision", vision.ReturnPhotonPose());
       Logger.recordOutput("bestTarget",vision.getBestTagId(Cameras.CAM_1));
       //vision
     }
