@@ -406,12 +406,12 @@ public class VisionSwerve {
         VecBuilder.fill(
             n1StndardDevs * 0.25, n2StandardDevs * 0.25, n4StandardDevs * 0.25) // std devs
         ),
-    CAM_3(
-        PoseCameraConstants.CAM3N,
-        PoseCameraConstants.CAM3R,
-        PoseCameraConstants.CAM3T,
-        VecBuilder.fill(4, 4, 8),
-        VecBuilder.fill(0.5, 0.5, 1)),
+    // CAM_3(
+    //     PoseCameraConstants.CAM3N,
+    //     PoseCameraConstants.CAM3R,
+    //     PoseCameraConstants.CAM3T,
+    //     VecBuilder.fill(4, 4, 8),
+    //     VecBuilder.fill(0.5, 0.5, 1)),
   // CAM_4("CAM4",
   // CameraConstants.CAM1R,
   // CameraConstants.CAM1T,

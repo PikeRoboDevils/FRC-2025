@@ -143,10 +143,10 @@ public class SwerveHardware implements SwerveIO {
         swerveDrive.driveFieldOriented(velocity);
     }
 
-    @Override
-    public void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[] forwardForce) {
-        swerveDrive.drive(speeds, modules, forwardForce);
-    }
+    // @Override
+    // public void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[] forwardForce) {
+    //     swerveDrive.drive(speeds, modules, forwardForce);
+    // }
 
     @Override
     public void resetOdometry(Pose2d initialHolonomicPose) {

@@ -100,17 +100,11 @@ public class Robot extends LoggedRobot {
     }
   }
 
-  // TODO: temporary
-  @Override
-  public void disabledPeriodic() {
-    RobotContainer.elevator.disabled();
-    RobotContainer.wrist.disabled();
-  }
+
 
   @Override
   public void teleopPeriodic() {
-    RobotContainer.elevator.setPoint(Units.inchesToMeters(40));
-    RobotContainer.wrist.setPoint(-45);
+
   }
 
   @Override
