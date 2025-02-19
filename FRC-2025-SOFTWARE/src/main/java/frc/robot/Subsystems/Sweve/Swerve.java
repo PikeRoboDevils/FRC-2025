@@ -53,6 +53,7 @@ public class Swerve extends SubsystemBase
 
 
   private final SwerveIO io;
+  private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
   private final SwerveSetpointGenerator setpointGenerator;
   private SwerveSetpoint previousSetpoint;
@@ -186,6 +187,7 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
   @Override
   public void periodic()
   {
+    Logger.processInputs("Swerve", inputs);
     Logger.recordOutput("Odometry/Pose", io.getPose());
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (Constants.Swerve.VISION)
