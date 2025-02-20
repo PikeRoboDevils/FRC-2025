@@ -123,12 +123,15 @@ public class RobotContainer {
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
+    //Drive To pose commands. Might be worth rediong to be a single command
     driverXbox
         .leftBumper()
         .whileTrue(Commands.defer(() -> drivebase.autoAlign(0), Set.of(drivebase)));
     driverXbox
         .rightBumper()
         .whileTrue(Commands.defer(() -> drivebase.autoAlign(1), Set.of(drivebase)));
+
+    driverXbox.a().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
   }
 
   public Command getAutonomousCommand() {
