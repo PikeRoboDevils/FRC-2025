@@ -121,8 +121,17 @@ public class RobotContainer {
     // it takes inverted controls and returns the correct speeds
     // IT IS BACKWARDS. lol I forgot it defaults to RED not BLUE
 
+
+
+    //Drive Controllerr Commands
+
+    //Generic
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
+    driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
+    driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.lock()));
+
+    //Season Specififc
     //Drive To pose commands. Might be worth rediong to be a single command
     driverXbox
         .leftBumper()
@@ -131,7 +140,7 @@ public class RobotContainer {
         .rightBumper()
         .whileTrue(Commands.defer(() -> drivebase.autoAlign(1), Set.of(drivebase)));
 
-    driverXbox.a().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
+
   }
 
   public Command getAutonomousCommand() {
