@@ -100,6 +100,6 @@ public class ElevatorSim implements ElevatorIO {
   @Override
   public double getVoltage() {
     return _elevator.getInput(
-        0); // I think this is the reference for voltage. Still needs checked, it would apear to be;
+        0); //this is Voltage
   }
 }

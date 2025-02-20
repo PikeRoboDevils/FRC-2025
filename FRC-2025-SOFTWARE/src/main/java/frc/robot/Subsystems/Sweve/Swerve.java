@@ -172,7 +172,7 @@ public class Swerve extends SubsystemBase
           }
         
          
-         
+     //TODO fix path planner again :(    
   private void setupPathPlanner() {
     // Configure AutoBuilder last
     AutoBuilder.configure(
@@ -263,35 +263,44 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
 
            //TODO: add to robot container
 
-    public Command autoAlign(int position){
+           //Aligns the robot to the requested reef pose automatically
+  public Command autoAlign(int position){
 
-      int tagId = vision.getBestTagId(Cameras.CAM_1);
+    //identify the important face using the bes tag id coming from front camera
+    int tagId = vision.getBestTagId(Cameras.CAM_1);
 
-      Pose2d pose = targetPosition[tagId][position]; 
+    //Identify pose
+    Pose2d pose = targetPosition[tagId][position]; 
       
-      if (pose == null) {
-        return Commands.none();
-      }
+    //make sure its a valid tag
+    if (pose == null) {
+      return Commands.none();
+    }
 
-      translateX.setGoal(pose.getX());
-      translateY.setGoal(pose.getY());
-      rotateControl.setGoal(pose.getRotation().getDegrees());
+    //set the pid goals so they behave correctly
+    translateX.setGoal(pose.getX());
+    translateY.setGoal(pose.getY());
+    rotateControl.setGoal(pose.getRotation().getDegrees());
 
-      return run(
-        () -> {
-          double x = translateX.calculate(getPose().getX());
-          double y = translateY.calculate(getPose().getY());
-          double rotate = rotateControl.calculate(getPose().getRotation().getDegrees());
-          double xF = feedX.calculate(pose.getX() - getPose().getX());
-          double yF = feedY.calculate(pose.getY() - getPose().getY());
-          double xS = MathUtil.clamp(x + xF, -io.getMaxVelocity(), io.getMaxVelocity());
-          double yS = MathUtil.clamp(y + yF, -io.getMaxVelocity(), io.getMaxVelocity());
+    return run(
+      () -> {
+        //update PID values every loop 
+        double x = translateX.calculate(getPose().getX());
+        double y = translateY.calculate(getPose().getY());
+        double rotate = rotateControl.calculate(getPose().getRotation().getDegrees());
+        double xF = feedX.calculate(pose.getX() - getPose().getX());
+        double yF = feedY.calculate(pose.getY() - getPose().getY());
+        double xS = MathUtil.clamp(x + xF, -io.getMaxVelocity(), io.getMaxVelocity());
+        double yS = MathUtil.clamp(y + yF, -io.getMaxVelocity(), io.getMaxVelocity());
 
-          ChassisSpeeds speeds = new ChassisSpeeds(xS, yS, Units.degreesToRadians(rotate));
 
-          io.driveFieldOriented(speeds);
-        });
-    } 
+        //parse field relative chasis speeds
+        ChassisSpeeds speeds = new ChassisSpeeds(xS, yS, Units.degreesToRadians(rotate));
+
+        //run chassis speeds
+        io.driveFieldOriented(speeds);
+      });
+  } 
 
   @Override
   public void periodic()
