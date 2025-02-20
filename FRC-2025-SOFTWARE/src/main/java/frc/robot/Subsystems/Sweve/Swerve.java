@@ -12,6 +12,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 
@@ -117,6 +118,7 @@ public class Swerve extends SubsystemBase
           new Pose2d(new Translation2d(5.011, 2.802), new Rotation2d(Units.degreesToRadians(121)));
   
 
+      //Setup the closed loop controllers for auto align
       double TkP = 1;
       double TkI = 0;
       double TkD = 0.5;
@@ -184,6 +186,17 @@ public class Swerve extends SubsystemBase
             this // Reference to this subsystem to set requirements
     );
     //PathfindingCommand.warmupCommand().schedule();
+
+    //Logging for the path planner values.
+     PathPlannerLogging.setLogActivePathCallback(
+        (activePath) -> {
+          Logger.recordOutput(
+              "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+        }); // loging stuff
+    PathPlannerLogging.setLogTargetPoseCallback(
+        (targetPose) -> {
+          Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+        }); // logging stuff
     }
 
 // this crashes the robot idk why 
