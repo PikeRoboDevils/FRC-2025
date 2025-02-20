@@ -300,7 +300,7 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
     {
       io.updateOdometry();
       vision.visionSim.update(io.getPose());
-      //updatePoseWithVision();
+      updatePoseWithVision();
       Logger.recordOutput("Odometry/Vision", vision.ReturnPhotonPose());
       Logger.recordOutput("bestTarget",vision.getBestTagId(Cameras.CAM_1));
       //vision
