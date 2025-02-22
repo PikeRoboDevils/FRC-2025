@@ -105,16 +105,16 @@ public class RobotContainer {
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle =
         drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
             () -> -driverXbox.getRightX(),
             () -> -driverXbox.getRightY());
 
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity =
         drivebase.fieldRelativeTeleop(
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
             () ->  MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2.5);
     // im not sure where the inversions are supposed to be but right now
@@ -133,13 +133,15 @@ public class RobotContainer {
 
     //Season Specififc
     //Drive To pose commands. Might be worth rediong to be a single command
-    driverXbox
-        .leftBumper()
-        .whileTrue(Commands.defer(() -> drivebase.autoAlign(0), Set.of(drivebase)));
-    driverXbox
-        .rightBumper()
-        .whileTrue(Commands.defer(() -> drivebase.autoAlign(1), Set.of(drivebase)));
-
+    if (Constants.Swerve.VISION)
+    {
+      driverXbox
+          .leftBumper()
+          .whileTrue(Commands.defer(() -> drivebase.autoAlign(0), Set.of(drivebase)));
+      driverXbox
+          .rightBumper()
+          .whileTrue(Commands.defer(() -> drivebase.autoAlign(1), Set.of(drivebase)));
+    }
 
   }
 
