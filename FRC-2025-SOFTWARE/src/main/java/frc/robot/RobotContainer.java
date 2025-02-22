@@ -115,7 +115,7 @@ public class RobotContainer {
         drivebase.fieldRelativeTeleop(
             () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
             () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> -driverXbox.getRightX(),
+            () ->  MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2.5);
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
@@ -128,8 +128,8 @@ public class RobotContainer {
     //Generic
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
-    driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
-    driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.lock()));
+    driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
+    driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
 
     //Season Specififc
     //Drive To pose commands. Might be worth rediong to be a single command

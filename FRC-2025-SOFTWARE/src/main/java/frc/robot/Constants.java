@@ -79,7 +79,7 @@ public static final DriveTrainSimulationConfig driveTrainSimulationConfig = Driv
       public static final double TURN_CONSTANT    = 6;
     
     //DRIVER PRACTICE
-    public static final boolean driverPractice = false; // advantage scope has peformance issues when running mutiple robots change rendering mode to standard or low
+    public static final boolean driverPractice = true; // advantage scope has peformance issues when running mutiple robots change rendering mode to standard or low
     }
 
    //For Easier camera setup to be used with already made vision examples  
