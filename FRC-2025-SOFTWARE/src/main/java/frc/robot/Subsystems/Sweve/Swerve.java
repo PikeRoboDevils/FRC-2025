@@ -75,6 +75,8 @@ public class Swerve extends SubsystemBase
   private SimpleMotorFeedforward feedY;
   private ProfiledPIDController rotateControl;
 
+  private Rotation2d lastAngle;
+
 
       
   //not 2025 yet
@@ -249,6 +251,30 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
     return run(() -> {
     ChassisSpeeds desiredSpeeds = io.getTargetSpeeds(LeftY.getAsDouble(), LeftX.getAsDouble(), new Rotation2d(RightX.getAsDouble() * Math.PI));
     desiredSpeeds.omegaRadiansPerSecond = RightX.getAsDouble() * Math.PI * steerSens.getAsDouble();
+
+    io.driveFieldOriented(desiredSpeeds);
+    });
+  }
+
+  public Command fieldRelativeHybrid(DoubleSupplier LeftX, DoubleSupplier LeftY, DoubleSupplier RightX, DoubleSupplier steerSens) {
+    return run(() -> {
+    ChassisSpeeds desiredSpeeds = io.getTargetSpeeds(LeftY.getAsDouble(), LeftX.getAsDouble(), new Rotation2d(RightX.getAsDouble() * Math.PI));
+    desiredSpeeds.omegaRadiansPerSecond = RightX.getAsDouble() * Math.PI * steerSens.getAsDouble();
+
+    ChassisSpeeds holdingSpeeds;
+    if (lastAngle != null) {
+      double x = lastAngle.getSin();
+      double y = lastAngle.getCos();
+      holdingSpeeds = io.getTargetSpeeds(LeftY.getAsDouble(), LeftX.getAsDouble(), x,y);
+    } else {
+      holdingSpeeds = desiredSpeeds;
+    }
+
+    if (Math.abs(RightX.getAsDouble()) <= 0) {
+      desiredSpeeds.omegaRadiansPerSecond = holdingSpeeds.omegaRadiansPerSecond;
+    } else {
+      lastAngle = getHeading();
+    }
 
     io.driveFieldOriented(desiredSpeeds);
     });
