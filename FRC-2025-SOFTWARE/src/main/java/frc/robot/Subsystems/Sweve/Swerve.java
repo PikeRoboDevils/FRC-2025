@@ -249,7 +249,23 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
 
   public Command fieldRelativeTeleop(DoubleSupplier LeftX, DoubleSupplier LeftY, DoubleSupplier RightX, DoubleSupplier steerSens) {
     return run(() -> {
-    ChassisSpeeds desiredSpeeds = io.getTargetSpeeds(LeftY.getAsDouble(), LeftX.getAsDouble(), new Rotation2d(RightX.getAsDouble() * Math.PI));
+
+    double Xvalue;
+    double Yvalue;
+    if (DriverStation.getAlliance().isPresent()) {
+      if (DriverStation.getAlliance().get().equals(Alliance.Red)) {
+        Xvalue = -LeftX.getAsDouble();
+        Yvalue = -LeftY.getAsDouble();
+      } else {
+        Xvalue = LeftX.getAsDouble();
+        Yvalue = LeftY.getAsDouble();
+      } 
+    } else {
+      Xvalue = LeftX.getAsDouble();
+      Yvalue = LeftY.getAsDouble();
+    }
+
+    ChassisSpeeds desiredSpeeds = io.getTargetSpeeds(Yvalue, Xvalue, new Rotation2d(RightX.getAsDouble() * Math.PI));
     desiredSpeeds.omegaRadiansPerSecond = RightX.getAsDouble() * Math.PI * steerSens.getAsDouble();
 
     io.driveFieldOriented(desiredSpeeds);
