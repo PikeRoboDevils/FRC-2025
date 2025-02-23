@@ -117,6 +117,13 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
             () ->  MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2.5);
+
+    Command driveFieldOrientedHybrid =
+        drivebase.fieldRelativeHybrid(
+            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
+            () ->  MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
+            () -> 2.5);
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
     // IT IS BACKWARDS. lol I forgot it defaults to RED not BLUE
@@ -126,7 +133,7 @@ public class RobotContainer {
     //Drive Controllerr Commands
 
     //Generic
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedHybrid);
 
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());

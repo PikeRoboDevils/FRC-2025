@@ -247,6 +247,24 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
 
   public Command fieldRelativeTeleop(DoubleSupplier LeftX, DoubleSupplier LeftY, DoubleSupplier RightX, DoubleSupplier steerSens) {
     return run(() -> {
+    //calculate open loop steering
+    ChassisSpeeds desiredSpeeds = io.getTargetSpeeds(LeftY.getAsDouble(), LeftX.getAsDouble(), new Rotation2d(RightX.getAsDouble() * Math.PI));
+    desiredSpeeds.omegaRadiansPerSecond = RightX.getAsDouble() * Math.PI * steerSens.getAsDouble();
+
+    //calculate closed loop to help with drift
+    ChassisSpeeds holdSpeeds = io.getTargetSpeeds(LeftY.getAsDouble(), LeftX.getAsDouble(), getHeading());
+
+    if (RightX.getAsDouble() <= 0) {
+      io.driveFieldOriented(holdSpeeds);
+    } else {
+      io.driveFieldOriented(desiredSpeeds);
+    }
+
+    });
+  }
+
+  public Command fieldRelativeHybrid(DoubleSupplier LeftX, DoubleSupplier LeftY, DoubleSupplier RightX, DoubleSupplier steerSens) {
+    return run(() -> {
     ChassisSpeeds desiredSpeeds = io.getTargetSpeeds(LeftY.getAsDouble(), LeftX.getAsDouble(), new Rotation2d(RightX.getAsDouble() * Math.PI));
     desiredSpeeds.omegaRadiansPerSecond = RightX.getAsDouble() * Math.PI * steerSens.getAsDouble();
 
