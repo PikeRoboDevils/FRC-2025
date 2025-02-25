@@ -138,6 +138,10 @@ public class RobotContainer {
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
 
     // Season Specififc
+
+    driverXbox.y().whileTrue(elevator.setVoltage(()->12));//should be opperator buttons will change
+    driverXbox.a().whileTrue(elevator.setVoltage(()->12));//should be opperator
+
     // Drive To pose commands. Might be worth rediong to be a single command
     if (Constants.Swerve.VISION) {
       driverXbox
