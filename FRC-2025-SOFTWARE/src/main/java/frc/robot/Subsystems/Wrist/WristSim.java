@@ -76,6 +76,6 @@ public class WristSim implements WristIO {
 
   @Override
   public double getVoltage() {
-    return _wrist.getInput(0); //This is voltage
+    return _wrist.getInput(0); // This is voltage
   }
 }

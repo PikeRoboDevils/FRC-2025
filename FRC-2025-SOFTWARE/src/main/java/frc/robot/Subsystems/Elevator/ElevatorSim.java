@@ -99,7 +99,6 @@ public class ElevatorSim implements ElevatorIO {
 
   @Override
   public double getVoltage() {
-    return _elevator.getInput(
-        0); //this is Voltage
+    return _elevator.getInput(0); // this is Voltage
   }
 }
