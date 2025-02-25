@@ -29,6 +29,7 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
 
   final CommandXboxController driverXbox = new CommandXboxController(0); // driver Controller
+  final CommandXboxController operatorXbox = new CommandXboxController(1); // driver Controller
 
   private final Swerve drivebase = new Swerve(new SwerveHardware());
 
@@ -132,15 +133,16 @@ public class RobotContainer {
     // Drive Controllerr Commands
 
     // Generic
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedHybrid);
 
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
+    driverXbox.x().whileFalse(Commands.run(()->drivebase.unlock()));
 
     // Season Specififc
 
-    driverXbox.y().whileTrue(elevator.setVoltage(()->12));//should be opperator buttons will change
-    driverXbox.a().whileTrue(elevator.setVoltage(()->12));//should be opperator
+    //driverXbox.rightTrigger(0.5).whileTrue(elevator.setPoint(()->driverXbox.getRawAxis(1)));
+    //driverXbox.leftTrigger(0.5).whileTrue(climb.setAngle(()->driverXbox.getRawAxis(1)));
 
     // Drive To pose commands. Might be worth rediong to be a single command
     if (Constants.Swerve.VISION) {

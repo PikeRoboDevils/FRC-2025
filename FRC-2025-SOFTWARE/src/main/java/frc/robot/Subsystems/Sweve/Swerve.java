@@ -55,6 +55,8 @@ public class Swerve extends SubsystemBase {
 
   private Rotation2d lastAngle;
 
+  public boolean isLocked = false;
+
   // not 2025 yet
   // private final AprilTagFieldLayout aprilTagFieldLayout =
   // AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
@@ -250,6 +252,7 @@ public class Swerve extends SubsystemBase {
         () -> {
           double Xvalue;
           double Yvalue;
+          if (isLocked) return; // to prevent accidental movement while locked
           if (DriverStation.getAlliance().isPresent()) {
             if (DriverStation.getAlliance().get().equals(Alliance.Red)) {
               Xvalue = -LeftX.getAsDouble();
@@ -269,6 +272,7 @@ public class Swerve extends SubsystemBase {
               RightX.getAsDouble() * Math.PI * steerSens.getAsDouble();
 
           io.driveFieldOriented(desiredSpeeds);
+          
         });
   }
 
@@ -488,8 +492,14 @@ public class Swerve extends SubsystemBase {
 
   /** Lock the swerve drive to prevent it from moving. */
   public void lock() {
+    isLocked = true;
     io.lockPose();
   }
+
+    /** Lock the swerve drive to prevent it from moving. */
+    public void unlock() {
+      isLocked = false;
+    }
 
   /** Update the pose estimation with vision data. */
   public void updatePoseWithVision() {

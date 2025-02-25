@@ -139,7 +139,7 @@ public class Constants {
         new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
   }
 
-  public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??
+  public static final Mode currentMode = Mode.REAL; // TODO:IS MODE SET CURRECTLY??
 
   public static enum Mode {
     /** Running on a real robot. */

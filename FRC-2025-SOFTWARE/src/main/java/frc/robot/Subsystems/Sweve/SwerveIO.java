@@ -121,6 +121,9 @@ public interface SwerveIO {
     return null;
   }
 
+  public default boolean getLocked() {
+    return false;
+  }
   public default Optional<Pose2d> getSimPose() {
     return null;
   }
