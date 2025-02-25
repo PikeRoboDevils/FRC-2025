@@ -8,7 +8,11 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
@@ -58,9 +62,11 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  // TODO: replace with command
-  public void setPoint(double position) {
-    io.setPosition(position);
+  public Command setPoint(DoubleSupplier position) {
+    return run(()->io.setPosition(position.getAsDouble()));
+  }
+  public Command setVoltage(DoubleSupplier volts) {
+    return run(()->io.setVoltage(volts.getAsDouble()));
   }
 
   public void disabled() {

@@ -4,7 +4,12 @@
 
 package frc.robot.Subsystems.Climber;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.function.DoubleSupplier;
+
+
 import org.littletonrobotics.junction.Logger;
 
 public class Climber extends SubsystemBase {
@@ -21,5 +26,9 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
+  }
+
+  public Command setAngle(DoubleSupplier angle){
+    return run(()->io.setAngle(angle.getAsDouble()));
   }
 }
