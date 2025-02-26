@@ -29,7 +29,7 @@ public class Constants {
 
     public static boolean VISION = false;
 
-    public static final double MAXSPEED = Units.feetToMeters(16);
+    public static final double MAXSPEED = Units.feetToMeters(5);
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS =
@@ -126,8 +126,8 @@ public class Constants {
 
     public static final RobotConfig config =
         new RobotConfig(Swerve.ROBOT_MASS, 1, modConfig, FL, FR, BL, BR);
-    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-    public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
+        public static final PIDConstants TRANSLATION_PID = new PIDConstants(1.7, 0, 0);
+        public static final PIDConstants ANGLE_PID       = new PIDConstants(1.4, 0, 0.01);
     public static final PPHolonomicDriveController DRIVE_CONTROLLER =
         new PPHolonomicDriveController(TRANSLATION_PID, ANGLE_PID);
     // PPHolonomicController is the built in path following controller for holonomic drive trains
