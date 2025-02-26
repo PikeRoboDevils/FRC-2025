@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLog;
@@ -79,8 +80,7 @@ public interface SwerveIO {
 
   public default void driveFieldOriented(ChassisSpeeds velocity) {}
 
-  public default void drivePathPlanner(
-      ChassisSpeeds speedsRobotRelative, DriveFeedforwards moduleFeedForwards) {}
+  public default void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[] forwardForce) {}
 
   public default void resetOdometry(Pose2d initialHolonomicPose) {}
 

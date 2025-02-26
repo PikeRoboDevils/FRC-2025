@@ -141,8 +141,11 @@ public class RobotContainer {
 
     // Season Specififc
 
-    //driverXbox.rightTrigger(0.5).whileTrue(elevator.setPoint(()->driverXbox.getRawAxis(1)));
-    //driverXbox.leftTrigger(0.5).whileTrue(climb.setAngle(()->driverXbox.getRawAxis(1)));
+    // operatorXbox.rightTrigger(0.5).whileTrue(wrist.setVoltage(()-> MathUtil.applyDeadband(-operatorXbox.getRightY(), 0.1) *0.1));
+    // // operatorXbox.leftTrigger(0.5).whileTrue(climb.setAngle(()->operatorXbox.getRightY()));
+    // operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*6 ));
+
+
 
     // Drive To pose commands. Might be worth rediong to be a single command
     if (Constants.Swerve.VISION) {

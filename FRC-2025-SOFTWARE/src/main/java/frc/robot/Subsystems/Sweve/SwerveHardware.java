@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -157,11 +158,11 @@ public class SwerveHardware implements SwerveIO {
     swerveDrive.driveFieldOriented(velocity);
   }
 
-  // @Override
-  // public void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[]
-  // forwardForce) {
-  //     swerveDrive.drive(speeds, modules, forwardForce);
-  // }
+  @Override
+  public void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[]
+  forwardForce) {
+      swerveDrive.drive(speeds, modules, forwardForce);
+  }
 
   @Override
   public void resetOdometry(Pose2d initialHolonomicPose) {
