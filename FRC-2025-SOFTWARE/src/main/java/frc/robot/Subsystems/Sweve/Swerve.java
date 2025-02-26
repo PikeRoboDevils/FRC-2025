@@ -225,6 +225,17 @@ public class Swerve extends SubsystemBase {
     //Preload PathPlanner Path finding
     // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
     PathfindingCommand.warmupCommand().schedule();
+
+        //Logging for the path planner values.
+        PathPlannerLogging.setLogActivePathCallback(
+          (activePath) -> {
+            Logger.recordOutput(
+                "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+          }); // loging stuff
+      PathPlannerLogging.setLogTargetPoseCallback(
+          (targetPose) -> {
+            Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+          });
   }
 
 
@@ -318,6 +329,7 @@ public class Swerve extends SubsystemBase {
         });
   }
 
+  //Uses PID to hold at last angle while maintaining open loop steering for feeling.
   public Command fieldRelativeHybrid(
       DoubleSupplier LeftX, DoubleSupplier LeftY, DoubleSupplier RightX, DoubleSupplier steerSens) {
     return run(

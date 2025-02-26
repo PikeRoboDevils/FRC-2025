@@ -29,7 +29,7 @@ public class Constants {
 
     public static boolean VISION = false;
 
-    public static final double MAXSPEED = Units.feetToMeters(5);
+    public static final double MAXSPEED = Units.feetToMeters(5); //Why did we lower the drive speed int teleop?
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS =

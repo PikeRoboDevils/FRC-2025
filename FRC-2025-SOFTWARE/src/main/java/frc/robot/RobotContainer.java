@@ -128,12 +128,11 @@ public class RobotContainer {
             () -> 2.5);
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
-    // IT IS BACKWARDS. lol I forgot it defaults to RED not BLUE
 
-    // Drive Controllerr Commands
+    // Drive Controller Commands
 
     // Generic
-    drivebase.setDefaultCommand(driveFieldOrientedHybrid);
+    drivebase.setDefaultCommand(driveFieldOrientedHybrid); //Wait it works? it didnt when I tested it in sim.
 
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
