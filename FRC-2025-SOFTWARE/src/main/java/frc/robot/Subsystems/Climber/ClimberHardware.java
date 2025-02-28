@@ -19,6 +19,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class ClimberHardware implements ClimberIO {
 
   SparkMax ClimberMotor;
+  SparkMax ClimberFollow;
   SparkAbsoluteEncoder ClimberEncoder;
   RelativeEncoder internalEncoder;
   SparkClosedLoopController closedLoopController;
@@ -26,7 +27,8 @@ public class ClimberHardware implements ClimberIO {
   SparkMaxConfig motorConfig;
 
   public ClimberHardware() {
-    ClimberMotor = new SparkMax(2, MotorType.kBrushless);
+    ClimberMotor = new SparkMax(13, MotorType.kBrushless);
+    ClimberFollow = new SparkMax(15, MotorType.kBrushless);
 
     /*
      * Initialize the SPARK MAX and get its encoder and closed loop controller
@@ -95,6 +97,7 @@ public class ClimberHardware implements ClimberIO {
      */
     ClimberMotor.configure(
         motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    ClimberFollow.configure(motorConfig.follow(ClimberMotor), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     // // Initialize dashboard values
     // SmartDashboard.setDefaultNumber("Target Position", 0);

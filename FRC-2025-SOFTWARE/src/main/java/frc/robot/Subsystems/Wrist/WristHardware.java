@@ -27,7 +27,7 @@ public class WristHardware implements WristIO {
   SparkMaxConfig motorConfig;
 
   public WristHardware() {
-    wristMotor = new SparkMax(2, MotorType.kBrushless);
+    wristMotor = new SparkMax(16, MotorType.kBrushless);
     wristMotor.setControlFramePeriodMs(
         30); // defualt is 20 ms. This system should be fine with slightly lower polling
 

@@ -1,13 +1,13 @@
 
 1 - PDP
-2 - CoralIntake
-3-10 SWERVE ONLY Canivore??
+2 - CoralIntake ?
+3-10 SWERVE ONLY 
 11 - Pigeon
 12 - Elevator Right
-13 - Wrist
+13 - Climber Right
 14- Elevator Left
-15 - Climber
-16
+15 - Climber Left
+16 - Wrist
 17
 18
 19
