@@ -418,19 +418,21 @@ public class Swerve extends SubsystemBase {
           .isPresent()) { // might be able to merge the ifs but just to be safe against null errors
         // it isnt
         Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
+        vision.visionSim.update(io.getPose());
       }
     }
 
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (Constants.Swerve.VISION || Robot.isSimulation()) {
+    if (Constants.Swerve.VISION) {
       io.updateOdometry();
-      vision.visionSim.update(io.getPose());
+      vision.updateVisionField();
       updatePoseWithVision();
       Logger.recordOutput("Odometry/Vision", vision.ReturnPhotonPose());
       Logger.recordOutput("bestTarget", vision.getBestTagId(Cameras.CAM_1));
       // vision
     }
   }
+  
 
   @Override
   public void simulationPeriodic() {}

@@ -78,7 +78,7 @@ public class Constants {
   // Camera initiation can be found on line 376 of Vision swerve
   public static class PoseCameraConstants {
     public static final String CAM1N =
-        "W"; // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef
+        "CAM1"; // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef
     // tags.
     public static final Rotation3d CAM1R =
         new Rotation3d(0, Units.degreesToRadians(-5), Units.degreesToRadians(30));
