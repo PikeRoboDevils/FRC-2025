@@ -15,6 +15,12 @@
           "data": {
             "pathName": "New New Path"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "not so simple"
+          }
         }
       ]
     }

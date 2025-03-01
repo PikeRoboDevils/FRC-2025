@@ -77,37 +77,51 @@ public class Constants {
   // For Easier camera setup to be used with already made vision examples
   // Camera initiation can be found on line 376 of Vision swerve
   public static class PoseCameraConstants {
-    public static final String CAM1N =
-        "CAM1"; // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef
-    // tags.
-    public static final Rotation3d CAM1R =
-        new Rotation3d(0, Units.degreesToRadians(-5), Units.degreesToRadians(30));
-    public static final Translation3d CAM1T =
+    public static Object[] CAM1 = new Object[3]; {
+     // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef tags.
+    CAM1[0] = "CAM1"; 
+
+    CAM1[1] = 
+    new Rotation3d(0, Units.degreesToRadians(-5), Units.degreesToRadians(30));
+
+    CAM1[2] =
         new Translation3d(
             Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
             Units.inchesToMeters(-12),
             Units.inchesToMeters(12));
+        }
 
-    public static final String CAM2N =
-        "RearOut"; // cam 2 and 3 are roughly halfway up the elevator bracing and mounted to the
+    // cam 2 and 3 are roughly halfway up the elevator bracing and mounted to the
     // outside looking the direction of thier name. (this is important as looking
     // directly (same plane) at a tag is bad)
-    public static final Rotation3d CAM2R =
-        new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(180 + 10));
-    public static final Translation3d CAM2T =
-        new Translation3d(
+    public static Object[] CAM2 = new Object[3]; {
+        
+        CAM2[0] = "RearOut"; 
+       
+        CAM2[1] = 
+           new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(180 + 10));
+       
+        CAM2[2] =
+           new Translation3d(
             Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
             Units.inchesToMeters(10.687),
             Units.inchesToMeters(20.915));
+        }
 
-    public static final String CAM3N = "FrontIn";
-    public static final Rotation3d CAM3R =
-        new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20));
-    public static final Translation3d CAM3T =
-        new Translation3d(
-            Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
-            Units.inchesToMeters(-10.687),
-            Units.inchesToMeters(20.915));
+        public static Object[] CAM3 = new Object[3]; {
+        
+            CAM3[0] = "FrontIn"; 
+           
+            CAM3[1] = 
+                new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20));
+           
+            CAM3[2] =
+            new Translation3d(
+                Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
+                Units.inchesToMeters(-10.687),
+                Units.inchesToMeters(20.915));
+            }
+
 
     // it goes up to 4 but it is commented out in SwerveVision
     public static final double maxVisionStdDevsDistance = 30;
@@ -139,7 +153,7 @@ public class Constants {
         new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
   }
 
-  public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??
+  public static final Mode currentMode = Mode.REAL; // TODO:IS MODE SET CURRECTLY??
 
   public static enum Mode {
     /** Running on a real robot. */
