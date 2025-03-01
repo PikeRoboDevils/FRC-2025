@@ -16,6 +16,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Subsystems.Elevator.Elevator;
+import frc.robot.Subsystems.Wrist.Wrist;
+
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -23,11 +26,31 @@ import swervelib.math.Matter;
 
 public class Constants {
 
+    public enum RobotState{
+        L1Coral(0,0),
+        L2Coral(0,0),
+        L3Coral(0,0),
+        L4Coral(0,0),
+        Source(0,0),
+        L2Algae(0,0),
+        L3Algae(0,0);
+        
+        public double WristPos;
+        public double ElevatorPos;
+
+
+        RobotState(double elevatorPos, double wristPos){
+            WristPos = wristPos;
+            ElevatorPos = elevatorPos;
+        }
+    };
+
   public class Swerve {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];
 
     public static boolean VISION = false;
+
 
     public static final double MAXSPEED = Units.feetToMeters(5); //Why did we lower the drive speed int teleop?
     // taken from offseason swerve

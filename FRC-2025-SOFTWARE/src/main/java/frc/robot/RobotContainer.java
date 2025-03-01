@@ -14,13 +14,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Subsystems.Climber.Climber;
+import frc.robot.Subsystems.Climber.Climber;import frc.robot.Subsystems.Climber.ClimberHardware;
 import frc.robot.Subsystems.CoralIntake.CoralIntake;
+import frc.robot.Subsystems.CoralIntake.CoralIntakeHardware;
 import frc.robot.Subsystems.Elevator.Elevator;
+import frc.robot.Subsystems.Elevator.ElevatorHardware;
 import frc.robot.Subsystems.Elevator.ElevatorSim;
 import frc.robot.Subsystems.Sweve.Swerve;
 import frc.robot.Subsystems.Sweve.SwerveHardware;
 import frc.robot.Subsystems.Wrist.Wrist;
+import frc.robot.Subsystems.Wrist.WristHardware;
 import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
 import java.util.Set;
@@ -47,10 +50,10 @@ public class RobotContainer {
 
   public RobotContainer() {
     if (Robot.isReal()) {
-      // elevator = new Elevator(new ElevatorHardware());
-      // wrist = new Wrist(new WristHardware(), elevator);
-      // climb = new Climber(new ClimberHardware());
-      // intake = new CoralIntake(new CoralIntakeHardware());
+      elevator = new Elevator(new ElevatorHardware());
+      wrist = new Wrist(new WristHardware(), elevator);
+      climb = new Climber(new ClimberHardware());
+      intake = new CoralIntake(new CoralIntakeHardware());
     } else {
       elevator = new Elevator(new ElevatorSim());
       wrist =
@@ -88,6 +91,9 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
+  private Command SetRobotState(Constants.RobotState robotState){
+    return Commands.parallel(elevator.setPoint(()->robotState.ElevatorPos), Commands.waitSeconds(.5).andThen(()->wrist.setAngle(()->robotState.WristPos)));
+  }
   private void configureBindings() {
 
     // closedAbsoluteDriveAdv does not work at least in sim dont use it :)
@@ -126,23 +132,25 @@ public class RobotContainer {
             () ->
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2.5);
+
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
 
     // Drive Controller Commands
 
     // Generic
-    drivebase.setDefaultCommand(driveFieldOrientedHybrid); //Wait it works? it didnt when I tested it in sim.
-
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); 
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
     driverXbox.x().whileFalse(Commands.run(()->drivebase.unlock()));
 
     // Season Specififc
+    driverXbox.rightTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), 0.1) * 0.1));
+    driverXbox.leftTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(-driverXbox.getLeftTriggerAxis(), 0.1) * 0.1));
 
-    // operatorXbox.rightTrigger(0.5).whileTrue(wrist.setVoltage(()-> MathUtil.applyDeadband(-operatorXbox.getRightY(), 0.1) *0.1));
-    // // operatorXbox.leftTrigger(0.5).whileTrue(climb.setAngle(()->operatorXbox.getRightY()));
-    // operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*6 ));
+    operatorXbox.rightTrigger(0.5).whileTrue(wrist.setVoltage(()-> MathUtil.applyDeadband(-operatorXbox.getRightY(), 0.1) * 0.1));
+    operatorXbox.leftTrigger(0.5).whileTrue(climb.setAngle(()->operatorXbox.getRightY()));
+    operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()));
 
 
 
