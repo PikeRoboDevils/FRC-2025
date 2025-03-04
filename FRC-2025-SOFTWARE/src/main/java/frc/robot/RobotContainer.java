@@ -51,9 +51,9 @@ public class RobotContainer {
   public RobotContainer() {
     if (Robot.isReal()) {
       elevator = new Elevator(new ElevatorHardware());
-      wrist = new Wrist(new WristHardware(), elevator);
+      // wrist = new Wrist(new WristHardware(), elevator);
       climb = new Climber(new ClimberHardware());
-      intake = new CoralIntake(new CoralIntakeHardware());
+      // intake = new CoralIntake(new CoralIntakeHardware());
     } else {
       elevator = new Elevator(new ElevatorSim());
       wrist =
