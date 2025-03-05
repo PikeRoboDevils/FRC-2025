@@ -14,6 +14,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 /** Add your docs here. */
@@ -42,6 +43,7 @@ public class ElevatorHardware implements ElevatorIO {
      */
     motorConfig = new SparkMaxConfig();
 
+    motorConfig.idleMode(IdleMode.kBrake);
     motorConfig.voltageCompensation(
         12); // may be tweaked depending on voltage drain. Highly reccomended from a consistancy and
     // smoothness standpoint
@@ -60,7 +62,7 @@ public class ElevatorHardware implements ElevatorIO {
      */
     motorConfig
         .closedLoop
-        .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder) //use absolute encoder
         // Set PID values for position control. We don't need to pass a closed
         // loop slot, as it will default to slot 0.
         .p(0.4)

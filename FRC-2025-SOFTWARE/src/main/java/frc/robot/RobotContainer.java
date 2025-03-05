@@ -145,11 +145,11 @@ public class RobotContainer {
     driverXbox.x().whileFalse(Commands.run(()->drivebase.unlock()));
 
     // Season Specififc
-    driverXbox.rightTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), 0.1) * 0.1));
-    driverXbox.leftTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(-driverXbox.getLeftTriggerAxis(), 0.1) * 0.1));
+   // driverXbox.rightTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), 0.1) * 0.1));
+   // driverXbox.leftTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(-driverXbox.getLeftTriggerAxis(), 0.1) * 0.1));
 
-    operatorXbox.rightTrigger(0.5).whileTrue(wrist.setVoltage(()-> MathUtil.applyDeadband(-operatorXbox.getRightY(), 0.1) * 0.1));
-    operatorXbox.leftTrigger(0.5).whileTrue(climb.setAngle(()->operatorXbox.getRightY()));
+    //operatorXbox.rightTrigger(0.5).whileTrue(wrist.setVoltage(()-> MathUtil.applyDeadband(-operatorXbox.getRightY(), 0.1) * 0.1));
+    operatorXbox.leftTrigger(0.5).whileTrue(climb.setVoltage(()->-operatorXbox.getLeftY()));
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()));
 
 

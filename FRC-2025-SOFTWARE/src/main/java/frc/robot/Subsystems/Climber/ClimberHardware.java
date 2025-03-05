@@ -56,34 +56,34 @@ public class ClimberHardware implements ClimberIO {
      * Configure the closed loop controller. We want to make sure we set the
      * feedback sensor as the primary encoder.
      */
-    motorConfig
-        .closedLoop
-        .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
-        // Set PID values for position control. We don't need to pass a closed
-        // loop slot, as it will default to slot 0.
-        .p(0.4)
-        .i(0)
-        .d(0)
-        .outputRange(-1, 1)
-        // Set PID values for velocity control in slot 1
-        .p(0.0001, ClosedLoopSlot.kSlot1)
-        .i(0, ClosedLoopSlot.kSlot1)
-        .d(0, ClosedLoopSlot.kSlot1)
-        .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-        .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+    // motorConfig
+    //     .closedLoop
+    //     .feedbackSensor(FeedbackSensor.) //use absolute later
+    //     // Set PID values for position control. We don't need to pass a closed
+    //     // loop slot, as it will default to slot 0.
+    //     .p(0.4)
+    //     .i(0)
+    //     .d(0)
+    //     .outputRange(-1, 1)
+    //     // Set PID values for velocity control in slot 1
+    //     .p(0.0001, ClosedLoopSlot.kSlot1)
+    //     .i(0, ClosedLoopSlot.kSlot1)
+    //     .d(0, ClosedLoopSlot.kSlot1)
+    //     .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+    //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-    motorConfig
-        .closedLoop
-        .maxMotion
-        // Set MAXMotion parameters for position control. We don't need to pass
-        // a closed loop slot, as it will default to slot 0.
-        .maxVelocity(1000)
-        .maxAcceleration(1000)
-        .allowedClosedLoopError(1)
-        // Set MAXMotion parameters for velocity control in slot 1
-        .maxAcceleration(500, ClosedLoopSlot.kSlot1)
-        .maxVelocity(6000, ClosedLoopSlot.kSlot1)
-        .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
+    // motorConfig
+    //     .closedLoop
+    //     .maxMotion
+    //     // Set MAXMotion parameters for position control. We don't need to pass
+    //     // a closed loop slot, as it will default to slot 0.
+    //     .maxVelocity(1000)
+    //     .maxAcceleration(1000)
+    //     .allowedClosedLoopError(1)
+    //     // Set MAXMotion parameters for velocity control in slot 1
+    //     .maxAcceleration(500, ClosedLoopSlot.kSlot1)
+    //     .maxVelocity(6000, ClosedLoopSlot.kSlot1)
+    //     .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
 
     /*
      * Apply the configuration to the SPARK MAX.
@@ -95,9 +95,11 @@ public class ClimberHardware implements ClimberIO {
      * the SPARK MAX loses power. This is useful for power cycles that may occur
      * mid-operation.
      */
+
+
     ClimberMotor.configure(
         motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    ClimberFollow.configure(motorConfig.follow(ClimberMotor), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    ClimberFollow.configure(motorConfig.follow(ClimberMotor, true), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     // // Initialize dashboard values
     // SmartDashboard.setDefaultNumber("Target Position", 0);
