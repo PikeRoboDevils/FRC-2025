@@ -62,7 +62,7 @@ public class RobotContainer {
               new WristSim(),
               elevator); // pass the current location of the wrist due to the stacked dof with
       // seperate subsystems
-      // climb = new Climber(new ClimberSim());
+      climb = new Climber(new ClimberSim());
       // intake = new CoralIntake(new CoralIntakeSim());
     }
 
