@@ -93,7 +93,7 @@ public class Constants {
 
     // DRIVER PRACTICE
     public static final boolean driverPractice =
-        true; // advantage scope has peformance issues when running mutiple robots change rendering
+        false; // advantage scope has peformance issues when running mutiple robots change rendering
     // mode to standard or low
   }
 

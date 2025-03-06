@@ -126,11 +126,20 @@ public class ClimberHardware implements ClimberIO {
         angleDeg, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
   }
 
-  // set voltage from 0-1
+
   @Override
-  public void setVoltage(double speed) {
-    ClimberMotor.set(speed);
+  public void setVoltage(double volts) {
+    ClimberMotor.setVoltage(volts);;
   }
+
+  //cant use rn no encoder on robot
+  
+  // // set speed from 0-1
+  // @Override
+  // public void setSpeed(double speed) {
+  //   ClimberMotor.set(speed);;
+  // }
+
 
   @Override
   public double getAngleDeg() {

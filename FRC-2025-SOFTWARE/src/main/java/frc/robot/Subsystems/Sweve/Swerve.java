@@ -129,7 +129,7 @@ public class Swerve extends SubsystemBase {
     rotateControl = new ProfiledPIDController(RkP, RkI, RkD, rConstraints, 0.02);
     rotateControl.enableContinuousInput(0, 360);
 
-    if (Constants.Swerve.VISION || Robot.isSimulation()) {
+    if (Constants.Swerve.VISION) {
       setupPhotonVision();
       // Stop the odometry thread if we are using vision that way we can synchronize updates better.
       io.getSwerve().stopOdometryThread();
