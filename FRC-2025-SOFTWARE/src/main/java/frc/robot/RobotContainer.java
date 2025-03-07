@@ -140,7 +140,7 @@ public class RobotContainer {
     // Drive Controller Commands
 
     // Generic
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); 
+    drivebase.setDefaultCommand(driveFieldOrientedDirectAngle); //prepared for eight steps
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
     driverXbox.x().whileFalse(Commands.run(()->drivebase.unlock()));
