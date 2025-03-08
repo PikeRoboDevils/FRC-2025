@@ -4,8 +4,7 @@
     "id": 11,
     "canbus": null
   },
-  "invertedIMU": true
-  ,
+  "invertedIMU": true,
   "modules": [
     "frontleft.json",
     "frontright.json",
