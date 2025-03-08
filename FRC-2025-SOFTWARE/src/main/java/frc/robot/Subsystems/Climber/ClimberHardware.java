@@ -20,7 +20,7 @@ public class ClimberHardware implements ClimberIO {
 
   SparkMax ClimberMotor;
   SparkMax ClimberFollow;
-  SparkAbsoluteEncoder ClimberEncoder;
+  // SparkAbsoluteEncoder ClimberEncoder;
   RelativeEncoder internalEncoder;
   SparkClosedLoopController closedLoopController;
 
@@ -36,7 +36,7 @@ public class ClimberHardware implements ClimberIO {
      */
     closedLoopController = ClimberMotor.getClosedLoopController();
     internalEncoder = ClimberMotor.getEncoder();
-    ClimberEncoder = ClimberMotor.getAbsoluteEncoder();
+    // ClimberEncoder = ClimberMotor.getAbsoluteEncoder();
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
@@ -115,7 +115,7 @@ public class ClimberHardware implements ClimberIO {
     inputs.ClimberCurrent = ClimberMotor.getOutputCurrent();
     inputs.ClimberEncoderAngle = getAngleDeg();
     inputs.ClimberVolt = getVoltage();
-    inputs.ClimberVelocity = ClimberEncoder.getVelocity();
+    // inputs.ClimberVelocity = ClimberEncoder.getVelocity();
     inputs.ClimberInternalAngle = internalEncoder.getPosition();
   }
 
@@ -141,16 +141,16 @@ public class ClimberHardware implements ClimberIO {
   // }
 
 
-  @Override
-  public double getAngleDeg() {
-    return ClimberEncoder.getPosition();
-  }
+  // @Override
+  // public double getAngleDeg() {
+  //    return ClimberEncoder.getPosition();
+  // }
 
-  @Override
-  public double getAngleRad() {
-    double radians = ClimberEncoder.getPosition() * (Math.PI / 180);
-    return radians;
-  }
+  // @Override
+  // public double getAngleRad() {
+  //   double radians = ClimberEncoder.getPosition() * (Math.PI / 180);
+  //   return radians;
+  // }
 
   @Override
   public double getVoltage() {

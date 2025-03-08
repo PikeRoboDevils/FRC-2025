@@ -15,15 +15,28 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.thethriftybot.ThriftyNova.EncoderType;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import frc.robot.Constants;
+
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 /** Add your docs here. */
 public class ElevatorHardware implements ElevatorIO {
   SparkMax Leader;
   SparkMax Follower;
-  SparkAbsoluteEncoder elevatorEncoder;
+  DutyCycleEncoder elevatorEncoder;
   RelativeEncoder internalEncoder;
-  SparkClosedLoopController closedLoopController;
+  // SparkClosedLoopController closedLoopController;
+  private ElevatorFeedforward _feedforward;
+  private ProfiledPIDController _profiledPIDController;
   SparkMaxConfig motorConfig;
 
   public ElevatorHardware() {
@@ -33,9 +46,25 @@ public class ElevatorHardware implements ElevatorIO {
     Follower.setControlFramePeriodMs(
         50); // defualt is 20 ms. The follower motor should be fine with slightly lower polling
 
-    closedLoopController = Leader.getClosedLoopController();
+    // closedLoopController = Leader.getClosedLoopController();
+    
     internalEncoder = Leader.getEncoder();
-    elevatorEncoder = Leader.getAbsoluteEncoder();
+    elevatorEncoder = new DutyCycleEncoder(Constants.Encoders.ElevatorChannel);
+
+
+    // position control
+    _feedforward = new ElevatorFeedforward(0,0,0); // based on random numbers in recalc
+    _profiledPIDController =
+        new ProfiledPIDController(
+            Constants.Encoders.kP_Elev,
+            Constants.Encoders.kI_Elev,
+            Constants.Encoders.kD_Elev,
+            new Constraints(
+                2.73,
+                -2)); // for some reason if the accell isnt negative the first motion is slowed or wonky
+
+
+
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
@@ -56,25 +85,25 @@ public class ElevatorHardware implements ElevatorIO {
      */
     motorConfig.encoder.positionConversionFactor(1).velocityConversionFactor(1);
 
-    /*
-     * Configure the closed loop controller. We want to make sure we set the
-     * feedback sensor as the primary encoder.
-     */
-    motorConfig
-        .closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder) //use absolute encoder
-        // Set PID values for position control. We don't need to pass a closed
-        // loop slot, as it will default to slot 0.
-        .p(0.4)
-        .i(0)
-        .d(0)
-        .outputRange(-1, 1)
-        // Set PID values for velocity control in slot 1
-        .p(0.0001, ClosedLoopSlot.kSlot1)
-        .i(0, ClosedLoopSlot.kSlot1)
-        .d(0, ClosedLoopSlot.kSlot1)
-        .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-        .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+    // /*
+    //  * Configure the closed loop controller. We want to make sure we set the
+    //  * feedback sensor as the primary encoder.
+    //  */
+    // motorConfig
+    //     .closedLoop
+    //     .feedbackSensor()
+    //     // Set PID values for position control. We don't need to pass a closed
+    //     // loop slot, as it will default to slot 0.
+    //     .p(0.4)
+    //     .i(0)
+    //     .d(0)
+    //     .outputRange(-1, 1)
+    //     // Set PID values for velocity control in slot 1
+    //     .p(0.0001, ClosedLoopSlot.kSlot1)
+    //     .i(0, ClosedLoopSlot.kSlot1)
+    //     .d(0, ClosedLoopSlot.kSlot1)
+    //     .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+    //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
     motorConfig
         .closedLoop
@@ -121,22 +150,34 @@ public class ElevatorHardware implements ElevatorIO {
 
   @Override
   public void setPosition(double position) {
-    closedLoopController.setReference(position, ControlType.kPosition);
+    double volts =
+        MathUtil.clamp(
+            _feedforward.calculate(position - getPosition())
+                + _profiledPIDController.calculate(getPosition(), position),
+            -12,
+            12);
+    Leader.setVoltage(volts);
   }
 
   @Override
   public void setVelocity(double speed) {
-    closedLoopController.setReference(speed, ControlType.kVelocity);
+    double volts =
+        MathUtil.clamp(
+            _profiledPIDController.calculate(speed, getVelocity()),
+            0,
+            0); // im lazy (also dont know if we need a set velocity)
+        Leader.setVoltage(volts);
   }
+
 
   @Override
   public double getVelocity() {
-    return elevatorEncoder.getVelocity();
+    return elevatorEncoder.get(); //needs more work
   }
 
   @Override
   public double getPosition() {
-    return elevatorEncoder.getPosition();
+    return elevatorEncoder.get();
   }
 
   @Override

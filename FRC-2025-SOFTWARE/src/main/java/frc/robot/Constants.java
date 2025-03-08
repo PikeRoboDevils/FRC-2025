@@ -188,4 +188,26 @@ public class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+  
+  public static class Encoders {
+
+    public static final int WristChannel = 0;
+    // public static final int WristChannelB = 0;
+    public static final boolean WristReverse = false;
+
+    
+    public static final double kP_Wrist = 0.001;
+    public static final double kI_Wrist = 0;
+    public static final double kD_Wrist = 0;
+    
+    public static final int ElevatorChannel = 1;
+    // public static final int ElevatorChannelB = 0;
+    public static final boolean ElevatorReverse = false;
+
+    public static final double kP_Elev = 0.00000001;
+    public static final double kI_Elev = 0;
+    public static final double kD_Elev = 0;
+
+
+  }
 }
