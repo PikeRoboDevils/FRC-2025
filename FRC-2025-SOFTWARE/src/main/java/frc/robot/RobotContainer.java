@@ -51,9 +51,9 @@ public class RobotContainer {
 
   public RobotContainer() {
     if (Robot.isReal()) {
-      elevator = new Elevator(new ElevatorHardware());
-      // wrist = new Wrist(new WristHardware(), elevator);
-      climb = new Climber(new ClimberHardware());
+      // elevator = new Elevator(new ElevatorHardware());
+      // // wrist = new Wrist(new WristHardware(), elevator);
+      // climb = new Climber(new ClimberHardware());
       // intake = new CoralIntake(new CoralIntakeHardware());
     } else {
       elevator = new Elevator(new ElevatorSim());
@@ -150,8 +150,8 @@ public class RobotContainer {
    // driverXbox.leftTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(-driverXbox.getLeftTriggerAxis(), 0.1) * 0.1));
 
     //operatorXbox.rightTrigger(0.5).whileTrue(wrist.setVoltage(()-> MathUtil.applyDeadband(-operatorXbox.getRightY(), 0.1) * 0.1));
-    operatorXbox.leftTrigger(0.5).whileTrue(climb.setVoltage(()->-operatorXbox.getLeftY()));
-    operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()));
+    // operatorXbox.leftTrigger(0.5).whileTrue(climb.setVoltage(()->-operatorXbox.getLeftY()));
+    // operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()));
 
 
 
