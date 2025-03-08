@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.Subsystems.Climber;
 
+import java.lang.module.ModuleReader;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -13,6 +15,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 /** Add your docs here. */
@@ -38,6 +41,7 @@ public class ClimberHardware implements ClimberIO {
     internalEncoder = ClimberMotor.getEncoder();
     // ClimberEncoder = ClimberMotor.getAbsoluteEncoder();
 
+    
     /*
      * Create a new SPARK MAX configuration object. This will store the
      * configuration parameters for the SPARK MAX that we will set below.
@@ -96,6 +100,7 @@ public class ClimberHardware implements ClimberIO {
      * mid-operation.
      */
 
+     motorConfig.idleMode(IdleMode.kBrake);
 
     ClimberMotor.configure(
         motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);

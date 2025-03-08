@@ -32,7 +32,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class WristHardware implements WristIO {
 
   SparkMax wristMotor;
-  DutyCycleEncoder wristEncoder;
+  RelativeEncoder wristEncoder;
   RelativeEncoder internalEncoder;
   // SparkClosedLoopController closedLoopController;
   private ArmFeedforward _feedforward;
@@ -52,7 +52,7 @@ public class WristHardware implements WristIO {
     // closedLoopController = wristMotor.getClosedLoopController();
     internalEncoder = wristMotor.getEncoder();
     // wristEncoder = wristMotor.getAbsoluteEncoder();
-    wristEncoder = new DutyCycleEncoder(Constants.Encoders.WristChannel);
+    wristEncoder = internalEncoder;
 
         // position control
     _feedforward = new ArmFeedforward(0,0,0); // based on random numbers in recalc
@@ -166,12 +166,12 @@ public class WristHardware implements WristIO {
 
   @Override
   public double getAngleDeg() {
-    return wristEncoder.get();
+    return wristEncoder.getPosition();
   }
 
   @Override
   public double getAngleRad() {
-    double radians = wristEncoder.get() * (Math.PI / 180);
+    double radians = wristEncoder.getPosition() * (Math.PI / 180);
     return radians;
   }
 

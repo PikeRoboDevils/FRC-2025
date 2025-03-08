@@ -51,10 +51,10 @@ public class RobotContainer {
 
   public RobotContainer() {
     if (Robot.isReal()) {
-      // elevator = new Elevator(new ElevatorHardware());
-      // // wrist = new Wrist(new WristHardware(), elevator);
-      // climb = new Climber(new ClimberHardware());
-      // intake = new CoralIntake(new CoralIntakeHardware());
+      elevator = new Elevator(new ElevatorHardware());
+      wrist = new Wrist(new WristHardware(), elevator);
+      climb = new Climber(new ClimberHardware());
+      intake = new CoralIntake(new CoralIntakeHardware());
     } else {
       elevator = new Elevator(new ElevatorSim());
       wrist =
@@ -122,10 +122,10 @@ public class RobotContainer {
     Command driveFieldOrientedAnglularVelocity =
         drivebase.fieldRelativeTeleop(
             () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
             () ->
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
-            () -> 2.5);
+            () -> 4);
     Command driveFieldOrientedHybrid =
         drivebase.fieldRelativeTeleop(
             () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
@@ -140,19 +140,25 @@ public class RobotContainer {
     // Drive Controller Commands
 
     // Generic
-    drivebase.setDefaultCommand(driveFieldOrientedDirectAngle); //prepared for eight steps
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); //prepared for eight steps
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
     driverXbox.x().whileFalse(Commands.run(()->drivebase.unlock()));
 
     // Season Specififc
-   // driverXbox.rightTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(driverXbox.getRightTriggerAxis(), 0.1) * 0.1));
-   // driverXbox.leftTrigger().whileTrue(intake.setVoltage(()-> MathUtil.applyDeadband(-driverXbox.getLeftTriggerAxis(), 0.1) * 0.1));
+    driverXbox.rightBumper().whileTrue(intake.setVoltage(()->3));
+    driverXbox.leftBumper().whileTrue(intake.setVoltage(()->-1));
 
-    //operatorXbox.rightTrigger(0.5).whileTrue(wrist.setVoltage(()-> MathUtil.applyDeadband(-operatorXbox.getRightY(), 0.1) * 0.1));
-    // operatorXbox.leftTrigger(0.5).whileTrue(climb.setVoltage(()->-operatorXbox.getLeftY()));
-    // operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()));
+    // operatorXbox.leftTrigger(0.5).whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
+  
+        // operatorXbox.rightTrigger(0.5).whileTrue(climb.setVoltage(()->-operatorXbox.getRightY()*3));
+        //     operatorXbox.rightTrigger(0.5).whileFalse(climb.setVoltage(()->(0))); //POSITIVE IS DOWN
+    
+            // operatorXbox.povUp().whileFalse(elevator.setPoint(()->0));
+    
+    // operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*2));
 
+    operatorXbox.povUp().onTrue(wrist.setAngle(()->0));
 
 
     // Drive To pose commands. Might be worth rediong to be a single command

@@ -21,6 +21,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -32,7 +33,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class ElevatorHardware implements ElevatorIO {
   SparkMax Leader;
   SparkMax Follower;
-  DutyCycleEncoder elevatorEncoder;
+  RelativeEncoder elevatorEncoder;
   RelativeEncoder internalEncoder;
   // SparkClosedLoopController closedLoopController;
   private ElevatorFeedforward _feedforward;
@@ -49,19 +50,31 @@ public class ElevatorHardware implements ElevatorIO {
     // closedLoopController = Leader.getClosedLoopController();
     
     internalEncoder = Leader.getEncoder();
-    elevatorEncoder = new DutyCycleEncoder(Constants.Encoders.ElevatorChannel);
+    DigitalInput dio = new DigitalInput(0);
+    // elevatorEncoder = new Encoder(0, 0, false);
+    elevatorEncoder = internalEncoder; //TEMPORARY
 
+//     // Configures the encoder to return a distance of 4 for every 256 pulses
+// // Also changes the units of getRate
+// elevatorEncoder.setDistancePerPulse(2/2048);
+// // Configures the encoder to consider itself stopped when its rate is below 10
+// elevatorEncoder.setMinRate(10);
+// // Reverses the direction of the encoder
+// elevatorEncoder.setReverseDirection(true);
+// // Configures an encoder to average its period measurement over 5 samples
+// // Can be between 1 and 127 samples
+// elevatorEncoder.setSamplesToAverage(5);
 
     // position control
-    _feedforward = new ElevatorFeedforward(0,0,0); // based on random numbers in recalc
+    _feedforward = new ElevatorFeedforward(0,Constants.Encoders.kG_Elev,0); // based on random numbers in recalc
     _profiledPIDController =
         new ProfiledPIDController(
             Constants.Encoders.kP_Elev,
             Constants.Encoders.kI_Elev,
             Constants.Encoders.kD_Elev,
             new Constraints(
-                2.73,
-                -2)); // for some reason if the accell isnt negative the first motion is slowed or wonky
+                3,
+                -2));
 
 
 
@@ -140,7 +153,7 @@ public class ElevatorHardware implements ElevatorIO {
     inputs.ElevatorVelocity = getVelocity();
     inputs.ElevatorVolt = getVoltage();
     inputs.ElevatorCurrent = Leader.getOutputCurrent();
-    inputs.ElevatorPosition = internalEncoder.getPosition();
+    inputs.ElevatorPosition = getPosition();
   }
 
   @Override
@@ -172,12 +185,12 @@ public class ElevatorHardware implements ElevatorIO {
 
   @Override
   public double getVelocity() {
-    return elevatorEncoder.get(); //needs more work
+    return elevatorEncoder.getVelocity();
   }
 
   @Override
   public double getPosition() {
-    return elevatorEncoder.get();
+    return elevatorEncoder.getPosition();
   }
 
   @Override

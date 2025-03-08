@@ -30,7 +30,7 @@ public class Constants {
         L1Coral(0,0),
         L2Coral(0,0),
         L3Coral(0,0),
-        L4Coral(0,0),
+        L4Coral(25.5,0),
         Source(0,0),
         L2Algae(0,0),
         L3Algae(0,0);
@@ -52,7 +52,7 @@ public class Constants {
     public static boolean VISION = false;
 
 
-    public static final double MAXSPEED = Units.feetToMeters(5); //Why did we lower the drive speed int teleop?
+    public static final double MAXSPEED = Units.feetToMeters(15.1); //Why did we lower the drive speed int teleop?
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS =
@@ -191,7 +191,7 @@ public class Constants {
   
   public static class Encoders {
 
-    public static final int WristChannel = 0;
+    public static final int WristChannel = 8;
     // public static final int WristChannelB = 0;
     public static final boolean WristReverse = false;
 
@@ -200,14 +200,16 @@ public class Constants {
     public static final double kI_Wrist = 0;
     public static final double kD_Wrist = 0;
     
-    public static final int ElevatorChannel = 1;
-    // public static final int ElevatorChannelB = 0;
+    public static final int ElevatorChannelA = 2;
+    public static final int ElevatorChannelB = 3;
     public static final boolean ElevatorReverse = false;
 
-    public static final double kP_Elev = 0.00000001;
+    public static final double kP_Elev = 7;
     public static final double kI_Elev = 0;
-    public static final double kD_Elev = 0;
+    public static final double kD_Elev = 0.0007;
 
+    public static final double kG_Elev = 0.28
+    ;
 
   }
 }
