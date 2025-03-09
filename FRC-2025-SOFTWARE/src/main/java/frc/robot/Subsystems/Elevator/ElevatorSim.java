@@ -5,11 +5,15 @@
 package frc.robot.Subsystems.Elevator;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /** Add your docs here. */
 public class ElevatorSim implements ElevatorIO {
@@ -17,7 +21,11 @@ public class ElevatorSim implements ElevatorIO {
   private edu.wpi.first.wpilibj.simulation.ElevatorSim _elevator;
 
   private ElevatorFeedforward _feedforward;
-  private ProfiledPIDController _profiledPIDController;
+  private TrapezoidProfile profile;
+  private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+  private final PIDController positionController;
+
 
   public ElevatorSim() {
 
@@ -28,8 +36,8 @@ public class ElevatorSim implements ElevatorIO {
     _elevator =
         new edu.wpi.first.wpilibj.simulation.ElevatorSim(
             DCMotor.getNEO(2),
-            9,
-            15,
+            6.6,
+            10,
             Units.inchesToMeters(2), // 2 inches
             Units.inchesToMeters(0),
             Units.inchesToMeters(74), // 84 inches //74 because of model rigging
@@ -38,15 +46,9 @@ public class ElevatorSim implements ElevatorIO {
             stdDevs);
 
     // position control
-    _feedforward = new ElevatorFeedforward(0.05, 0.34, 6.91); // based on random numbers in recalc
-    _profiledPIDController =
-        new ProfiledPIDController(
-            12,
-            0,
-            0.1,
-            new Constraints(
-                2.73,
-                -2)); // for some reason if the accell isnt negative the first motion is slowed or
+    _feedforward = new ElevatorFeedforward(0.0, 1.276, 5); // based on random numbers in recalc
+    profile = new TrapezoidProfile(new Constraints(Units.inchesToMeters(10), Units.inchesToMeters(2))); //m/s
+    positionController = new PIDController(36, 0, 0.08);
     // wonky
   }
 
@@ -58,33 +60,32 @@ public class ElevatorSim implements ElevatorIO {
     inputs.ElevatorVelocity = getVelocity();
     inputs.ElevatorVolt = getVoltage();
     inputs.ElevatorCurrent = _elevator.getCurrentDrawAmps();
-    inputs.ElevatorPosition = _elevator.getPositionMeters();
-  }
+    inputs.ElevatorPosition = getPosition();
 
-  @Override
-  public void setVoltage(double speed) {
-    _elevator.setInputVoltage(speed);
+    if(DriverStation.isDisabled()) {
+      resetController();
+    }
   }
 
   @Override
   public void setPosition(double position) {
-    double volts =
-        MathUtil.clamp(
-            _feedforward.calculate(position - getPosition())
-                + _profiledPIDController.calculate(getPosition(), position),
-            -12,
-            12);
-    _elevator.setInputVoltage(volts);
+
+    goal = new TrapezoidProfile.State(position, 0.0);
+
+    setpoint = profile.calculate(0.02, setpoint, goal);
+    // setpoint = new TrapezoidProfile.State(0, 6);
+    runPosition(setpoint);
+  }
+
+  private void runPosition(TrapezoidProfile.State setpoint) {
+    double ff = _feedforward.calculate(setpoint.velocity, 0);
+    double output = positionController.calculate(getPosition(), setpoint.position);
+    setVoltage(output + ff);
   }
 
   @Override
-  public void setVelocity(double speed) {
-    double volts =
-        MathUtil.clamp(
-            _profiledPIDController.calculate(speed, getVelocity()),
-            0,
-            0); // im lazy (also dont know if we need a set velocity)
-    _elevator.setInputVoltage(volts);
+  public void setVoltage(double speed) {
+    _elevator.setInputVoltage(MathUtil.clamp(speed, -12, 12));
   }
 
   @Override
@@ -100,5 +101,9 @@ public class ElevatorSim implements ElevatorIO {
   @Override
   public double getVoltage() {
     return _elevator.getInput(0); // this is Voltage
+  }
+
+  private void resetController() {
+    setpoint = new TrapezoidProfile.State(getPosition(), 0.0);
   }
 }

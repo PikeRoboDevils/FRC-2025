@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -160,6 +161,8 @@ public class RobotContainer {
 
     operatorXbox.povUp().onTrue(wrist.setAngle(()->0));
     operatorXbox.povDown().onTrue(wrist.setAngle(()->90));
+    // operatorXbox.povUp().onTrue(elevator.setPoint(()->Units.inchesToMeters(5)));
+    // operatorXbox.povDown().onTrue(elevator.setPoint(()->0));
 
 
     // Drive To pose commands. Might be worth rediong to be a single command
