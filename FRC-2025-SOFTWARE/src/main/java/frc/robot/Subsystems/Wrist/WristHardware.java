@@ -21,11 +21,14 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.Constants.gearRatios;
 
@@ -39,7 +42,10 @@ public class WristHardware implements WristIO {
   RelativeEncoder internalEncoder;
   // SparkClosedLoopController closedLoopController;
   private ArmFeedforward _feedforward;
-  private ProfiledPIDController _profiledPIDController;
+    private TrapezoidProfile profile;
+  private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+  private final PIDController positionController;
 
   SparkMaxConfig motorConfig;
 
@@ -59,14 +65,8 @@ public class WristHardware implements WristIO {
 
         // position control
     _feedforward = new ArmFeedforward(0,0,0); // based on random numbers in recalc
-    _profiledPIDController =
-        new ProfiledPIDController(
-            Constants.Encoders.kP_Wrist,
-            Constants.Encoders.kI_Wrist,
-            Constants.Encoders.kD_Wrist,
-            new Constraints(
-                1,
-                2)); // for some reason if the accell isnt negative the first motion is slowed or wonky
+    profile = new TrapezoidProfile(new Constraints(10, 5)); //deg/s
+    positionController = new PIDController(2, 0, 0);
 
     
     /*
@@ -138,8 +138,6 @@ public class WristHardware implements WristIO {
     // SmartDashboard.setDefaultNumber("Target Velocity", 0);
     // SmartDashboard.setDefaultBoolean("Control Mode", false);
     // SmartDashboard.setDefaultBoolean("Reset Encoder", false);
-
-    _profiledPIDController.reset(getAngleDeg(), getVelocityDeg()); //consistant unit + in seconds
   }
 
   @Override
@@ -150,24 +148,37 @@ public class WristHardware implements WristIO {
     inputs.WristVolt = getVoltage();
     // inputs.WristVelocity = wristEncoder.get();
     inputs.WristInternalAngle = internalEncoder.getPosition();
+
+    if(DriverStation.isDisabled()) {
+      resetController();
+    }
   }
 
   // set wrist angle in degrees
   @Override
   public void setAngle(double angleDeg) {
-    double volts =
-        MathUtil.clamp(
-            _feedforward.calculate(angleDeg, 0)
-                + _profiledPIDController.calculate(getAngleDeg(), angleDeg),
-            -12,
-            12);
-    wristMotor.setVoltage(volts);
+
+    goal = new TrapezoidProfile.State(angleDeg, 0.0);
+
+    setpoint = profile.calculate(0.02, setpoint, goal);
+    // setpoint = new TrapezoidProfile.State(0, 6);
+    runPosition(setpoint);
+  }
+
+  private void runPosition(TrapezoidProfile.State setpoint) {
+    double ff = _feedforward.calculate(setpoint.velocity, 0);
+    double output = positionController.calculate(getAngleDeg(), setpoint.position);
+    setVoltage(output + ff);
   }
 
   // set voltage from 0-1
   @Override
   public void setVoltage(double speed) {
-    wristMotor.setVoltage(speed);
+    wristMotor.setVoltage(MathUtil.clamp(speed, -12, 12));
+  }
+
+  private void resetController() {
+    setpoint = new TrapezoidProfile.State(getAngleDeg(), 0.0);
   }
 
   @Override
