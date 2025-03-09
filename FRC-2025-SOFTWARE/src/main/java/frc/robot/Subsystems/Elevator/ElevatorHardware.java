@@ -19,9 +19,12 @@ import com.thethriftybot.ThriftyNova.EncoderType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -37,7 +40,10 @@ public class ElevatorHardware implements ElevatorIO {
   RelativeEncoder internalEncoder;
   // SparkClosedLoopController closedLoopController;
   private ElevatorFeedforward _feedforward;
-  private ProfiledPIDController _profiledPIDController;
+  private TrapezoidProfile profile;
+  private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+  private final PIDController positionController;
   SparkMaxConfig motorConfig;
 
   public ElevatorHardware() {
@@ -67,15 +73,12 @@ public class ElevatorHardware implements ElevatorIO {
 
     // position control
     _feedforward = new ElevatorFeedforward(0,Constants.Encoders.kG_Elev,0); // based on random numbers in recalc
-    _profiledPIDController =
-        new ProfiledPIDController(
+    positionController =
+        new PIDController(
             Constants.Encoders.kP_Elev,
             Constants.Encoders.kI_Elev,
-            Constants.Encoders.kD_Elev,
-            new Constraints(
-                3,
-                -2));
-
+            Constants.Encoders.kD_Elev);
+    profile = new TrapezoidProfile(new Constraints(3, 2)); //rotations a second
 
 
 
@@ -154,32 +157,46 @@ public class ElevatorHardware implements ElevatorIO {
     inputs.ElevatorVolt = getVoltage();
     inputs.ElevatorCurrent = Leader.getOutputCurrent();
     inputs.ElevatorPosition = getPosition();
-  }
 
-  @Override
-  public void setVoltage(double speed) {
-    Leader.setVoltage(speed);
+    if(DriverStation.isDisabled()) {
+      resetController();
+    }
   }
 
   @Override
   public void setPosition(double position) {
-    double volts =
-        MathUtil.clamp(
-            _feedforward.calculate(position - getPosition())
-                + _profiledPIDController.calculate(getPosition(), position),
-            -12,
-            12);
-    Leader.setVoltage(volts);
+
+    goal = new TrapezoidProfile.State(position, 0.0);
+
+    setpoint = profile.calculate(0.02, setpoint, goal);
+    // setpoint = new TrapezoidProfile.State(0, 6);
+    runPosition(setpoint);
   }
 
+  private void runPosition(TrapezoidProfile.State setpoint) {
+    double ff = _feedforward.calculate(setpoint.velocity, 0);
+    double output = positionController.calculate(getPosition(), setpoint.position);
+    setVoltage(output + ff);
+  }
+
+  // set voltage from 0-1
   @Override
+  public void setVoltage(double speed) {
+    Leader.setVoltage(MathUtil.clamp(speed, -12, 12));
+  }
+
+  private void resetController() {
+    setpoint = new TrapezoidProfile.State(getPosition(), 0.0);
+  }
+
+  @Override @Deprecated //TODO: un depreciate it
   public void setVelocity(double speed) {
-    double volts =
-        MathUtil.clamp(
-            _profiledPIDController.calculate(speed, getVelocity()),
-            0,
-            0); // im lazy (also dont know if we need a set velocity)
-        Leader.setVoltage(volts);
+    // double volts =
+    //     MathUtil.clamp(
+    //         _profiledPIDController.calculate(speed, getVelocity()),
+    //         0,
+    //         0); // im lazy (also dont know if we need a set velocity)
+    //     Leader.setVoltage(volts);
   }
 
 
