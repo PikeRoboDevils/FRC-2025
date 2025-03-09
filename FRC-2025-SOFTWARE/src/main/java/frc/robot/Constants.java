@@ -45,6 +45,12 @@ public class Constants {
         }
     };
 
+    public class gearRatios {
+
+        public static double Arm = (12.0/50.0) * (1.0/5.0); //TODO: adjust the actual pulley ratio (pulley * planetary) drive/driven
+
+    }
+
   public class Swerve {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];

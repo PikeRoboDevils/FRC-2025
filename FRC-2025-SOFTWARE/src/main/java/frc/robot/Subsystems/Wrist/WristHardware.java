@@ -22,9 +22,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import frc.robot.Constants;
+import frc.robot.Constants.gearRatios;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -80,7 +82,7 @@ public class WristHardware implements WristIO {
      * needed, we can adjust values like the position or velocity conversion
      * factors.
      */
-    motorConfig.encoder.positionConversionFactor(1).velocityConversionFactor(1);
+    motorConfig.encoder.positionConversionFactor(gearRatios.Arm).velocityConversionFactor(gearRatios.Arm); //this is actually a "mechanisms" 1/gear (smaller than 1 reduction) ratio would convert it to be in final rotations (I think. CTRE is gear ratio/1 [greater than 1 reduction])
 
     // /*
     //  * Configure the closed loop controller. We want to make sure we set the
@@ -166,13 +168,18 @@ public class WristHardware implements WristIO {
 
   @Override
   public double getAngleDeg() {
-    return wristEncoder.getPosition();
+    return wristEncoder.getPosition() * (360); //getPosition returns rotations now
   }
 
   @Override
   public double getAngleRad() {
-    double radians = wristEncoder.getPosition() * (Math.PI / 180);
+    double radians = wristEncoder.getPosition() * (2 * Math.PI); //getPosition returns rotations now
     return radians;
+  }
+
+  //TODO: make overide and set value using limit switch to about +45 deg (dont forget Units.degreeToRadian()).
+  public void setEncoderPosition(Rotation2d rotations) {
+    wristEncoder.setPosition(rotations.getRotations());
   }
 
   @Override
