@@ -205,7 +205,11 @@ public class SwerveHardware implements SwerveIO {
     }
     @Override
     public Pose2d getPose() {
-        return Robot.isReal() ? swerveDrive.getPose() : swerveDrive.getSimulationDriveTrainPose().get();
+        return swerveDrive.getPose();
+    }
+    @Override
+    public Optional<Pose2d> getSimPose() {
+        return swerveDrive.getSimulationDriveTrainPose();
     }
     @Override
     public SwerveDriveConfiguration getSwerveDriveConfiguration() {
