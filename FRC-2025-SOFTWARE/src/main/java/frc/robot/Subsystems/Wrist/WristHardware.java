@@ -24,6 +24,7 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import frc.robot.Constants;
 import frc.robot.Constants.gearRatios;
@@ -66,6 +67,8 @@ public class WristHardware implements WristIO {
             new Constraints(
                 1,
                 2)); // for some reason if the accell isnt negative the first motion is slowed or wonky
+
+    
     /*
      * Create a new SPARK MAX configuration object. This will store the
      * configuration parameters for the SPARK MAX that we will set below.
@@ -136,6 +139,7 @@ public class WristHardware implements WristIO {
     // SmartDashboard.setDefaultBoolean("Control Mode", false);
     // SmartDashboard.setDefaultBoolean("Reset Encoder", false);
 
+    _profiledPIDController.reset(getAngleDeg(), getVelocityDeg()); //consistant unit + in seconds
   }
 
   @Override
@@ -153,7 +157,7 @@ public class WristHardware implements WristIO {
   public void setAngle(double angleDeg) {
     double volts =
         MathUtil.clamp(
-            _feedforward.calculate(angleDeg, 1)
+            _feedforward.calculate(angleDeg, 0)
                 + _profiledPIDController.calculate(getAngleDeg(), angleDeg),
             -12,
             12);
@@ -185,5 +189,9 @@ public class WristHardware implements WristIO {
   @Override
   public double getVoltage() {
     return wristMotor.getAppliedOutput();
+  }
+
+  public double getVelocityDeg() {
+    return (wristEncoder.getVelocity() * 360) /60; // R/M * (deg/rotation) = Deg/M. Deg/M * M/Sec = Deg/Sec 
   }
 }

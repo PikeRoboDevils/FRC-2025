@@ -4,11 +4,17 @@
 
 package frc.robot.Subsystems.Wrist;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 /** Add your docs here. */
@@ -16,7 +22,10 @@ public class WristSim implements WristIO {
 
   private SingleJointedArmSim _wrist;
   private ArmFeedforward _feedforward;
-  private PIDController _pid;
+  private TrapezoidProfile profile;
+  private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+  private final PIDController positionController;
 
   public WristSim() {
     _wrist =
@@ -30,8 +39,9 @@ public class WristSim implements WristIO {
             true,
             Units.degreesToRadians(90));
 
-    _feedforward = new ArmFeedforward(0.01, 0.3, 5.2);
-    _pid = new PIDController(12, 0, 0);
+    _feedforward = new ArmFeedforward(0.0, 0.0, 1);
+    profile = new TrapezoidProfile(new Constraints(10, 5)); //deg/s
+    positionController = new PIDController(2, 0, 0);
   }
 
   @Override
@@ -46,22 +56,31 @@ public class WristSim implements WristIO {
     // be
     inputs.WristVelocity =
         Units.radiansPerSecondToRotationsPerMinute(_wrist.getVelocityRadPerSec());
+
+    if(DriverStation.isDisabled()) {
+      resetController();
+    }
   }
 
   @Override
   public void setAngle(double angleDeg) {
-    double ffw =
-        _feedforward.calculate(
-            Units.degreesToRadians(angleDeg),
-            _wrist.getAngleRads() - Units.degreesToRadians(angleDeg));
-    double pid = _pid.calculate(_wrist.getAngleRads(), Units.degreesToRadians(angleDeg));
 
-    _wrist.setInputVoltage(MathUtil.clamp(ffw + pid, -12, 12));
+    goal = new TrapezoidProfile.State(angleDeg, 0.0);
+
+    setpoint = profile.calculate(0.02, setpoint, goal);
+    // setpoint = new TrapezoidProfile.State(0, 6);
+    runPosition(setpoint);
+  }
+
+  private void runPosition(TrapezoidProfile.State setpoint) {
+    double ff = _feedforward.calculate(setpoint.velocity, 0);
+    double output = positionController.calculate(getAngleDeg(), setpoint.position);
+    setVoltage(output + ff);
   }
 
   @Override
   public void setVoltage(double speed) {
-    _wrist.setInputVoltage(speed * 12);
+    _wrist.setInputVoltage(MathUtil.clamp(speed, -12, 12));
   }
 
   @Override
@@ -78,4 +97,13 @@ public class WristSim implements WristIO {
   public double getVoltage() {
     return _wrist.getInput(0); // This is voltage
   }
+
+  public double getVelocity() {
+    return (Units.radiansPerSecondToRotationsPerMinute(_wrist.getVelocityRadPerSec())* 360) /60;
+  }
+
+  private void resetController() {
+    setpoint = new TrapezoidProfile.State(getAngleDeg(), 0.0);
+  }
+
 }

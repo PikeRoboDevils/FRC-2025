@@ -413,14 +413,14 @@ public class Swerve extends SubsystemBase {
     Logger.recordOutput("Odometry/driveToPose/translateYPID", translateY.getPositionError());
     Logger.recordOutput("Odometry/driveToPose/rotatePID", rotateControl.getPositionError());
 
-    if (Robot.isSimulation()) {
-      if (io.getSimPose()
-          .isPresent()) { // might be able to merge the ifs but just to be safe against null errors
-        // it isnt
-        Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
-        vision.visionSim.update(io.getPose());
-      }
-    }
+    // if (Robot.isSimulation()) {
+    //   if (io.getSimPose()
+    //       .isPresent()) { // might be able to merge the ifs but just to be safe against null errors
+    //     // it isnt
+    //     Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
+    //     vision.visionSim.update(io.getPose());
+    //   }
+    // }
 
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (Constants.Swerve.VISION) {

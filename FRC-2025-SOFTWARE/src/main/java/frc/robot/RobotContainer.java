@@ -146,8 +146,8 @@ public class RobotContainer {
     driverXbox.x().whileFalse(Commands.run(()->drivebase.unlock()));
 
     // Season Specififc
-    driverXbox.rightBumper().whileTrue(intake.setVoltage(()->3));
-    driverXbox.leftBumper().whileTrue(intake.setVoltage(()->-1));
+    // driverXbox.rightBumper().whileTrue(intake.setVoltage(()->3));
+    // driverXbox.leftBumper().whileTrue(intake.setVoltage(()->-1));
 
     // operatorXbox.leftTrigger(0.5).whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
   
@@ -159,6 +159,7 @@ public class RobotContainer {
     // operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*2));
 
     operatorXbox.povUp().onTrue(wrist.setAngle(()->0));
+    operatorXbox.povDown().onTrue(wrist.setAngle(()->90));
 
 
     // Drive To pose commands. Might be worth rediong to be a single command
