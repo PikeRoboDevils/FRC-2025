@@ -16,6 +16,7 @@ public interface WristIO {
     public double WristVolt = 0.0;
     public double WristCurrent = 0.0;
     public double WristInternalAngle = 0.0;
+    public boolean WristLimit = false;
   }
 
   public default void updateInputs(WristIOInputs inputs) {}

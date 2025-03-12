@@ -150,7 +150,7 @@ public class RobotContainer {
     // driverXbox.rightBumper().whileTrue(intake.setVoltage(()->3));
     // driverXbox.leftBumper().whileTrue(intake.setVoltage(()->-1));
 
-    // operatorXbox.leftTrigger(0.5).whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
+    operatorXbox.leftTrigger(0.5).whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
   
         // operatorXbox.rightTrigger(0.5).whileTrue(climb.setVoltage(()->-operatorXbox.getRightY()*3));
         //     operatorXbox.rightTrigger(0.5).whileFalse(climb.setVoltage(()->(0))); //POSITIVE IS DOWN
@@ -160,7 +160,7 @@ public class RobotContainer {
     // operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*2));
 
     operatorXbox.povUp().onTrue(wrist.setAngle(()->0));
-    operatorXbox.povDown().onTrue(wrist.setAngle(()->90));
+    operatorXbox.povDown().onTrue(wrist.setAngle(()->20));//DONT GO PAST 
     // operatorXbox.povUp().onTrue(elevator.setPoint(()->Units.inchesToMeters(5)));
     // operatorXbox.povDown().onTrue(elevator.setPoint(()->0));
 

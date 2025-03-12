@@ -47,7 +47,7 @@ public class Constants {
 
     public class gearRatios {
 
-        public static double Arm = (12.0/50.0) * (1.0/5.0); //TODO: adjust the actual pulley ratio (pulley * planetary) drive/driven
+        public static double Arm = (11.0/42.0) * (1.0/5.0); //inverted
 
     }
 

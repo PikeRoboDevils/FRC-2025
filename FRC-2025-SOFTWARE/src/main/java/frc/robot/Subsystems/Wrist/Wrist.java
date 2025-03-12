@@ -60,5 +60,7 @@ public class Wrist extends SubsystemBase {
   
   public void disabled() {
     io.setVoltage(0);
+    
   }
+  
 }
