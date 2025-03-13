@@ -159,24 +159,25 @@ public class RobotContainer {
     // Season Specififc
     driverXbox.rightBumper().whileTrue(intake.setVoltage(()->3));
     driverXbox.leftBumper().whileTrue(intake.setVoltage(()->-1));
-
-     operatorXbox.leftStick().whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
-  
-        // operatorXbox.rightTrigger(0.5).whileTrue(climb.setVoltage(()->-operatorXbox.getRightY()*3));
-        //     operatorXbox.rightTrigger(0.5).whileFalse(climb.setVoltage(()->(0))); //POSITIVE IS DOWN
-
     
+    // Overides
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*2));
-
+    operatorXbox.rightStick().whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
  
-    operatorXbox.povUp().onTrue(wrist.setAngle(()->0));
-    operatorXbox.povDown().onTrue(wrist.setAngle(()->20));//DONT GO PAST 35
+    // Wrist
+    operatorXbox.rightBumper().onTrue(wrist.setAngle(()->0 + (operatorXbox.getRightY()*1))); // Reef
+    operatorXbox.leftBumper().onTrue(wrist.setAngle(()->20 + (operatorXbox.getRightY()*1)));// Source
 
+    // Climber
+    operatorXbox.rightTrigger(0.5).whileTrue(climb.setVoltage(()-> (-1/2) - operatorXbox.getRightY()*3)); // POSITIVE IS DOWN
+
+    // Elevator
     operatorXbox.start().onTrue(Commands.runOnce(()->elevator.reset(),elevator));
     operatorXbox.a().onTrue(coralSource);
     operatorXbox.b().onTrue(coralL2);
     operatorXbox.x().onTrue(coralL3);
     // operatorXbox.y().onTrue(coralL4);
+
 
 
     // Drive To pose commands. Might be worth rediong to be a single command
