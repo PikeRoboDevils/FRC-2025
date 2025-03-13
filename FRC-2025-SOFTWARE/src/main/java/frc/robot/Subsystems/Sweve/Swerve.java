@@ -13,6 +13,9 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -61,6 +64,7 @@ public class Swerve extends SubsystemBase {
 
   public boolean isLocked = false;
 
+
   // not 2025 yet
   // private final AprilTagFieldLayout aprilTagFieldLayout =
   // AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
@@ -69,6 +73,9 @@ public class Swerve extends SubsystemBase {
     this.io = swerveIO;
     Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
 
+
+    CameraServer.startAutomaticCapture();
+    
     // Set Pose for tag ID and location (0 = alliance wall left 1 = alliance wall right) //this is
     // blue alliance
     targetPosition[17][0] =
