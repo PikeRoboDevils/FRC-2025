@@ -3,18 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.Subsystems.Climber;
 
-import java.lang.module.ModuleReader;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -41,7 +37,6 @@ public class ClimberHardware implements ClimberIO {
     internalEncoder = ClimberMotor.getEncoder();
     // ClimberEncoder = ClimberMotor.getAbsoluteEncoder();
 
-    
     /*
      * Create a new SPARK MAX configuration object. This will store the
      * configuration parameters for the SPARK MAX that we will set below.
@@ -100,11 +95,14 @@ public class ClimberHardware implements ClimberIO {
      * mid-operation.
      */
 
-     motorConfig.idleMode(IdleMode.kBrake);
+    motorConfig.idleMode(IdleMode.kBrake);
 
     ClimberMotor.configure(
         motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    ClimberFollow.configure(motorConfig.follow(ClimberMotor, true), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    ClimberFollow.configure(
+        motorConfig.follow(ClimberMotor, true),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kNoPersistParameters);
 
     // // Initialize dashboard values
     // SmartDashboard.setDefaultNumber("Target Position", 0);
@@ -131,20 +129,19 @@ public class ClimberHardware implements ClimberIO {
         angleDeg, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
   }
 
-
   @Override
   public void setVoltage(double volts) {
-    ClimberMotor.setVoltage(volts);;
+    ClimberMotor.setVoltage(volts);
+    ;
   }
 
-  //cant use rn no encoder on robot
-  
+  // cant use rn no encoder on robot
+
   // // set speed from 0-1
   // @Override
   // public void setSpeed(double speed) {
   //   ClimberMotor.set(speed);;
   // }
-
 
   // @Override
   // public double getAngleDeg() {

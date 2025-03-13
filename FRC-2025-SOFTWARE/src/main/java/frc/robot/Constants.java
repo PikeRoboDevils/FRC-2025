@@ -16,9 +16,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Subsystems.Elevator.Elevator;
-import frc.robot.Subsystems.Wrist.Wrist;
-
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -26,30 +23,28 @@ import swervelib.math.Matter;
 
 public class Constants {
 
-    public enum RobotState{
-        L1Coral(0,0),
-        L2Coral(0,0),
-        L3Coral(0,0),
-        L4Coral(25.5,0),
-        Source(0,0),
-        L2Algae(0,0),
-        L3Algae(0,0);
-        
-        public double WristPos;
-        public double ElevatorPos;
+  public enum RobotState {
+    L1Coral(0, 0),
+    L2Coral(0, 0),
+    L3Coral(0, 0),
+    L4Coral(25.5, 0),
+    Source(0, 0),
+    L2Algae(0, 0),
+    L3Algae(0, 0);
 
+    public double WristPos;
+    public double ElevatorPos;
 
-        RobotState(double elevatorPos, double wristPos){
-            WristPos = wristPos;
-            ElevatorPos = elevatorPos;
-        }
-    };
-
-    public class gearRatios {
-
-        public static double Arm = (11.0/42.0) * (1.0/5.0); //inverted
-
+    RobotState(double elevatorPos, double wristPos) {
+      WristPos = wristPos;
+      ElevatorPos = elevatorPos;
     }
+  };
+
+  public class gearRatios {
+
+    public static double Arm = (11.0 / 42.0) * (1.0 / 5.0); // inverted
+  }
 
   public class Swerve {
 
@@ -57,8 +52,8 @@ public class Constants {
 
     public static boolean VISION = false;
 
-
-    public static final double MAXSPEED = Units.feetToMeters(15.1); //Why did we lower the drive speed int teleop?
+    public static final double MAXSPEED =
+        Units.feetToMeters(15.1); // Why did we lower the drive speed int teleop?
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS =
@@ -106,51 +101,51 @@ public class Constants {
   // For Easier camera setup to be used with already made vision examples
   // Camera initiation can be found on line 376 of Vision swerve
   public static class PoseCameraConstants {
-    public static Object[] CAM1 = new Object[3]; {
-     // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef tags.
-    CAM1[0] = "CAM1"; 
+    public static Object[] CAM1 = new Object[3];
 
-    CAM1[1] = 
-    new Rotation3d(0, Units.degreesToRadians(-5), Units.degreesToRadians(30));
+    {
+      // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef tags.
+      CAM1[0] = "CAM1";
 
-    CAM1[2] =
-        new Translation3d(
-            Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
-            Units.inchesToMeters(-12),
-            Units.inchesToMeters(12));
-        }
+      CAM1[1] = new Rotation3d(0, Units.degreesToRadians(-5), Units.degreesToRadians(30));
+
+      CAM1[2] =
+          new Translation3d(
+              Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
+              Units.inchesToMeters(-12),
+              Units.inchesToMeters(12));
+    }
 
     // cam 2 and 3 are roughly halfway up the elevator bracing and mounted to the
     // outside looking the direction of thier name. (this is important as looking
     // directly (same plane) at a tag is bad)
-    public static Object[] CAM2 = new Object[3]; {
-        
-        CAM2[0] = "RearOut"; 
-       
-        CAM2[1] = 
-           new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(180 + 10));
-       
-        CAM2[2] =
-           new Translation3d(
-            Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
-            Units.inchesToMeters(10.687),
-            Units.inchesToMeters(20.915));
-        }
+    public static Object[] CAM2 = new Object[3];
 
-        public static Object[] CAM3 = new Object[3]; {
-        
-            CAM3[0] = "FrontIn"; 
-           
-            CAM3[1] = 
-                new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20));
-           
-            CAM3[2] =
-            new Translation3d(
-                Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
-                Units.inchesToMeters(-10.687),
-                Units.inchesToMeters(20.915));
-            }
+    {
+      CAM2[0] = "RearOut";
 
+      CAM2[1] = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(180 + 10));
+
+      CAM2[2] =
+          new Translation3d(
+              Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
+              Units.inchesToMeters(10.687),
+              Units.inchesToMeters(20.915));
+    }
+
+    public static Object[] CAM3 = new Object[3];
+
+    {
+      CAM3[0] = "FrontIn";
+
+      CAM3[1] = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20));
+
+      CAM3[2] =
+          new Translation3d(
+              Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
+              Units.inchesToMeters(-10.687),
+              Units.inchesToMeters(20.915));
+    }
 
     // it goes up to 4 but it is commented out in SwerveVision
     public static final double maxVisionStdDevsDistance = 30;
@@ -169,8 +164,8 @@ public class Constants {
 
     public static final RobotConfig config =
         new RobotConfig(Swerve.ROBOT_MASS, 1, modConfig, FL, FR, BL, BR);
-        public static final PIDConstants TRANSLATION_PID = new PIDConstants(1.7, 0, 0);
-        public static final PIDConstants ANGLE_PID       = new PIDConstants(1.4, 0, 0.01);
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(1.7, 0, 0);
+    public static final PIDConstants ANGLE_PID = new PIDConstants(1.4, 0, 0.01);
     public static final PPHolonomicDriveController DRIVE_CONTROLLER =
         new PPHolonomicDriveController(TRANSLATION_PID, ANGLE_PID);
     // PPHolonomicController is the built in path following controller for holonomic drive trains
@@ -194,18 +189,17 @@ public class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
-  
+
   public static class Encoders {
 
     public static final int WristChannel = 8;
     // public static final int WristChannelB = 0;
     public static final boolean WristReverse = false;
 
-    
     public static final double kP_Wrist = 0.001;
     public static final double kI_Wrist = 0;
     public static final double kD_Wrist = 0;
-    
+
     public static final int ElevatorChannelA = 2;
     public static final int ElevatorChannelB = 3;
     public static final boolean ElevatorReverse = false;
@@ -216,6 +210,5 @@ public class Constants {
 
     public static final double kG_Elev = 0.092;
     ;
-
   }
 }

@@ -47,4 +47,3 @@ public class ClimberSim implements ClimberIO {
         Units.radiansPerSecondToRotationsPerMinute(_Climber.getVelocityRadPerSec());
   }
 }
- 

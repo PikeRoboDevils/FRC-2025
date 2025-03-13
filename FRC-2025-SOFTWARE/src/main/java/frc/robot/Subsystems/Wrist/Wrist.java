@@ -11,9 +11,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.Elevator.Elevator;
-
 import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Wrist extends SubsystemBase {
@@ -51,16 +49,14 @@ public class Wrist extends SubsystemBase {
   }
 
   public Command setAngle(DoubleSupplier angle) {
-    return run(()->io.setAngle(angle.getAsDouble()));
+    return run(() -> io.setAngle(angle.getAsDouble()));
   }
 
   public Command setVoltage(DoubleSupplier volts) {
-    return run(()->io.setVoltage(volts.getAsDouble()));
+    return run(() -> io.setVoltage(volts.getAsDouble()));
   }
-  
+
   public void disabled() {
     io.setVoltage(0);
-    
   }
-  
 }

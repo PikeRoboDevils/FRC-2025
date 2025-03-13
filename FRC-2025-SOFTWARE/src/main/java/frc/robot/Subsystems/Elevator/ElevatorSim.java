@@ -5,10 +5,8 @@
 package frc.robot.Subsystems.Elevator;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -25,7 +23,6 @@ public class ElevatorSim implements ElevatorIO {
   private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
   private TrapezoidProfile.State goal = new TrapezoidProfile.State();
   private final PIDController positionController;
-
 
   public ElevatorSim() {
 
@@ -47,7 +44,9 @@ public class ElevatorSim implements ElevatorIO {
 
     // position control
     _feedforward = new ElevatorFeedforward(0.0, 1.276, 5); // based on random numbers in recalc
-    profile = new TrapezoidProfile(new Constraints(Units.inchesToMeters(10), Units.inchesToMeters(2))); //m/s
+    profile =
+        new TrapezoidProfile(
+            new Constraints(Units.inchesToMeters(10), Units.inchesToMeters(2))); // m/s
     positionController = new PIDController(36, 0, 0.08);
     // wonky
   }
@@ -62,7 +61,7 @@ public class ElevatorSim implements ElevatorIO {
     inputs.ElevatorCurrent = _elevator.getCurrentDrawAmps();
     inputs.ElevatorPosition = getPosition();
 
-    if(DriverStation.isDisabled()) {
+    if (DriverStation.isDisabled()) {
       resetController();
     }
   }

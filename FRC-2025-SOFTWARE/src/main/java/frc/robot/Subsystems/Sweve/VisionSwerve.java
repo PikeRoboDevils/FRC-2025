@@ -390,26 +390,29 @@ public class VisionSwerve {
 
   enum Cameras {
     CAM_1(
-        (String)PoseCameraConstants.CAM1[0],
-        (Rotation3d)PoseCameraConstants.CAM1[1], // rotation of camera
-        (Translation3d)PoseCameraConstants.CAM1[2], // transform of camera (dont forget forwatd+ left+ up+)
+        (String) PoseCameraConstants.CAM1[0],
+        (Rotation3d) PoseCameraConstants.CAM1[1], // rotation of camera
+        (Translation3d)
+            PoseCameraConstants.CAM1[2], // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
         VecBuilder.fill(
             n1StndardDevs * 0.25, n2StandardDevs * 0.25, n4StandardDevs * 0.25) // std devs
         ),
 
     CAM_2(
-      (String)PoseCameraConstants.CAM2[0],
-      (Rotation3d)PoseCameraConstants.CAM2[1], // rotation of camera
-      (Translation3d)PoseCameraConstants.CAM2[2], // transform of camera (dont forget forwatd+ left+ up+)
+        (String) PoseCameraConstants.CAM2[0],
+        (Rotation3d) PoseCameraConstants.CAM2[1], // rotation of camera
+        (Translation3d)
+            PoseCameraConstants.CAM2[2], // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
         VecBuilder.fill(
             n1StndardDevs * 0.25, n2StandardDevs * 0.25, n4StandardDevs * 0.25) // std devs
         ),
     CAM_3(
-      (String)PoseCameraConstants.CAM3[0],
-      (Rotation3d)PoseCameraConstants.CAM3[1], // rotation of camera
-      (Translation3d)PoseCameraConstants.CAM3[2], // transform of camera (dont forget forwatd+ left+ up+)
+        (String) PoseCameraConstants.CAM3[0],
+        (Rotation3d) PoseCameraConstants.CAM3[1], // rotation of camera
+        (Translation3d)
+            PoseCameraConstants.CAM3[2], // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(4, 4, 8),
         VecBuilder.fill(0.5, 0.5, 1)),
   // CAM_4("CAM4",

@@ -3,8 +3,9 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Testing",
-    "Simulations"
+    "New Folder",
+    "Simulations",
+    "Testing"
   ],
   "autoFolders": [],
   "defaultMaxVel": 6.0,

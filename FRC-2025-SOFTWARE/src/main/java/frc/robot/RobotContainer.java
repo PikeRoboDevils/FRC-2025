@@ -7,7 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,7 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Subsystems.Climber.Climber;import frc.robot.Subsystems.Climber.ClimberHardware;
+import frc.robot.Subsystems.Climber.Climber;
+import frc.robot.Subsystems.Climber.ClimberHardware;
 import frc.robot.Subsystems.Climber.ClimberSim;
 import frc.robot.Subsystems.CoralIntake.CoralIntake;
 import frc.robot.Subsystems.CoralIntake.CoralIntakeHardware;
@@ -28,8 +28,6 @@ import frc.robot.Subsystems.Wrist.Wrist;
 import frc.robot.Subsystems.Wrist.WristHardware;
 import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
-
-import java.io.OutputStreamWriter;
 import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 
@@ -52,7 +50,6 @@ public class RobotContainer {
   private boolean debounce = false;
   private int id = 0;
 
-  
   public RobotContainer() {
     if (Robot.isReal()) {
       elevator = new Elevator(new ElevatorHardware());
@@ -96,9 +93,12 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
-  private Command SetRobotState(Constants.RobotState robotState){
-    return Commands.parallel(elevator.setPoint(()->robotState.ElevatorPos), Commands.waitSeconds(.5).andThen(()->wrist.setAngle(()->robotState.WristPos)));
+  private Command SetRobotState(Constants.RobotState robotState) {
+    return Commands.parallel(
+        elevator.setPoint(() -> robotState.ElevatorPos),
+        Commands.waitSeconds(.5).andThen(() -> wrist.setAngle(() -> robotState.WristPos)));
   }
+
   private void configureBindings() {
 
     // closedAbsoluteDriveAdv does not work at least in sim dont use it :)
@@ -138,12 +138,16 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2.5);
 
-    Command coralSource = Commands.parallel(elevator.setPoint(()->1));//.alongWith(wrist.setAngle(()->35));
-    Command coralL1 = Commands.parallel(elevator.setPoint(()->3));//.alongWith(wrist.setAngle(()->4));
-    Command coralL2 = Commands.parallel(elevator.setPoint(()->9));//.alongWith(wrist.setAngle(()->-7));
-    Command coralL3 = Commands.parallel(elevator.setPoint(()->13));//.alongWith(wrist.setAngle(()->-7));
-    Command coralL4 = Commands.parallel(elevator.setPoint(()->25));//.alongWith(wrist.setAngle(()->-28));
-
+    Command coralSource =
+        Commands.parallel(elevator.setPoint(() -> 1)); // .alongWith(wrist.setAngle(()->35));
+    Command coralL1 =
+        Commands.parallel(elevator.setPoint(() -> 3)); // .alongWith(wrist.setAngle(()->4));
+    Command coralL2 =
+        Commands.parallel(elevator.setPoint(() -> 9)); // .alongWith(wrist.setAngle(()->-7));
+    Command coralL3 =
+        Commands.parallel(elevator.setPoint(() -> 13)); // .alongWith(wrist.setAngle(()->-7));
+    Command coralL4 =
+        Commands.parallel(elevator.setPoint(() -> 25)); // .alongWith(wrist.setAngle(()->-28));
 
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
@@ -151,34 +155,40 @@ public class RobotContainer {
     // Drive Controller Commands
 
     // Generic
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); //prepared for eight steps
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // prepared for eight steps
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
-    driverXbox.x().whileFalse(Commands.run(()->drivebase.unlock()));
+    driverXbox.x().whileFalse(Commands.run(() -> drivebase.unlock()));
 
     // Season Specififc
-    driverXbox.rightBumper().whileTrue(intake.setVoltage(()->3));
-    driverXbox.leftBumper().whileTrue(intake.setVoltage(()->-1));
-    
+    driverXbox.rightBumper().whileTrue(intake.setVoltage(() -> 3));
+    driverXbox.leftBumper().whileTrue(intake.setVoltage(() -> -1));
+
     // Overides
-    operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*2));
-    operatorXbox.rightStick().whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
- 
+    operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 2));
+    operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 1));
+
     // Wrist
-    operatorXbox.rightBumper().onTrue(wrist.setAngle(()->0 + (operatorXbox.getRightY()*1))); // Reef
-    operatorXbox.leftBumper().onTrue(wrist.setAngle(()->20 + (operatorXbox.getRightY()*1)));// Source
+    operatorXbox
+        .rightBumper()
+        .onTrue(wrist.setAngle(() -> 0 + (operatorXbox.getRightY() * 1))); // Reef
+    operatorXbox
+        .leftBumper()
+        .onTrue(wrist.setAngle(() -> 20 + (operatorXbox.getRightY() * 1))); // Source
 
     // Climber
-    operatorXbox.rightTrigger(0.5).whileTrue(climb.setVoltage(()-> (-1/2) - operatorXbox.getRightY()*3)); // POSITIVE IS DOWN
+    operatorXbox
+        .rightTrigger(0.5)
+        .whileTrue(
+            climb.setVoltage(() -> (-1 / 2) - operatorXbox.getRightY() * 3)); // POSITIVE IS DOWN
 
     // Elevator
-    operatorXbox.start().onTrue(Commands.runOnce(()->elevator.reset(),elevator));
+    operatorXbox.start().onTrue(Commands.runOnce(() -> elevator.reset(), elevator));
     operatorXbox.a().onTrue(coralSource);
+    operatorXbox.povDown().onTrue(coralL1);
     operatorXbox.b().onTrue(coralL2);
     operatorXbox.x().onTrue(coralL3);
     // operatorXbox.y().onTrue(coralL4);
-
-
 
     // Drive To pose commands. Might be worth rediong to be a single command
     if (Constants.Swerve.VISION) {

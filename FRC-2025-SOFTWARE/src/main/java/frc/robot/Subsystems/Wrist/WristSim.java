@@ -4,12 +4,9 @@
 
 package frc.robot.Subsystems.Wrist;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -40,7 +37,7 @@ public class WristSim implements WristIO {
             Units.degreesToRadians(90));
 
     _feedforward = new ArmFeedforward(0.0, 0.0, 1);
-    profile = new TrapezoidProfile(new Constraints(10, 5)); //deg/s
+    profile = new TrapezoidProfile(new Constraints(10, 5)); // deg/s
     positionController = new PIDController(2, 0, 0);
   }
 
@@ -57,7 +54,7 @@ public class WristSim implements WristIO {
     inputs.WristVelocity =
         Units.radiansPerSecondToRotationsPerMinute(_wrist.getVelocityRadPerSec());
 
-    if(DriverStation.isDisabled()) {
+    if (DriverStation.isDisabled()) {
       resetController();
     }
   }
@@ -99,11 +96,10 @@ public class WristSim implements WristIO {
   }
 
   public double getVelocity() {
-    return (Units.radiansPerSecondToRotationsPerMinute(_wrist.getVelocityRadPerSec())* 360) /60;
+    return (Units.radiansPerSecondToRotationsPerMinute(_wrist.getVelocityRadPerSec()) * 360) / 60;
   }
 
   private void resetController() {
     setpoint = new TrapezoidProfile.State(getAngleDeg(), 0.0);
   }
-
 }

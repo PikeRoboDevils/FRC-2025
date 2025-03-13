@@ -80,7 +80,8 @@ public interface SwerveIO {
 
   public default void driveFieldOriented(ChassisSpeeds velocity) {}
 
-  public default void drivePathPlanner(ChassisSpeeds speeds, SwerveModuleState[] modules, Force[] forwardForce) {}
+  public default void drivePathPlanner(
+      ChassisSpeeds speeds, SwerveModuleState[] modules, Force[] forwardForce) {}
 
   public default void resetOdometry(Pose2d initialHolonomicPose) {}
 
@@ -124,6 +125,7 @@ public interface SwerveIO {
   public default boolean getLocked() {
     return false;
   }
+
   public default Optional<Pose2d> getSimPose() {
     return null;
   }

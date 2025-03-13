@@ -13,9 +13,7 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
-
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -32,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -64,7 +61,6 @@ public class Swerve extends SubsystemBase {
 
   public boolean isLocked = false;
 
-
   // not 2025 yet
   // private final AprilTagFieldLayout aprilTagFieldLayout =
   // AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
@@ -73,9 +69,8 @@ public class Swerve extends SubsystemBase {
     this.io = swerveIO;
     Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
 
+    CameraServer.startAutomaticCapture(); // for coral scoring cam
 
-    CameraServer.startAutomaticCapture();
-    
     // Set Pose for tag ID and location (0 = alliance wall left 1 = alliance wall right) //this is
     // blue alliance
     targetPosition[17][0] =
@@ -165,14 +160,11 @@ public class Swerve extends SubsystemBase {
             );
   }
 
-  // TODO fix path planner again :(
-  public void setupPathPlanner()
-  {
+  public void setupPathPlanner() {
     // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
     RobotConfig config;
-    try
-    {
+    try {
       config = RobotConfig.fromGUISettings();
 
       final boolean enableFeedforward = true;
@@ -185,26 +177,26 @@ public class Swerve extends SubsystemBase {
           this::getRobotVelocity,
           // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
           (speedsRobotRelative, moduleFeedForwards) -> {
-            if (enableFeedforward)
-            {
-              io.getSwerve().drive(
-                  speedsRobotRelative,
-                  io.getSwerve().kinematics.toSwerveModuleStates(speedsRobotRelative),
-                  moduleFeedForwards.linearForces()
-                               );
-            } else
-            {
+            if (enableFeedforward) {
+              io.getSwerve()
+                  .drive(
+                      speedsRobotRelative,
+                      io.getSwerve().kinematics.toSwerveModuleStates(speedsRobotRelative),
+                      moduleFeedForwards.linearForces());
+            } else {
               io.getSwerve().setChassisSpeeds(speedsRobotRelative);
             }
           },
-          // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+          // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally
+          // outputs individual module feedforwards
           new PPHolonomicDriveController(
-              // PPHolonomicController is the built in path following controller for holonomic drive trains
+              // PPHolonomicController is the built in path following controller for holonomic drive
+              // trains
               new PIDConstants(5.0, 0.0, 0.0),
               // Translation PID constants
               new PIDConstants(5.0, 0.0, 0.0)
               // Rotation PID constants
-          ),
+              ),
           config,
           // The robot configuration
           () -> {
@@ -213,38 +205,35 @@ public class Swerve extends SubsystemBase {
             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
             var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent())
-            {
+            if (alliance.isPresent()) {
               return alliance.get() == DriverStation.Alliance.Red;
             }
             return false;
           },
           this
           // Reference to this subsystem to set requirements
-                           );
+          );
 
-    } catch (Exception e)
-    {
+    } catch (Exception e) {
       // Handle exception as needed
       e.printStackTrace();
     }
 
-    //Preload PathPlanner Path finding
+    // Preload PathPlanner Path finding
     // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
     PathfindingCommand.warmupCommand().schedule();
 
-        //Logging for the path planner values.
-        PathPlannerLogging.setLogActivePathCallback(
-          (activePath) -> {
-            Logger.recordOutput(
-                "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
-          }); // loging stuff
-      PathPlannerLogging.setLogTargetPoseCallback(
-          (targetPose) -> {
-            Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-          });
+    // Logging for the path planner values.
+    PathPlannerLogging.setLogActivePathCallback(
+        (activePath) -> {
+          Logger.recordOutput(
+              "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+        }); // loging stuff
+    PathPlannerLogging.setLogTargetPoseCallback(
+        (targetPose) -> {
+          Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+        });
   }
-
 
   // this crashes the robot idk why
   // // Since AutoBuilder is configured, we can use it to build pathfinding commands
@@ -332,11 +321,10 @@ public class Swerve extends SubsystemBase {
               RightX.getAsDouble() * Math.PI * steerSens.getAsDouble();
 
           io.driveFieldOriented(desiredSpeeds);
-          
         });
   }
 
-  //Uses PID to hold at last angle while maintaining open loop steering for feeling.
+  // Uses PID to hold at last angle while maintaining open loop steering for feeling.
   public Command fieldRelativeHybrid(
       DoubleSupplier LeftX, DoubleSupplier LeftY, DoubleSupplier RightX, DoubleSupplier steerSens) {
     return run(
@@ -422,7 +410,8 @@ public class Swerve extends SubsystemBase {
 
     // if (Robot.isSimulation()) {
     //   if (io.getSimPose()
-    //       .isPresent()) { // might be able to merge the ifs but just to be safe against null errors
+    //       .isPresent()) { // might be able to merge the ifs but just to be safe against null
+    // errors
     //     // it isnt
     //     Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
     //     vision.visionSim.update(io.getPose());
@@ -439,7 +428,6 @@ public class Swerve extends SubsystemBase {
       // vision
     }
   }
-  
 
   @Override
   public void simulationPeriodic() {}
@@ -559,10 +547,10 @@ public class Swerve extends SubsystemBase {
     io.lockPose();
   }
 
-    /** Lock the swerve drive to prevent it from moving. */
-    public void unlock() {
-      isLocked = false;
-    }
+  /** Lock the swerve drive to prevent it from moving. */
+  public void unlock() {
+    isLocked = false;
+  }
 
   /** Update the pose estimation with vision data. */
   public void updatePoseWithVision() {

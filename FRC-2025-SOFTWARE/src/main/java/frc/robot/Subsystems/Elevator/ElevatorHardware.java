@@ -6,32 +6,21 @@ package frc.robot.Subsystems.Elevator;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.thethriftybot.ThriftyNova.EncoderType;
-
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import frc.robot.Constants;
-
-import com.revrobotics.spark.config.SparkMaxConfig;
 
 /** Add your docs here. */
 public class ElevatorHardware implements ElevatorIO {
@@ -55,33 +44,31 @@ public class ElevatorHardware implements ElevatorIO {
         50); // defualt is 20 ms. The follower motor should be fine with slightly lower polling
 
     // closedLoopController = Leader.getClosedLoopController();
-    
+
     internalEncoder = Leader.getEncoder();
     DigitalInput dio = new DigitalInput(0);
     // elevatorEncoder = new Encoder(0, 0, false);
-    elevatorEncoder = internalEncoder; //TEMPORARY
+    elevatorEncoder = internalEncoder; // TEMPORARY
 
-//     // Configures the encoder to return a distance of 4 for every 256 pulses
-// // Also changes the units of getRate
-// elevatorEncoder.setDistancePerPulse(2/2048);
-// // Configures the encoder to consider itself stopped when its rate is below 10
-// elevatorEncoder.setMinRate(10);
-// // Reverses the direction of the encoder
-// elevatorEncoder.setReverseDirection(true);
-// // Configures an encoder to average its period measurement over 5 samples
-// // Can be between 1 and 127 samples
-// elevatorEncoder.setSamplesToAverage(5);
+    //     // Configures the encoder to return a distance of 4 for every 256 pulses
+    // // Also changes the units of getRate
+    // elevatorEncoder.setDistancePerPulse(2/2048);
+    // // Configures the encoder to consider itself stopped when its rate is below 10
+    // elevatorEncoder.setMinRate(10);
+    // // Reverses the direction of the encoder
+    // elevatorEncoder.setReverseDirection(true);
+    // // Configures an encoder to average its period measurement over 5 samples
+    // // Can be between 1 and 127 samples
+    // elevatorEncoder.setSamplesToAverage(5);
 
     // position control
-    _feedforward = new ElevatorFeedforward(0,Constants.Encoders.kG_Elev,0.2); // based on random numbers in recalc
+    _feedforward =
+        new ElevatorFeedforward(
+            0, Constants.Encoders.kG_Elev, 0.2); // based on random numbers in recalc
     positionController =
         new PIDController(
-            Constants.Encoders.kP_Elev,
-            Constants.Encoders.kI_Elev,
-            Constants.Encoders.kD_Elev);
-    profile = new TrapezoidProfile(new Constraints(10, 10)); //rotations a second
-
-
+            Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
+    profile = new TrapezoidProfile(new Constraints(10, 10)); // rotations a second
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
@@ -159,7 +146,7 @@ public class ElevatorHardware implements ElevatorIO {
     inputs.ElevatorCurrent = Leader.getOutputCurrent();
     inputs.ElevatorPosition = getPosition();
 
-    if(DriverStation.isDisabled()) {
+    if (DriverStation.isDisabled()) {
       resetController();
     }
   }
@@ -190,7 +177,8 @@ public class ElevatorHardware implements ElevatorIO {
     setpoint = new TrapezoidProfile.State(getPosition(), 0.0);
   }
 
-  @Override @Deprecated //TODO: un depreciate it
+  @Override
+  @Deprecated // TODO: un depreciate it
   public void setVelocity(double speed) {
     // double volts =
     //     MathUtil.clamp(
@@ -199,7 +187,6 @@ public class ElevatorHardware implements ElevatorIO {
     //         0); // im lazy (also dont know if we need a set velocity)
     //     Leader.setVoltage(volts);
   }
-
 
   @Override
   public double getVelocity() {
@@ -219,5 +206,4 @@ public class ElevatorHardware implements ElevatorIO {
   public void setEncoderPosition(Rotation2d rotations) {
     internalEncoder.setPosition(rotations.getRotations());
   }
-
 }

@@ -11,9 +11,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
@@ -64,17 +62,18 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command setPoint(DoubleSupplier position) {
-    return run(()->io.setPosition(position.getAsDouble()));
+    return run(() -> io.setPosition(position.getAsDouble()));
   }
+
   public Command setVoltage(DoubleSupplier volts) {
-    return run(()->io.setVoltage(volts.getAsDouble())).finallyDo(()->io.setVoltage(0));
+    return run(() -> io.setVoltage(volts.getAsDouble())).finallyDo(() -> io.setVoltage(0));
   }
 
   public void disabled() {
     io.setVoltage(0);
   }
 
-  public void reset(){
+  public void reset() {
     io.setEncoderPosition(new Rotation2d(0));
   }
 }

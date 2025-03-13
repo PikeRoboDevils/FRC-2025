@@ -6,15 +6,8 @@ package frc.robot.Subsystems.CoralIntake;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkMaxConfig;
-
-import frc.robot.Subsystems.Climber.ClimberIO.ClimberIOInputs;
 
 /** Add your docs here. */
 public class CoralIntakeHardware implements CoralIntakeIO {
@@ -28,8 +21,6 @@ public class CoralIntakeHardware implements CoralIntakeIO {
 
     internalEncoder = intakeMotor.getEncoder();
     intakeEncoder = intakeMotor.getAbsoluteEncoder();
-
-   
   }
 
   @Override
@@ -38,13 +29,14 @@ public class CoralIntakeHardware implements CoralIntakeIO {
     inputs.IntakeCurrent = intakeMotor.getOutputCurrent();
     inputs.IntakeVolt = getVoltage();
     inputs.IntakeVelocity = intakeEncoder.getVelocity();
- 
   }
 
   @Override
   public void setVoltage(double volts) {
-    intakeMotor.setVoltage(volts);;
+    intakeMotor.setVoltage(volts);
+    ;
   }
+
   @Override
   public double getVoltage() {
     return intakeMotor.getAppliedOutput();
