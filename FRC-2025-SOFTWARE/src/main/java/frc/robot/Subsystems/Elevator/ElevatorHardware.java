@@ -21,6 +21,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -72,13 +73,13 @@ public class ElevatorHardware implements ElevatorIO {
 // elevatorEncoder.setSamplesToAverage(5);
 
     // position control
-    _feedforward = new ElevatorFeedforward(0,Constants.Encoders.kG_Elev,0); // based on random numbers in recalc
+    _feedforward = new ElevatorFeedforward(0,Constants.Encoders.kG_Elev,0.2); // based on random numbers in recalc
     positionController =
         new PIDController(
             Constants.Encoders.kP_Elev,
             Constants.Encoders.kI_Elev,
             Constants.Encoders.kD_Elev);
-    profile = new TrapezoidProfile(new Constraints(3, 2)); //rotations a second
+    profile = new TrapezoidProfile(new Constraints(10, 10)); //rotations a second
 
 
 
@@ -214,4 +215,9 @@ public class ElevatorHardware implements ElevatorIO {
   public double getVoltage() {
     return Leader.getAppliedOutput();
   }
+
+  public void setEncoderPosition(Rotation2d rotations) {
+    internalEncoder.setPosition(rotations.getRotations());
+  }
+
 }

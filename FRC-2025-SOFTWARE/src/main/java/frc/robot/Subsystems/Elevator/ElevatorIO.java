@@ -6,6 +6,8 @@ package frc.robot.Subsystems.Elevator;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 /** Add your docs here. */
 public interface ElevatorIO {
   @AutoLog
@@ -36,4 +38,6 @@ public interface ElevatorIO {
   public default double getVoltage() {
     return 0;
   }
+
+  public default void setEncoderPosition(Rotation2d rotations) {}
 }

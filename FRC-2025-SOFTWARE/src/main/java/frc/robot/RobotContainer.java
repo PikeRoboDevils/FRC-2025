@@ -28,6 +28,8 @@ import frc.robot.Subsystems.Wrist.Wrist;
 import frc.robot.Subsystems.Wrist.WristHardware;
 import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
+
+import java.io.OutputStreamWriter;
 import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 
@@ -135,6 +137,13 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2.5);
 
+    Command coralSource = Commands.parallel(elevator.setPoint(()->1));//.alongWith(wrist.setAngle(()->35));
+    Command coralL1 = Commands.parallel(elevator.setPoint(()->3));//.alongWith(wrist.setAngle(()->4));
+    Command coralL2 = Commands.parallel(elevator.setPoint(()->9));//.alongWith(wrist.setAngle(()->-7));
+    Command coralL3 = Commands.parallel(elevator.setPoint(()->13));//.alongWith(wrist.setAngle(()->-7));
+    Command coralL4 = Commands.parallel(elevator.setPoint(()->25));//.alongWith(wrist.setAngle(()->-28));
+
+
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
 
@@ -147,22 +156,26 @@ public class RobotContainer {
     driverXbox.x().whileFalse(Commands.run(()->drivebase.unlock()));
 
     // Season Specififc
-    // driverXbox.rightBumper().whileTrue(intake.setVoltage(()->3));
-    // driverXbox.leftBumper().whileTrue(intake.setVoltage(()->-1));
+    driverXbox.rightBumper().whileTrue(intake.setVoltage(()->3));
+    driverXbox.leftBumper().whileTrue(intake.setVoltage(()->-1));
 
-    operatorXbox.leftTrigger(0.5).whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
+     operatorXbox.leftStick().whileTrue(wrist.setVoltage(()-> operatorXbox.getRightY()*1));
   
         // operatorXbox.rightTrigger(0.5).whileTrue(climb.setVoltage(()->-operatorXbox.getRightY()*3));
         //     operatorXbox.rightTrigger(0.5).whileFalse(climb.setVoltage(()->(0))); //POSITIVE IS DOWN
-    
-            // operatorXbox.povUp().whileFalse(elevator.setPoint(()->0));
-    
-    // operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*2));
 
+    
+    operatorXbox.leftStick().whileTrue(elevator.setVoltage(()-> -operatorXbox.getLeftY()*2));
+
+ 
     operatorXbox.povUp().onTrue(wrist.setAngle(()->0));
-    operatorXbox.povDown().onTrue(wrist.setAngle(()->20));//DONT GO PAST 
-    // operatorXbox.povUp().onTrue(elevator.setPoint(()->Units.inchesToMeters(5)));
-    // operatorXbox.povDown().onTrue(elevator.setPoint(()->0));
+    operatorXbox.povDown().onTrue(wrist.setAngle(()->20));//DONT GO PAST 35
+
+    operatorXbox.start().onTrue(Commands.runOnce(()->elevator.reset(),elevator));
+    operatorXbox.a().onTrue(coralSource);
+    operatorXbox.b().onTrue(coralL2);
+    operatorXbox.x().onTrue(coralL3);
+    // operatorXbox.y().onTrue(coralL4);
 
 
     // Drive To pose commands. Might be worth rediong to be a single command

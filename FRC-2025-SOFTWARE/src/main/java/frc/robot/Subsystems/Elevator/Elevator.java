@@ -5,6 +5,7 @@
 package frc.robot.Subsystems.Elevator;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
@@ -71,5 +72,9 @@ public class Elevator extends SubsystemBase {
 
   public void disabled() {
     io.setVoltage(0);
+  }
+
+  public void reset(){
+    io.setEncoderPosition(new Rotation2d(0));
   }
 }

@@ -68,10 +68,11 @@ public class WristHardware implements WristIO {
     // wristEncoder = wristMotor.getAbsoluteEncoder();
     // wristEncoder = internalEncoder;
 
-        // position control
-    _feedforward = new ArmFeedforward(0.002,0.032,0); // based on random numbers in recalc
-    profile = new TrapezoidProfile(new Constraints(0.1, 0.0)); //deg/s
-    positionController = new PIDController(0.09, 0, 0.01);
+        // position control FEEDFORWARD = 0
+    _feedforward = new ArmFeedforward(0,0.032,0.01); // based on random numbers in recalc
+    //not being used
+    profile = new TrapezoidProfile(new Constraints(1, 1)); //deg/s
+    positionController = new PIDController(0.03, 0, 0.02);
 
     
     /*
@@ -80,7 +81,7 @@ public class WristHardware implements WristIO {
      */
     motorConfig = new SparkMaxConfig();
 
-    motorConfig.idleMode(IdleMode.kBrake);
+    // motorConfig.idleMode(IdleMode.kBrake); //PID with brake is bad
     motorConfig.voltageCompensation(
         12); // may be tweaked depending on voltage drain. Highly reccomended from a consistancy and
     // smoothness standpoint
@@ -170,12 +171,12 @@ public class WristHardware implements WristIO {
 
     setpoint = profile.calculate(0.02, setpoint, goal);
     // setpoint = new TrapezoidProfile.State(0, 6);
-    runPosition(setpoint);
+    runPosition(angleDeg);
   }
 
-  private void runPosition(TrapezoidProfile.State setpoint) {
-    double ff = _feedforward.calculate(Math.toRadians(setpoint.position), setpoint.velocity);
-    double output = positionController.calculate(getAngleDeg(), setpoint.position);
+  private void runPosition(Double setpoint) {
+    double ff = 0;//_feedforward.calculate(Math.toRadians(setpoint.position), setpoint.velocity);
+    double output = positionController.calculate(getAngleDeg(), setpoint);
     setVoltage(output + ff);
   }
 
@@ -193,7 +194,7 @@ public class WristHardware implements WristIO {
 
   @Override
   public double getAngleDeg() {
-    if (!limitSwitch.get()){
+    if (limitSwitch.get()){
       setEncoderPosition(new Rotation2d(Math.toRadians(35)));
     }
     return (internalEncoder.getPosition() *360 );///14)*360; //getPosition returns rotations now
