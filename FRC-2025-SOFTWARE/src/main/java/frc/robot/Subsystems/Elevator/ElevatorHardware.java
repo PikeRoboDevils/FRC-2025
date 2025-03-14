@@ -40,6 +40,7 @@ public class ElevatorHardware implements ElevatorIO {
     Leader = new SparkMax(12, MotorType.kBrushless);
     Follower = new SparkMax(14, MotorType.kBrushless);
 
+
     Follower.setControlFramePeriodMs(
         50); // defualt is 20 ms. The follower motor should be fine with slightly lower polling
 
@@ -68,7 +69,8 @@ public class ElevatorHardware implements ElevatorIO {
     positionController =
         new PIDController(
             Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
-    profile = new TrapezoidProfile(new Constraints(10, 10)); // rotations a second
+    profile = new TrapezoidProfile(new Constraints(10, 15
+    )); // rotations a second
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
@@ -81,6 +83,7 @@ public class ElevatorHardware implements ElevatorIO {
         12); // may be tweaked depending on voltage drain. Highly reccomended from a consistancy and
     // smoothness standpoint
 
+    motorConfig.smartCurrentLimit(40,30);
     /*
      * Configure the encoder. For this specific example, we are using the
      * integrated encoder of the NEO, and we don't need to configure it. If
@@ -175,6 +178,7 @@ public class ElevatorHardware implements ElevatorIO {
 
   private void resetController() {
     setpoint = new TrapezoidProfile.State(getPosition(), 0.0);
+    profile.calculate(getPosition(), setpoint, setpoint);
   }
 
   @Override

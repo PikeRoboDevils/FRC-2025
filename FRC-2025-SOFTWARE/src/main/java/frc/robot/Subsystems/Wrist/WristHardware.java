@@ -54,11 +54,11 @@ public class WristHardware implements WristIO {
     // wristEncoder = internalEncoder;
 
     // position control FEEDFORWARD = 0
-    _feedforward = new ArmFeedforward(0, 0.032, 0.01); // based on random numbers in recalc
+    _feedforward = new ArmFeedforward(0, 0.032, 0); // based on random numbers in recalc
     // not being used
     profile = new TrapezoidProfile(new Constraints(1, 1)); // deg/s
-    positionController = new PIDController(0.03, 0, 0.02);
-
+    positionController = new PIDController(0.15, 0, 0);
+    positionController.setTolerance(0.1);
     /*
      * Create a new SPARK MAX configuration object. This will store the
      * configuration parameters for the SPARK MAX that we will set below.
@@ -144,6 +144,7 @@ public class WristHardware implements WristIO {
 
     inputs.WristCurrent = wristMotor.getOutputCurrent();
     inputs.WristEncoderAngle = getAngleDeg();
+
     inputs.WristVolt = getVoltage();
     // inputs.WristVelocity = wristEncoder.get();
     inputs.WristInternalAngle = internalEncoder.getPosition();
@@ -166,7 +167,7 @@ public class WristHardware implements WristIO {
   }
 
   private void runPosition(Double setpoint) {
-    double ff = 0; // _feedforward.calculate(Math.toRadians(setpoint.position), setpoint.velocity);
+    double ff = 0.01;//_feedforward.calculate(getAngleRad(), 0);
     double output = positionController.calculate(getAngleDeg(), setpoint);
     setVoltage(output + ff);
   }
@@ -196,8 +197,6 @@ public class WristHardware implements WristIO {
     return radians;
   }
 
-  // TODO: make overide and set value using limit switch to about +45 deg (dont forget
-  // Units.degreeToRadian()).
   public void setEncoderPosition(Rotation2d rotations) {
     internalEncoder.setPosition(rotations.getRotations());
   }

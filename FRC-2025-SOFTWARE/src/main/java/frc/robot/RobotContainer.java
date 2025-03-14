@@ -138,16 +138,18 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2.5);
 
+    Command stow =
+            Commands.parallel(elevator.setPoint(() -> 0), wrist.setAngle(()->34));
     Command coralSource =
-        Commands.parallel(elevator.setPoint(() -> 1)); // .alongWith(wrist.setAngle(()->35));
+        Commands.parallel(elevator.setPoint(() -> 6.8), wrist.setAngle(()->30));
     Command coralL1 =
-        Commands.parallel(elevator.setPoint(() -> 3)); // .alongWith(wrist.setAngle(()->4));
+        Commands.parallel(elevator.setPoint(() -> 4), wrist.setAngle(()->10));
     Command coralL2 =
-        Commands.parallel(elevator.setPoint(() -> 9)); // .alongWith(wrist.setAngle(()->-7));
+        Commands.parallel(elevator.setPoint(() -> 9.4), wrist.setAngle(()->0));
     Command coralL3 =
-        Commands.parallel(elevator.setPoint(() -> 13)); // .alongWith(wrist.setAngle(()->-7));
+        Commands.parallel(elevator.setPoint(() -> 14.7), wrist.setAngle(()->0));
     Command coralL4 =
-        Commands.parallel(elevator.setPoint(() -> 25)); // .alongWith(wrist.setAngle(()->-28));
+        Commands.parallel(elevator.setPoint(() -> 24.5 + operatorXbox.getLeftY()), wrist.setAngle(()->0 ));
 
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
@@ -161,35 +163,39 @@ public class RobotContainer {
     driverXbox.x().whileFalse(Commands.run(() -> drivebase.unlock()));
 
     // Season Specififc
+
+    intake.setDefaultCommand(intake.setVoltage(()->1));
     driverXbox.rightBumper().whileTrue(intake.setVoltage(() -> 3));
-    driverXbox.leftBumper().whileTrue(intake.setVoltage(() -> -1));
+    driverXbox.leftBumper().whileTrue(intake.setVoltage(() -> -2
+    ));
 
     // Overides
-    operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 2));
-    operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 1));
+    // operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 3));
+    operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 2));
 
-    // Wrist
-    operatorXbox
-        .rightBumper()
-        .onTrue(wrist.setAngle(() -> 0 + (operatorXbox.getRightY() * 1))); // Reef
-    operatorXbox
-        .leftBumper()
-        .onTrue(wrist.setAngle(() -> 20 + (operatorXbox.getRightY() * 1))); // Source
+    // // Wrist
+    // operatorXbox
+    //     .rightBumper()
+    //     .onTrue(wrist.setAngle(() -> 0 + (operatorXbox.getRightY() * 10))); // Reef
+    // operatorXbox
+    //     .leftBumper()
+    //     .onTrue(wrist.setAngle(() -> 30 + (operatorXbox.getRightY() * 10))); // Source
 
     // Climber
     operatorXbox
         .rightTrigger(0.5)
         .whileTrue(
-            climb.setVoltage(() -> (-1 / 2) - operatorXbox.getRightY() * 3)); // POSITIVE IS DOWN
+            climb.setVoltage(() -> -operatorXbox.getRightY() * 2)).whileFalse(climb.setVoltage(() -> 0)); // POSITIVE IS DOWN
 
-    // Elevator
-    operatorXbox.start().onTrue(Commands.runOnce(() -> elevator.reset(), elevator));
-    operatorXbox.a().onTrue(coralSource);
-    operatorXbox.povDown().onTrue(coralL1);
-    operatorXbox.b().onTrue(coralL2);
-    operatorXbox.x().onTrue(coralL3);
+    // // Elevator
+    // operatorXbox.start().onTrue(Commands.runOnce(() -> elevator.reset(), elevator));
+    // operatorXbox.a().onTrue(coralSource);
+    // operatorXbox.povDown().onTrue(coralL1);
+    // operatorXbox.rightBumper().onTrue(stow);
+    // operatorXbox.b().onTrue(coralL2);
+    // operatorXbox.x().onTrue(coralL3);
     // operatorXbox.y().onTrue(coralL4);
-
+    
     // Drive To pose commands. Might be worth rediong to be a single command
     if (Constants.Swerve.VISION) {
       driverXbox
