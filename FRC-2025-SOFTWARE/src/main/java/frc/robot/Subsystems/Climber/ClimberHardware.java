@@ -43,6 +43,8 @@ public class ClimberHardware implements ClimberIO {
      */
     motorConfig = new SparkMaxConfig();
 
+
+    motorConfig.smartCurrentLimit(60,40);
     /*
      * Configure the encoder. For this specific example, we are using the
      * integrated encoder of the NEO, and we don't need to configure it. If

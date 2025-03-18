@@ -152,9 +152,15 @@ public class RobotContainer {
     Command coralL2 =
         Commands.parallel(
             elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0));
+    Command algaeL2 =
+            Commands.parallel(
+                elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
     Command coralL3 =
         Commands.parallel(
             elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0));
+    Command algaeL3 =
+            Commands.parallel(
+                elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0));
     Command coralL4 =
         Commands.parallel(
             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> -20));
@@ -167,9 +173,10 @@ public class RobotContainer {
     // Generic
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
-    driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
-    driverXbox.x().whileFalse(Commands.run(() -> drivebase.unlock()));
-
+    driverXbox.a().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
+    driverXbox.a().whileFalse(Commands.run(() -> drivebase.unlock()));
+    // driverXbox.x().whileTrue(Commands.run());
+    
     // Season Specififc
 
     intake.setDefaultCommand(intake.setVoltage(() -> 1));

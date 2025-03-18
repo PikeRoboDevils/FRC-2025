@@ -35,6 +35,7 @@ public class CoralIntakeHardware implements CoralIntakeIO {
     inputs.IntakeCurrent = intakeMotor.getOutputCurrent();
     inputs.IntakeVolt = getVoltage();
     inputs.IntakeVelocity = intakeEncoder.getVelocity();
+    inputs.hasCoral = hasCoral();
   }
 
   @Override
@@ -48,7 +49,7 @@ public class CoralIntakeHardware implements CoralIntakeIO {
     return intakeMotor.getAppliedOutput();
   }
 
-  // public boolean hasCoral() {
-  //   // return intakeMotor.getOutputCurrent() > ;
-  // }
+  public boolean hasCoral() {
+     return intakeMotor.getOutputCurrent() > 20 ;
+  }
 }
