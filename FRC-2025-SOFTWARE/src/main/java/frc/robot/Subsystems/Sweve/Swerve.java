@@ -14,6 +14,8 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -59,8 +61,10 @@ public class Swerve extends SubsystemBase {
 
   private Rotation2d lastAngle;
 
-  public boolean isLocked = false;
+  private MjpegServer Camera;
 
+  public boolean isLocked = false;
+  
   // not 2025 yet
   // private final AprilTagFieldLayout aprilTagFieldLayout =
   // AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
@@ -69,7 +73,12 @@ public class Swerve extends SubsystemBase {
     this.io = swerveIO;
     Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
 
-    CameraServer.startAutomaticCapture(); // for coral scoring cam
+
+    // CameraServer.startAutomaticCapture("climb", 0).setResolution(200, 400);
+
+    // CameraServer.startAutomaticCapture("elev", 1).setResolution(200, 400);
+
+    //  Camera = CameraServer.addSwitchedCamera("DriverCam");
 
     // Set Pose for tag ID and location (0 = alliance wall left 1 = alliance wall right) //this is
     // blue alliance
@@ -566,4 +575,18 @@ public class Swerve extends SubsystemBase {
     vision.updatePoseEstimation(io.getSwerve());
     return io.getPose();
   }
+
+
+public void switchCamera(){
+  boolean inverted = false;
+  if (inverted) {
+    Camera.setSource(CameraServer.getVideo("climb").getSource());
+    inverted = false;
+ }
+  else {
+    Camera.setSource(CameraServer.getVideo("elev").getSource());
+    inverted = true;
+  }
+    
+}
 }

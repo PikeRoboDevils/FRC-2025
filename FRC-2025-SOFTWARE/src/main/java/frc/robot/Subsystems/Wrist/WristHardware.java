@@ -65,6 +65,7 @@ public class WristHardware implements WristIO {
      */
     motorConfig = new SparkMaxConfig();
 
+    motorConfig.smartCurrentLimit(40);
     // motorConfig.idleMode(IdleMode.kBrake); //PID with brake is bad
     motorConfig.voltageCompensation(
         12); // may be tweaked depending on voltage drain. Highly reccomended from a consistancy and

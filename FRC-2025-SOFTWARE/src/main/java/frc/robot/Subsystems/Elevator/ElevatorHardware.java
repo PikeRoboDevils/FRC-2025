@@ -69,7 +69,7 @@ public class ElevatorHardware implements ElevatorIO {
     positionController =
         new PIDController(
             Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
-    profile = new TrapezoidProfile(new Constraints(10, 15
+    profile = new TrapezoidProfile(new Constraints(15, 20
     )); // rotations a second
 
     /*

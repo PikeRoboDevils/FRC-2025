@@ -113,4 +113,10 @@ public class Robot extends LoggedRobot {
       Simulation.startOpponentRobotSimulations();
     }
   }
+
+
+@Override
+public void disabledInit(){
+    // RobotContainer.elevator.setDefaultCommand(null);
+}
 }

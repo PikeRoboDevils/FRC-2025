@@ -40,7 +40,7 @@ public class Elevator extends SubsystemBase {
     _stage1Visuals =
         new Pose3d(
             new Translation3d(
-                Units.inchesToMeters(3.55), 0, (io.getPosition() / 3) + Units.inchesToMeters(5.6)),
+                Units.inchesToMeters(3.55), 0, (io.getPosition() / 3*360) + Units.inchesToMeters(5.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
     _stage2Visuals =
         new Pose3d(
