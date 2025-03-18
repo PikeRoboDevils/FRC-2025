@@ -168,7 +168,7 @@ public class WristHardware implements WristIO {
   }
 
   private void runPosition(Double setpoint) {
-    double ff = 0.01;//_feedforward.calculate(getAngleRad(), 0);
+    double ff = 0.01; // _feedforward.calculate(getAngleRad(), 0);
     double output = positionController.calculate(getAngleDeg(), setpoint);
     setVoltage(output + ff);
   }

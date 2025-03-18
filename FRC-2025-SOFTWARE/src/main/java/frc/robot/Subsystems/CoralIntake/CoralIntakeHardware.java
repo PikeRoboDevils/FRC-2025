@@ -7,8 +7,8 @@ package frc.robot.Subsystems.CoralIntake;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 /** Add your docs here. */
 public class CoralIntakeHardware implements CoralIntakeIO {
@@ -22,11 +22,11 @@ public class CoralIntakeHardware implements CoralIntakeIO {
   public CoralIntakeHardware() {
     intakeMotor = new SparkMax(2, MotorType.kBrushless);
     motorConfig = new SparkMaxConfig();
-    
+
     internalEncoder = intakeMotor.getEncoder();
     intakeEncoder = intakeMotor.getAbsoluteEncoder();
 
-    motorConfig.smartCurrentLimit(30,20);
+    motorConfig.smartCurrentLimit(30, 20);
   }
 
   @Override
