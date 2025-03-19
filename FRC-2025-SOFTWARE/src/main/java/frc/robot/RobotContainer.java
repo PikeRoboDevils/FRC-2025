@@ -198,7 +198,7 @@ public class RobotContainer {
     // Climber
     operatorXbox
         .rightTrigger(0.5)
-        .whileTrue(climb.setVoltage(() -> 0.25 - operatorXbox.getRightY() * 4))
+        .whileTrue(climb.setVoltage(() -> 0.5 - operatorXbox.getRightY() * 8)) //quick climb
         .whileFalse(climb.setVoltage(() -> 0)); // POSITIVE IS DOWN
 
     // Elevator & Wrist
