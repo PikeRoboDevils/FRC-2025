@@ -174,7 +174,7 @@ public class Swerve extends SubsystemBase {
     try {
       config = RobotConfig.fromGUISettings();
  
-      final boolean enableFeedforward = true;
+      final boolean enableFeedforward = false;
       // Configure AutoBuilder last
       AutoBuilder.configure(
           this::getPose,
@@ -206,17 +206,19 @@ public class Swerve extends SubsystemBase {
               ),
           config,
           // The robot configuration
-          () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-          },
+          ()-> false, //keep on blue for now 
+          // () -> {
+          //   // Boolean supplier that controls when the path will be mirrored for the red alliance
+          //   // This will flip the path being followed to the red side of the field.
+          //   // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          //   var alliance = DriverStation.getAlliance();
+          //   if (alliance.isPresent()) {
+          //     return alliance.get() == DriverStation.Alliance.Red;
+          //   }
+          //   return false;
+          // },
           this
           // Reference to this subsystem to set requirements
           );
@@ -447,7 +449,7 @@ public class Swerve extends SubsystemBase {
    * @param initialHolonomicPose The pose to set the odometry to
    */
   public void resetOdometry(Pose2d initialHolonomicPose) {
-    io.resetOdometry(initialHolonomicPose);
+    io.resetOdometry(initialHolonomicPose);//TODO: CHECK ORIENTATION ON RESET
   }
 
   /**

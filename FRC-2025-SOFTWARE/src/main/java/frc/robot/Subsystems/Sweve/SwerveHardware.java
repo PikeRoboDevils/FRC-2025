@@ -230,6 +230,8 @@ public class SwerveHardware implements SwerveIO {
     return swerveDrive.swerveDriveConfiguration;
   }
 
+
+  // NONE OF THIS SHOWED UP IN THE LOGS WAS ALL 0
   @Override
   public void updateInputs(SwerveIOInputs inputs) {
 
