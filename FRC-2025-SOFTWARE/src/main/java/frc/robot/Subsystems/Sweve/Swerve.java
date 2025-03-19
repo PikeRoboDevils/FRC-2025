@@ -417,6 +417,11 @@ public class Swerve extends SubsystemBase {
     Logger.recordOutput("Odometry/driveToPose/translateYPID", translateY.getPositionError());
     Logger.recordOutput("Odometry/driveToPose/rotatePID", rotateControl.getPositionError());
 
+    //does path planner already log current pose?
+    Logger.recordOutput("Odometry/PathPlanner/CurrentPose", AutoBuilder.getCurrentPose());
+
+
+
     // if (Robot.isSimulation()) {
     //   if (io.getSimPose()
     //       .isPresent()) { // might be able to merge the ifs but just to be safe against null

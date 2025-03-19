@@ -35,6 +35,8 @@ public class SwerveHardware implements SwerveIO {
   SwerveMotor lrDriveMotor;
   SwerveMotor rrDriveMotor;
 
+  Pose2d initalPose;
+
   public SwerveHardware() {
     // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
     //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
@@ -77,7 +79,10 @@ public class SwerveHardware implements SwerveIO {
     swerveDrive
         .pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder
     // and push the offsets onto it. Throws warning if not possible
-    resetOdometry(Constants.Swerve.STARTING_POSE);
+
+
+    //we shoud let path planner reset odometry. this potentially overrides the paths starting pose -JL 3/19/25
+   // resetOdometry(Constants.Swerve.STARTING_POSE);
 
     modules = swerveDrive.getModules();
 
@@ -166,6 +171,7 @@ public class SwerveHardware implements SwerveIO {
 
   @Override
   public void resetOdometry(Pose2d initialHolonomicPose) {
+    initalPose = initialHolonomicPose;
     swerveDrive.resetOdometry(initialHolonomicPose);
   }
 
@@ -182,6 +188,7 @@ public class SwerveHardware implements SwerveIO {
   @Override
   public void setModuleStates(SwerveModuleState[] modules) {
     swerveDrive.setModuleStates(modules, isRedAlliance());
+    
   }
 
   @Override
@@ -282,5 +289,6 @@ public class SwerveHardware implements SwerveIO {
     inputs.RightRearModuleDrivePosition = rrDriveMotor.getPosition();
     inputs.RightRearModuleDriveVelocity = rrDriveMotor.getVelocity();
     inputs.RightRearModuleDriveVolt = rrDriveMotor.getVoltage();
+    inputs.InitalPose = initalPose;
   }
 }
