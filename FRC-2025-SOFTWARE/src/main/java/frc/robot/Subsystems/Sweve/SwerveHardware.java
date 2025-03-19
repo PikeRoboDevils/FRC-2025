@@ -35,6 +35,8 @@ public class SwerveHardware implements SwerveIO {
   SwerveMotor lrDriveMotor;
   SwerveMotor rrDriveMotor;
 
+  Pose2d initalPose;
+
   public SwerveHardware() {
     // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
     //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
@@ -169,6 +171,7 @@ public class SwerveHardware implements SwerveIO {
 
   @Override
   public void resetOdometry(Pose2d initialHolonomicPose) {
+    initalPose = initialHolonomicPose;
     swerveDrive.resetOdometry(initialHolonomicPose);
   }
 
@@ -284,5 +287,6 @@ public class SwerveHardware implements SwerveIO {
     inputs.RightRearModuleDrivePosition = rrDriveMotor.getPosition();
     inputs.RightRearModuleDriveVelocity = rrDriveMotor.getVelocity();
     inputs.RightRearModuleDriveVolt = rrDriveMotor.getVoltage();
+    inputs.InitalPose = initalPose;
   }
 }
