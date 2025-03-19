@@ -77,7 +77,10 @@ public class SwerveHardware implements SwerveIO {
     swerveDrive
         .pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder
     // and push the offsets onto it. Throws warning if not possible
-    resetOdometry(Constants.Swerve.STARTING_POSE);
+
+
+    //we shoud let path planner reset odometry. this potentially overrides the paths starting pose -JL 3/19/25
+   // resetOdometry(Constants.Swerve.STARTING_POSE);
 
     modules = swerveDrive.getModules();
 
@@ -182,6 +185,7 @@ public class SwerveHardware implements SwerveIO {
   @Override
   public void setModuleStates(SwerveModuleState[] modules) {
     swerveDrive.setModuleStates(modules, isRedAlliance());
+    
   }
 
   @Override
