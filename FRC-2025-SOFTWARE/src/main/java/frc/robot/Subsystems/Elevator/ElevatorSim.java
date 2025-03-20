@@ -47,7 +47,7 @@ public class ElevatorSim implements ElevatorIO {
     profile =
         new TrapezoidProfile(
             new Constraints(Units.inchesToMeters(10), Units.inchesToMeters(2))); // m/s
-    positionController = new PIDController(36, 0, 0.08);
+    positionController = new PIDController(360000, 0, 0.08);//just a little slow
     // wonky
   }
 
