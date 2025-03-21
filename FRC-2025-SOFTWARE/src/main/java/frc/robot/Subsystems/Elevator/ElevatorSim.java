@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Constants;
 
 /** Add your docs here. */
 public class ElevatorSim implements ElevatorIO {
@@ -43,11 +44,12 @@ public class ElevatorSim implements ElevatorIO {
             stdDevs);
 
     // position control
-    _feedforward = new ElevatorFeedforward(0.0, 1.276, 5); // based on random numbers in recalc
+    _feedforward = new ElevatorFeedforward( 0, Constants.Encoders.kG_Elev, Constants.Encoders.kV_Elev); 
     profile =
         new TrapezoidProfile(
-            new Constraints(Units.inchesToMeters(10), Units.inchesToMeters(2))); // m/s
-    positionController = new PIDController(360000, 0, 0.08);//just a little slow
+            new Constraints(15, 20)); // rotations a second
+            // new Constraints(Units.inchesToMeters(10), Units.inchesToMeters(2))); // m/s
+    positionController = new PIDController(Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
     // wonky
   }
 
@@ -76,6 +78,7 @@ public class ElevatorSim implements ElevatorIO {
     runPosition(setpoint);
   }
 
+
   private void runPosition(TrapezoidProfile.State setpoint) {
     double ff = _feedforward.calculate(setpoint.velocity, 0);
     double output = positionController.calculate(getPosition(), setpoint.position);
@@ -94,7 +97,7 @@ public class ElevatorSim implements ElevatorIO {
 
   @Override
   public double getPosition() {
-    return _elevator.getPositionMeters();
+    return _elevator.getPositionMeters()*13.5; // TODO: Remove "/13.5" once absolute encoder is added  
   }
 
   @Override

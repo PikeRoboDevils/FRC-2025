@@ -209,6 +209,7 @@ public class Constants {
     public static final double kD_Elev = 0.0007;
 
     public static final double kG_Elev = 0.090;
+    public static final double kV_Elev = 0.2;
     ;
   }
 }

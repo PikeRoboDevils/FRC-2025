@@ -64,7 +64,7 @@ public class ElevatorHardware implements ElevatorIO {
     // position control
     _feedforward =
         new ElevatorFeedforward(
-            0, Constants.Encoders.kG_Elev, 0.2); // based on random numbers in recalc
+            0, Constants.Encoders.kG_Elev, Constants.Encoders.kV_Elev); // based on random numbers in recalc
     positionController =
         new PIDController(
             Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
