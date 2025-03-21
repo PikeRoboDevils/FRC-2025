@@ -2,6 +2,7 @@ package frc.robot.Subsystems.Sweve;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -77,8 +78,9 @@ public class SwerveHardware implements SwerveIO {
     swerveDrive
         .pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder
     // and push the offsets onto it. Throws warning if not possible
+    swerveDrive.getGyro().setOffset(new Rotation3d(0,Math.toRadians(0),Math.toRadians(0)));
+swerveDrive.getGyro().setInverted(true);
     resetOdometry(Constants.Swerve.STARTING_POSE);
-
     modules = swerveDrive.getModules();
 
     lfAngleMotor = modules[0].getAngleMotor();
@@ -191,7 +193,8 @@ public class SwerveHardware implements SwerveIO {
 
   @Override
   public void zeroGyro() {
-    swerveDrive.zeroGyro();
+    // swerveDrive.zeroGyro();//im guessing this zeros assuming its upward byt its actually upside down
+    resetOdometry(new Pose2d(getPose().getTranslation(),new Rotation2d(0)));
   }
 
   @Override

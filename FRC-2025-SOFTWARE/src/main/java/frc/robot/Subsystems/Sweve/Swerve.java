@@ -410,6 +410,8 @@ public class Swerve extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.processInputs("Swerve", inputs);
+    Logger.processInputs("Swerve", inputs);
+
     Logger.recordOutput("Odometry/Pose", io.getPose());
     Logger.recordOutput("Odometry/driveToPose/translateXPID", translateX.getPositionError());
     Logger.recordOutput("Odometry/driveToPose/translateYPID", translateY.getPositionError());
@@ -456,8 +458,8 @@ public class Swerve extends SubsystemBase {
    * @return The robot's pose
    */
   public Pose2d getPose() {
-    return !Constants.Swerve.VISION ? io.getPose() : getVisionPose(); // inline if statement
-    // return io.swerveDrive.getPose();
+    // return !Constants.Swerve.VISION ? io.getPose() : getVisionPose(); // inline if statement
+    return io.getPose();
     // Made it simple, can still use getMesPose for the normal pose
   }
 

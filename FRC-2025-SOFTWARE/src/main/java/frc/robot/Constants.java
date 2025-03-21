@@ -81,7 +81,7 @@ public class Constants {
             // Configures the bumper size (dimensions of the robot bumper)
             .withBumperSize(Inches.of(29), Inches.of(28.5));
 
-    public static final Pose2d STARTING_POSE = new Pose2d(3, 3, new Rotation2d());
+    public static final Pose2d STARTING_POSE = new Pose2d(8, 6, new Rotation2d(Math.toRadians(180)));
   }
 
   public static class OperatorConstants {
