@@ -177,7 +177,7 @@ public class Constants {
         new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
   }
 
-  public static final Mode currentMode = Mode.REPLAY; // TODO:IS MODE SET CURRECTLY??
+  public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -209,6 +209,7 @@ public class Constants {
     public static final double kD_Elev = 0.0007;
 
     public static final double kG_Elev = 0.090;
+    public static final double kV_Elev = 0.2;
     ;
   }
 }

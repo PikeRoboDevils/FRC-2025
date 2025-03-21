@@ -37,24 +37,26 @@ public class Elevator extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
 
+
+    // TODO: Remove all "/13.5" once absolute encoder is added 
     _stage1Visuals =
         new Pose3d(
             new Translation3d(
                 Units.inchesToMeters(3.55),
                 0,
-                (io.getPosition() / 3 * 360) + Units.inchesToMeters(5.6)),
+                (io.getPosition() / 3)/13.5 + Units.inchesToMeters(5.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
     _stage2Visuals =
         new Pose3d(
             new Translation3d(
                 Units.inchesToMeters(3.55),
                 0,
-                (io.getPosition() / 1.5) + Units.inchesToMeters(6.6)),
+                (io.getPosition() / 1.5 /13.5) + Units.inchesToMeters(6.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
     stage3Visuals =
         new Pose3d(
             new Translation3d(
-                Units.inchesToMeters(3.55), 0, (io.getPosition()) + Units.inchesToMeters(7.6)),
+                Units.inchesToMeters(3.55), 0, (io.getPosition() /13.5) + Units.inchesToMeters(7.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
 
     Logger.recordOutput("Components/Stage1", _stage1Visuals);

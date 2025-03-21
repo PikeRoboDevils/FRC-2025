@@ -9,6 +9,9 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.math.controller.BangBangController;
 
 /** Add your docs here. */
 public class CoralIntakeHardware implements CoralIntakeIO {
@@ -16,7 +19,8 @@ public class CoralIntakeHardware implements CoralIntakeIO {
   SparkMax intakeMotor;
   SparkAbsoluteEncoder intakeEncoder;
   RelativeEncoder internalEncoder;
-
+  BangBangController mBangController;// simple no tuning 
+  
   SparkMaxConfig motorConfig;
 
   public CoralIntakeHardware() {
@@ -26,7 +30,11 @@ public class CoralIntakeHardware implements CoralIntakeIO {
     internalEncoder = intakeMotor.getEncoder();
     intakeEncoder = intakeMotor.getAbsoluteEncoder();
 
+    mBangController.setTolerance(10);
+    
+    motorConfig.idleMode(IdleMode.kCoast);
     motorConfig.smartCurrentLimit(30, 20);
+    
   }
 
   @Override
@@ -39,9 +47,20 @@ public class CoralIntakeHardware implements CoralIntakeIO {
   }
 
   @Override
+  public void setVelocity(double velocity ) {
+    if (mBangController.atSetpoint()) {
+      intakeMotor.set(0);
+      return;
+    };
+
+    double output = mBangController.calculate(internalEncoder.getVelocity(), velocity);
+    intakeMotor.set(output);
+
+  }
+
+  @Override
   public void setVoltage(double volts) {
     intakeMotor.setVoltage(volts);
-    ;
   }
 
   @Override

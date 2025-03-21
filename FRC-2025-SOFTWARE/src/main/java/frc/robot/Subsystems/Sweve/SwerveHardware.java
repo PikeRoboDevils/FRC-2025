@@ -36,6 +36,8 @@ public class SwerveHardware implements SwerveIO {
   SwerveMotor lrDriveMotor;
   SwerveMotor rrDriveMotor;
 
+  Pose2d initalPose;
+
   public SwerveHardware() {
     // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
     //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
@@ -168,6 +170,7 @@ swerveDrive.getGyro().setInverted(true);
 
   @Override
   public void resetOdometry(Pose2d initialHolonomicPose) {
+    initalPose = initialHolonomicPose;
     swerveDrive.resetOdometry(initialHolonomicPose);
   }
 
@@ -184,6 +187,7 @@ swerveDrive.getGyro().setInverted(true);
   @Override
   public void setModuleStates(SwerveModuleState[] modules) {
     swerveDrive.setModuleStates(modules, isRedAlliance());
+    
   }
 
   @Override
@@ -233,6 +237,8 @@ swerveDrive.getGyro().setInverted(true);
     return swerveDrive.swerveDriveConfiguration;
   }
 
+
+  // NONE OF THIS SHOWED UP IN THE LOGS WAS ALL 0
   @Override
   public void updateInputs(SwerveIOInputs inputs) {
 
@@ -283,5 +289,6 @@ swerveDrive.getGyro().setInverted(true);
     inputs.RightRearModuleDrivePosition = rrDriveMotor.getPosition();
     inputs.RightRearModuleDriveVelocity = rrDriveMotor.getVelocity();
     inputs.RightRearModuleDriveVolt = rrDriveMotor.getVoltage();
+    inputs.InitalPose = initalPose;
   }
 }

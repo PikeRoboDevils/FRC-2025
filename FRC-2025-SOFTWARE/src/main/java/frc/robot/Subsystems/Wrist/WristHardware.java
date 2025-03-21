@@ -57,7 +57,11 @@ public class WristHardware implements WristIO {
     _feedforward = new ArmFeedforward(0, 0.032, 0); // based on random numbers in recalc
     // not being used
     profile = new TrapezoidProfile(new Constraints(1, 1)); // deg/s
+
+// only control method being used
     positionController = new PIDController(0.15, 0, 0);
+
+
     positionController.setTolerance(0.1);
     /*
      * Create a new SPARK MAX configuration object. This will store the
