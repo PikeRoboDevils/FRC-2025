@@ -81,7 +81,7 @@ public class SwerveHardware implements SwerveIO {
         .pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder
     // and push the offsets onto it. Throws warning if not possible
     swerveDrive.getGyro().setOffset(new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)));
-    swerveDrive.getGyro().setInverted(true);
+    swerveDrive.getGyro().setInverted(false);
     resetOdometry(Constants.Swerve.STARTING_POSE);
     modules = swerveDrive.getModules();
 
@@ -89,6 +89,7 @@ public class SwerveHardware implements SwerveIO {
     lfDriveMotor = modules[0].getDriveMotor();
 
     rfAngleMotor = modules[1].getAngleMotor();
+    
     rfDriveMotor = modules[1].getDriveMotor();
 
     lrAngleMotor = modules[2].getAngleMotor();

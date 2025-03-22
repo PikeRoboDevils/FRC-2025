@@ -50,7 +50,7 @@ public class Constants {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];
 
-    public static boolean VISION = true;
+    public static boolean VISION = false;
 
     public static final double MAXSPEED =
         Units.feetToMeters(15.1); // Why did we lower the drive speed int teleop?
@@ -102,51 +102,41 @@ public class Constants {
   // For Easier camera setup to be used with already made vision examples
   // Camera initiation can be found on line 376 of Vision swerve
   public static class PoseCameraConstants {
-    public static Object[] CAM1 = new Object[3];
 
-    {
       // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef tags.
-      CAM1[0] = "CAM1";
+      public static String CAM1N = "LEFT_CAM";
 
-      CAM1[1] = new Rotation3d(0, Units.degreesToRadians(-5), Units.degreesToRadians(30));
+      public static Rotation3d CAM1R = new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(45));
 
-      CAM1[2] =
+      public static Translation3d CAM1T =
           new Translation3d(
               Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
               Units.inchesToMeters(-12),
-              Units.inchesToMeters(12));
-    }
+              Units.inchesToMeters(9));
+  
+      public static String CAM2N = "RIGHT_CAM";
 
-    // cam 2 and 3 are roughly halfway up the elevator bracing and mounted to the
-    // outside looking the direction of thier name. (this is important as looking
-    // directly (same plane) at a tag is bad)
-    public static Object[] CAM2 = new Object[3];
+      public static Rotation3d CAM2R = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(180 + 10));
 
-    {
-      CAM2[0] = "RearOut";
+      public static Translation3d CAM2T =
+      new Translation3d(
+        Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
+        Units.inchesToMeters(12),// to right
+        Units.inchesToMeters(9));
 
-      CAM2[1] = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(180 + 10));
+    // public static Object[] CAM3 = new Object[3];
 
-      CAM2[2] =
-          new Translation3d(
-              Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
-              Units.inchesToMeters(10.687),
-              Units.inchesToMeters(20.915));
-    }
+    // {
+    //   CAM3[0] = "FrontIn";
 
-    public static Object[] CAM3 = new Object[3];
+    //   CAM3[1] = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20));
 
-    {
-      CAM3[0] = "FrontIn";
-
-      CAM3[1] = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20));
-
-      CAM3[2] =
-          new Translation3d(
-              Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
-              Units.inchesToMeters(-10.687),
-              Units.inchesToMeters(20.915));
-    }
+    //   CAM3[2] =
+    //       new Translation3d(
+    //           Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
+    //           Units.inchesToMeters(-10.687),
+    //           Units.inchesToMeters(20.915));
+    // }
 
     // it goes up to 4 but it is commented out in SwerveVision
     public static final double maxVisionStdDevsDistance = 30;
