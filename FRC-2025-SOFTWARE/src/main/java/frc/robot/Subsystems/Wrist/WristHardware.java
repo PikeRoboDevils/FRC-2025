@@ -58,9 +58,8 @@ public class WristHardware implements WristIO {
     // not being used
     profile = new TrapezoidProfile(new Constraints(1, 1)); // deg/s
 
-// only control method being used
+    // only control method being used
     positionController = new PIDController(0.15, 0, 0);
-
 
     positionController.setTolerance(0.1);
     /*

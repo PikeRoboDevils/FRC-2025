@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Subsystems.Climber.Climber;
 import frc.robot.Subsystems.Climber.ClimberHardware;
@@ -34,7 +33,6 @@ import frc.robot.Subsystems.Wrist.WristHardware;
 import frc.robot.Subsystems.Wrist.WristIO;
 import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
-import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -62,7 +60,8 @@ public class RobotContainer {
       wrist = new Wrist(new WristHardware(), elevator);
       climb = new Climber(new ClimberHardware());
       intake = new CoralIntake(new CoralIntakeHardware());
-    } if (Robot.isSimulation()) {
+    }
+    if (Robot.isSimulation()) {
       elevator = new Elevator(new ElevatorSim());
       wrist =
           new Wrist(
@@ -70,7 +69,7 @@ public class RobotContainer {
               elevator); // pass the current location of the wrist due to the stacked dof with
       // seperate subsystems
       climb = new Climber(new ClimberSim());
-      intake = new CoralIntake(new CoralIntakeIO() {});//still no sim
+      intake = new CoralIntake(new CoralIntakeIO() {}); // still no sim
     } else {
       elevator = new Elevator(new ElevatorIO() {});
       wrist =
@@ -158,8 +157,12 @@ public class RobotContainer {
     // same as driveFieldOrientedAnglularVelocity but slower
     Command driveControlled =
         drivebase.fieldRelativeTeleop(
-            () -> MathUtil.applyDeadband((-driverXbox.getLeftX())*0.5, OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY()*0.5, OperatorConstants.LEFT_X_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(
+                    (-driverXbox.getLeftX()) * 0.5, OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(
+                    driverXbox.getLeftY() * 0.5, OperatorConstants.LEFT_X_DEADBAND),
             () ->
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2);
@@ -175,14 +178,14 @@ public class RobotContainer {
         Commands.parallel(
             elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0));
     Command algaeL2 =
-            Commands.parallel(
-                elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
+        Commands.parallel(
+            elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
     Command coralL3 =
         Commands.parallel(
             elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0));
     Command algaeL3 =
-            Commands.parallel(
-                elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0));
+        Commands.parallel(
+            elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0));
     Command coralL4 =
         Commands.parallel(
             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> -20));
@@ -198,21 +201,26 @@ public class RobotContainer {
     driverXbox.a().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
     driverXbox.a().whileFalse(Commands.run(() -> drivebase.unlock()));
     // driverXbox.x().whileTrue(Commands.run());
-    
+
     // Season Specififc
 
     driverXbox.rightTrigger().whileTrue(intake.runIntake(() -> 2)); // In
     driverXbox.leftTrigger().whileTrue(intake.runIntake(() -> -3)); // Out
 
-    //switch cam doesnt always work
+    // switch cam doesnt always work
     // driverXbox.rightBumper().onTrue(Commands.runOnce(() -> drivebase.switchCamera(), drivebase));
     // operatorXbox.leftTrigger().onTrue(drivebase.swictchCamera());
 
     // Drive Slow
-    driverXbox.leftBumper().toggleOnTrue(Commands.runOnce(()->drivebase.setDefaultCommand(driveControlled), drivebase));
-    driverXbox.leftBumper().toggleOnFalse(Commands.runOnce(()->drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
-
-
+    driverXbox
+        .leftBumper()
+        .toggleOnTrue(
+            Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
+    driverXbox
+        .leftBumper()
+        .toggleOnFalse(
+            Commands.runOnce(
+                () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
 
     // Overides
 
@@ -223,15 +231,15 @@ public class RobotContainer {
     // Climber
     operatorXbox
         .rightTrigger(0.5)
-        .whileTrue(climb.setVoltage(() -> 0.5 - operatorXbox.getRightY() * 8)) //quick climb
+        .whileTrue(climb.setVoltage(() -> 0.5 - operatorXbox.getRightY() * 8)) // quick climb
         .whileFalse(climb.setVoltage(() -> 0)); // POSITIVE IS DOWN
 
     // Elevator & Wrist
-    operatorXbox.start().onTrue(Commands.runOnce(()->elevator.reset(),elevator));
+    operatorXbox.start().onTrue(Commands.runOnce(() -> elevator.reset(), elevator));
 
     operatorXbox.a().onTrue(stow);
     operatorXbox.a().and(operatorXbox.povUp()).whileTrue(coralL1);
-    
+
     operatorXbox.rightBumper().onTrue(coralSource);
 
     operatorXbox.b().onTrue(coralL2);

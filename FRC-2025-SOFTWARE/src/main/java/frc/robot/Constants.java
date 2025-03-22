@@ -50,7 +50,7 @@ public class Constants {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];
 
-    public static boolean VISION = false;
+    public static boolean VISION = true;
 
     public static final double MAXSPEED =
         Units.feetToMeters(15.1); // Why did we lower the drive speed int teleop?
@@ -81,7 +81,8 @@ public class Constants {
             // Configures the bumper size (dimensions of the robot bumper)
             .withBumperSize(Inches.of(29), Inches.of(28.5));
 
-    public static final Pose2d STARTING_POSE = new Pose2d(8, 6, new Rotation2d(Math.toRadians(180)));
+    public static final Pose2d STARTING_POSE =
+        new Pose2d(8, 6, new Rotation2d(Math.toRadians(180)));
   }
 
   public static class OperatorConstants {

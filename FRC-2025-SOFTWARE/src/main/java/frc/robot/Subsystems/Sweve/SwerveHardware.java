@@ -80,8 +80,8 @@ public class SwerveHardware implements SwerveIO {
     swerveDrive
         .pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder
     // and push the offsets onto it. Throws warning if not possible
-    swerveDrive.getGyro().setOffset(new Rotation3d(0,Math.toRadians(0),Math.toRadians(0)));
-swerveDrive.getGyro().setInverted(true);
+    swerveDrive.getGyro().setOffset(new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)));
+    swerveDrive.getGyro().setInverted(true);
     resetOdometry(Constants.Swerve.STARTING_POSE);
     modules = swerveDrive.getModules();
 
@@ -187,7 +187,6 @@ swerveDrive.getGyro().setInverted(true);
   @Override
   public void setModuleStates(SwerveModuleState[] modules) {
     swerveDrive.setModuleStates(modules, isRedAlliance());
-    
   }
 
   @Override
@@ -197,8 +196,9 @@ swerveDrive.getGyro().setInverted(true);
 
   @Override
   public void zeroGyro() {
-    // swerveDrive.zeroGyro();//im guessing this zeros assuming its upward byt its actually upside down
-    resetOdometry(new Pose2d(getPose().getTranslation(),new Rotation2d(0)));
+    // swerveDrive.zeroGyro();//im guessing this zeros assuming its upward byt its actually upside
+    // down
+    resetOdometry(new Pose2d(getPose().getTranslation(), new Rotation2d(0)));
   }
 
   @Override
@@ -236,7 +236,6 @@ swerveDrive.getGyro().setInverted(true);
   public SwerveDriveConfiguration getSwerveDriveConfiguration() {
     return swerveDrive.swerveDriveConfiguration;
   }
-
 
   // NONE OF THIS SHOWED UP IN THE LOGS WAS ALL 0
   @Override

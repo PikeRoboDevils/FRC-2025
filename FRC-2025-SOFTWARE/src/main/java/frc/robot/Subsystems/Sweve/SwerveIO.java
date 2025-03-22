@@ -65,8 +65,8 @@ public interface SwerveIO {
     public double RightRearModuleDriveVelocity = 0.0;
     public double RightRearModuleDriveVolt = 0.0;
     public double RightRearModuleDriveCurrent = 0.0;
-    
-    public Pose2d InitalPose = new Pose2d(0,0,new Rotation2d());
+
+    public Pose2d InitalPose = new Pose2d(0, 0, new Rotation2d());
   }
 
   public default void updateInputs(SwerveIOInputs inputs) {}

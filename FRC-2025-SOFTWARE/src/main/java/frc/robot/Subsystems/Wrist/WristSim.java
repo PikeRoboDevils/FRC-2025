@@ -36,11 +36,10 @@ public class WristSim implements WristIO {
             true,
             Units.degreesToRadians(90));
 
-            
-    _feedforward = new ArmFeedforward(0.0, 0.0, 1);//not being used
+    _feedforward = new ArmFeedforward(0.0, 0.0, 1); // not being used
     profile = new TrapezoidProfile(new Constraints(10, 5)); // deg/s //not being used
 
-    positionController = new PIDController(0.15, 0, 0);// from wrist hardware
+    positionController = new PIDController(0.15, 0, 0); // from wrist hardware
   }
 
   @Override
