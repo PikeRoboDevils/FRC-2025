@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
@@ -66,7 +67,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command setPoint(DoubleSupplier position) {
-    return run(() -> io.setPosition(position.getAsDouble()));
+    return run(() -> io.setPosition(position.getAsDouble())).finallyDo(() -> io.setVoltage(0));
   }
 
   public Command setVoltage(DoubleSupplier volts) {
