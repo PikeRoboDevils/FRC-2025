@@ -158,7 +158,7 @@ public class VisionSwerve {
     // deviations based on distance + tags seen.
     // Optional<EstimatedRobotPose> poseEst =
     // filterPose(camera.poseEstimator.update(getLatestResult(camera)));
-    camera.cameraSim.getCamera().getAllUnreadResults();
+    // camera.cameraSim.getCamera().getAllUnreadResults();// TODO: add if statement for sim
     Optional<EstimatedRobotPose> poseEst = camera.poseEstimator.update(getLatestResult(camera));
     poseEst.ifPresent(
         estimatedRobotPose ->
@@ -390,31 +390,31 @@ public class VisionSwerve {
 
   enum Cameras {
     CAM_1(
-        (String) PoseCameraConstants.CAM1[0],
-        (Rotation3d) PoseCameraConstants.CAM1[1], // rotation of camera
+        (String) PoseCameraConstants.CAM1N,
+        (Rotation3d) PoseCameraConstants.CAM1R, // rotation of camera
         (Translation3d)
-            PoseCameraConstants.CAM1[2], // transform of camera (dont forget forwatd+ left+ up+)
+            PoseCameraConstants.CAM1T, // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
         VecBuilder.fill(
             n1StndardDevs * 0.25, n2StandardDevs * 0.25, n4StandardDevs * 0.25) // std devs
         ),
 
     CAM_2(
-        (String) PoseCameraConstants.CAM2[0],
-        (Rotation3d) PoseCameraConstants.CAM2[1], // rotation of camera
+        (String) PoseCameraConstants.CAM2N,
+        (Rotation3d) PoseCameraConstants.CAM2R, // rotation of camera
         (Translation3d)
-            PoseCameraConstants.CAM2[2], // transform of camera (dont forget forwatd+ left+ up+)
+            PoseCameraConstants.CAM2T, // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
         VecBuilder.fill(
             n1StndardDevs * 0.25, n2StandardDevs * 0.25, n4StandardDevs * 0.25) // std devs
         ),
-    CAM_3(
-        (String) PoseCameraConstants.CAM3[0],
-        (Rotation3d) PoseCameraConstants.CAM3[1], // rotation of camera
-        (Translation3d)
-            PoseCameraConstants.CAM3[2], // transform of camera (dont forget forwatd+ left+ up+)
-        VecBuilder.fill(4, 4, 8),
-        VecBuilder.fill(0.5, 0.5, 1)),
+    // CAM_3(
+    //     (String) PoseCameraConstants.CAM3[0],
+    //     (Rotation3d) PoseCameraConstants.CAM3[1], // rotation of camera
+    //     (Translation3d)
+    //         PoseCameraConstants.CAM3[2], // transform of camera (dont forget forwatd+ left+ up+)
+    //     VecBuilder.fill(4, 4, 8),
+    //     VecBuilder.fill(0.5, 0.5, 1)),
   // CAM_4("CAM4",
   // CameraConstants.CAM1R,
   // CameraConstants.CAM1T,
@@ -461,7 +461,7 @@ public class VisionSwerve {
       latencyAlert =
           new Alert("'" + name + "' Camera is experiencing high latency.", AlertType.kWarning);
 
-      camera = new PhotonCamera(name);
+      camera = new PhotonCamera("LEFT_CAM");
 
       // https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html
       robotToCamTransform = new Transform3d(robotToCamTranslation, robotToCamRotation);

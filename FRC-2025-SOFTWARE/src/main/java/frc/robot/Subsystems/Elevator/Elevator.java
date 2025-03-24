@@ -68,7 +68,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command setPoint(DoubleSupplier position) {
-    return run(() -> io.setPosition(position.getAsDouble())).finallyDo(() -> io.setVoltage(0));
+    return run(() -> io.setPosition(position.getAsDouble()));
   }
 
   public Command setVoltage(DoubleSupplier volts) {

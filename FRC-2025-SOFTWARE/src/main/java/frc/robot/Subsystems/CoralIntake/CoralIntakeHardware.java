@@ -47,7 +47,7 @@ public class CoralIntakeHardware implements CoralIntakeIO {
   @Override
   public void setVelocity(double velocity) {
     if (mBangController.atSetpoint()) {
-      intakeMotor.set(0);
+      intakeMotor.set(velocity);
       return;
     }
     ;

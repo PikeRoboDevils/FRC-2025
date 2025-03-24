@@ -39,7 +39,7 @@ public class CoralIntake extends SubsystemBase {
   public Command runIntakeVolts(DoubleSupplier speed) {
     return run(() -> io.setVoltage(speed.getAsDouble()))
         .unless(() -> io.hasCoral())
-        .finallyDo(() -> io.setVoltage(0));
+        .finallyDo(() -> io.setVoltage(1)).until(()->!io.hasCoral());
   }
 
   public Command runIntakeAuto() {
