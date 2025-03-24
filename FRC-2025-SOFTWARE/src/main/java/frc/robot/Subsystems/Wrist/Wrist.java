@@ -55,7 +55,7 @@ public class Wrist extends SubsystemBase {
   public Command home() {
     return run(()->io.setVoltage(1))
     .withTimeout(0.5)
-    .beforeStarting(() -> io.setAngle(34)).withTimeout(1);
+    .beforeStarting(() -> io.setAngle(34)).withTimeout(0.1);
   }
   public Command setVoltage(DoubleSupplier volts) {
     return run(() -> io.setVoltage(volts.getAsDouble()));

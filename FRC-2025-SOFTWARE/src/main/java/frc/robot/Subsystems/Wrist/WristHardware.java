@@ -169,7 +169,7 @@ public class WristHardware implements WristIO {
     // setpoint = new TrapezoidProfile.State(0, 6);
     runPosition(angleDeg);
   }
-
+ 
   private void runPosition(Double setpoint) {
     double ff = 0.01; // _feedforward.calculate(getAngleRad(), 0);
     double output = positionController.calculate(getAngleDeg(), setpoint);

@@ -591,4 +591,12 @@ public class Swerve extends SubsystemBase {
       inverted = true;
     }
   }
+
+  public void slow(double speed,double angularSpeed) {
+    io.getSwerve().setMaximumAllowableSpeeds(speed, speed);
+  }
+  public void unSlow() {
+    io.getSwerve().setMaximumAllowableSpeeds(Constants.Swerve.MAXSPEED,Math.toRadians(720));//idk abt the angle speed 
+  }
+  
 }

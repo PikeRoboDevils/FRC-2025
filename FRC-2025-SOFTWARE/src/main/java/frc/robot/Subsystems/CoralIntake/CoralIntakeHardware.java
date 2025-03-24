@@ -29,7 +29,7 @@ public class CoralIntakeHardware implements CoralIntakeIO {
     internalEncoder = intakeMotor.getEncoder();
     intakeEncoder = intakeMotor.getAbsoluteEncoder();
 
-    mBangController = new BangBangController(10);
+    mBangController = new BangBangController(1);
 
     motorConfig.idleMode(IdleMode.kCoast);
     motorConfig.smartCurrentLimit(30, 20);
@@ -45,14 +45,14 @@ public class CoralIntakeHardware implements CoralIntakeIO {
   }
 
   @Override
-  public void setVelocity(double velocity) {
+  public void setVelocity(double RPM) {
     if (mBangController.atSetpoint()) {
       intakeMotor.set(velocity);
       return;
     }
     ;
 
-    double output = mBangController.calculate(internalEncoder.getVelocity(), velocity);
+    double output = mBangController.calculate(internalEncoder.getVelocity(), RPM);//getvelo gives rpm not velocity
     intakeMotor.set(output);
   }
 

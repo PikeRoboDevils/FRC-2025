@@ -34,6 +34,7 @@ import frc.robot.Subsystems.Wrist.WristIO;
 import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
 
@@ -47,7 +48,7 @@ public class RobotContainer {
   private Climber climb;
   private CoralIntake intake;
 
-  private final SendableChooser<Command> autoChooser;
+private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Auto Chooser");
 
   private final Field2d field;
 
@@ -61,30 +62,41 @@ public class RobotContainer {
       climb = new Climber(new ClimberHardware());
       intake = new CoralIntake(new CoralIntakeHardware());
     }
-    // else if (Robot.isSimulation()) {
-    //   elevator = new Elevator(new ElevatorSim());
-    //   wrist =
-    //       new Wrist(
-    //           new WristSim(),
-    //           elevator); // pass the current location of the wrist due to the stacked dof with
-    //   // seperate subsystems
-    //   climb = new Climber(new ClimberSim());
-    //   intake = new CoralIntake(new CoralIntakeIO() {}); // still no sim
-    // } else {
-    //   elevator = new Elevator(new ElevatorIO() {});
-    //   wrist =
-    //       new Wrist(
-    //           new WristIO() {},
-    //           elevator); // pass the current location of the wrist due to the stacked dof with
-    //   // seperate subsystems
-    //   climb = new Climber(new ClimberIO() {});
-    //   intake = new CoralIntake(new CoralIntakeIO() {});
-    // }
-    NamedCommands.registerCommand("CORALIN", intake.setVoltage(() -> 1));
-    NamedCommands.registerCommand("CORALOUT", intake.setVoltage(() -> -3));//switch to auto
-    NamedCommands.registerCommand("LowCORALOUT", intake.setVoltage(() -> -1));
+    else if (Robot.isSimulation()) {
+      elevator = new Elevator(new ElevatorSim());
+      wrist =
+          new Wrist(
+              new WristSim(),
+              elevator); // pass the current location of the wrist due to the stacked dof with
+      // seperate subsystems
+      climb = new Climber(new ClimberSim());
+      intake = new CoralIntake(new CoralIntakeIO() {}); // still no sim
+    } else {
+      elevator = new Elevator(new ElevatorIO() {});
+      wrist =
+          new Wrist(
+              new WristIO() {},
+              elevator); // pass the current location of the wrist due to the stacked dof with
+      // seperate subsystems
+      climb = new Climber(new ClimberIO() {});
+      intake = new CoralIntake(new CoralIntakeIO() {});
+    }
+
+    // breifly brings elevator down and resets its position
+    NamedCommands.registerCommand("E_RESET", elevator.setVoltage(()->-1).alongWith(Commands.run(()->elevator.reset(),elevator)).withTimeout(0.1));
+
+    // Intake Auto Commands
+    NamedCommands.registerCommand("CORAL_IN", intake.runIntakeAuto());
+    NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));
+    NamedCommands.registerCommand("L_CORAL_OUT", intake.runOutakeAuto(-1));
     
     NamedCommands.registerCommand("L1", wrist.home());//just for hitting limit switch
+
+    Command autoSource = Commands.deadline(
+        intake.runIntakeAuto(),elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
+
+    NamedCommands.registerCommand("SOURCE", autoSource);
+
     // Other levels are with the operator commands 
 
     field = new Field2d();
@@ -107,10 +119,15 @@ public class RobotContainer {
           field.getObject("target pose").setPose(pose);
         });
 
-    autoChooser =
-        AutoBuilder.buildAutoChooser(
-            Constants.PathPlanner.DEFAULT); // BE aware this does not remove old paths automatically
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
+    //logging autos
+    autoChooser.addDefaultOption("DEFAULT", AutoBuilder.buildAuto(Constants.PathPlanner.DEFAULT));
+    String[] autos =  AutoBuilder.getAllAutoNames().toArray(new String[0]); 
+    for (int i = 0; i < autos.length; i++) {
+        autoChooser.addOption(autos[i], AutoBuilder.buildAuto(autos[i]));
+    }
+
+    SmartDashboard.putData("Auto Chooser", autoChooser.getSendableChooser());
   }
 
   private Command SetRobotState(Constants.RobotState robotState) {
@@ -176,9 +193,9 @@ public class RobotContainer {
 
     Command coralSource =
         Commands.parallel(
-            elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30+ operatorXbox.getRightY() * 2));
+            elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
 
-    // NamedCommands.registerCommand("SOURCE", coralSource));
+    NamedCommands.registerCommand("SOURCE", coralSource.until(()->intake.hasCoral()));
     
     Command coralL1 =
         Commands.parallel(
@@ -230,19 +247,18 @@ public class RobotContainer {
     // driverXbox.rightBumper().onTrue(Commands.runOnce(() -> drivebase.switchCamera(), drivebase));
     // operatorXbox.leftTrigger().onTrue(drivebase.swictchCamera());
 
-    // // Drive Slow
-    // driverXbox
-    //     .leftBumper()
-    //     .toggleOnTrue(
-    //         Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
-    // driverXbox
-    //     .leftBumper()
-    //     .toggleOnFalse(
-    //         Commands.runOnce(
-    //             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
+    // Drive Slow
+    driverXbox
+        .leftBumper()
+        .toggleOnTrue(
+            Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
+    driverXbox
+        .leftBumper()
+        .toggleOnFalse(
+            Commands.runOnce(
+                () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
 
     // Overides
-
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 3));
     wrist.setDefaultCommand(wrist.setVoltage(() -> 0.02));
     operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 2));
@@ -250,7 +266,7 @@ public class RobotContainer {
     // Climber
     operatorXbox
         .rightTrigger(0.5)
-        .whileTrue(climb.setVoltage(() -> 0.5 - operatorXbox.getRightY() * 8)) // quick climb
+        .whileTrue(climb.setVoltage(() -> 0.5 - operatorXbox.getRightY() * 8)) // quick climb 0.5 is holding voltage
         .whileFalse(climb.setVoltage(() -> 0)); // POSITIVE IS DOWN
 
     // Elevator & Wrist
@@ -281,7 +297,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return autoChooser.get();
   }
 
   public void setDriveMode() {

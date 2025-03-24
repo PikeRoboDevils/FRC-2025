@@ -31,9 +31,9 @@ public class CoralIntake extends SubsystemBase {
 
   public Command runIntake(DoubleSupplier speed) {
     return run(() -> io.setVelocity(speed.getAsDouble()))
-        .unless(() -> io.hasCoral())
+        .unless(() -> hasCoral())
         .finallyDo(() -> io.setVelocity(1)) // holding speed
-        .until(() -> !io.hasCoral());
+        .until(() -> !hasCoral());
   }
 
   public Command runIntakeVolts(DoubleSupplier speed) {
@@ -43,11 +43,11 @@ public class CoralIntake extends SubsystemBase {
   }
 
   public Command runIntakeAuto() {
-    return run(() -> io.setVoltage(3)).until(() -> io.hasCoral()).withTimeout(3);
+    return run(() -> io.setVoltage(3)).until(() -> hasCoral());
   }
 
-  public Command runOutakeAuto() {
-    return run(() -> io.setVoltage(-3)).until(() -> !io.hasCoral()).withTimeout(1);
+  public Command runOutakeAuto(double volt) {
+    return run(() -> io.setVoltage(volt)).withTimeout(0.5);
   }
 
   public Boolean hasCoral() {
