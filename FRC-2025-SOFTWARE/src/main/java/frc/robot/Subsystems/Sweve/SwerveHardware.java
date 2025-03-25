@@ -89,7 +89,7 @@ public class SwerveHardware implements SwerveIO {
     lfDriveMotor = modules[0].getDriveMotor();
 
     rfAngleMotor = modules[1].getAngleMotor();
-    
+
     rfDriveMotor = modules[1].getDriveMotor();
 
     lrAngleMotor = modules[2].getAngleMotor();

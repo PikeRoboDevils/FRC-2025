@@ -35,7 +35,6 @@ import frc.robot.Constants;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
-
 import swervelib.SwerveDriveTest;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -595,25 +594,25 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public void slow(double speed,double angularSpeed) {
+  public void slow(double speed, double angularSpeed) {
     io.getSwerve().setMaximumAllowableSpeeds(speed, speed);
   }
+
   public void unSlow() {
-    io.getSwerve().setMaximumAllowableSpeeds(Constants.Swerve.MAXSPEED,Math.toRadians(540));
+    io.getSwerve().setMaximumAllowableSpeeds(Constants.Swerve.MAXSPEED, Math.toRadians(540));
   }
-  
-    /**
+
+  /**
    * Command to characterize the robot drive motors using SysId
    *
    * @return SysId Drive Command
    */
-  public Command sysIdDriveMotorCommand()
-  {
+  public Command sysIdDriveMotorCommand() {
     return SwerveDriveTest.generateSysIdCommand(
-        SwerveDriveTest.setDriveSysIdRoutine(
-            new Config(),
-            this, io.getSwerve(), 12, true),
-        3.0, 5.0, 3.0);
+        SwerveDriveTest.setDriveSysIdRoutine(new Config(), this, io.getSwerve(), 12, true),
+        3.0,
+        5.0,
+        3.0);
   }
 
   /**
@@ -621,13 +620,8 @@ public class Swerve extends SubsystemBase {
    *
    * @return SysId Angle Command
    */
-  public Command sysIdAngleMotorCommand()
-  {
+  public Command sysIdAngleMotorCommand() {
     return SwerveDriveTest.generateSysIdCommand(
-        SwerveDriveTest.setAngleSysIdRoutine(
-            new Config(),
-            this, io.getSwerve()),
-        3.0, 5.0, 3.0);
+        SwerveDriveTest.setAngleSysIdRoutine(new Config(), this, io.getSwerve()), 3.0, 5.0, 3.0);
   }
-
 }

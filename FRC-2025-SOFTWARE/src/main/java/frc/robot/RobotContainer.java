@@ -6,12 +6,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -50,7 +47,8 @@ public class RobotContainer {
   private Climber climb;
   private CoralIntake intake;
 
-private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Auto Chooser");
+  private final LoggedDashboardChooser<Command> autoChooser =
+      new LoggedDashboardChooser<>("Auto Chooser");
 
   private final Field2d field;
 
@@ -63,8 +61,7 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
       wrist = new Wrist(new WristHardware(), elevator);
       climb = new Climber(new ClimberHardware());
       intake = new CoralIntake(new CoralIntakeHardware());
-    }
-    else if (Robot.isSimulation()) {
+    } else if (Robot.isSimulation()) {
       elevator = new Elevator(new ElevatorSim());
       wrist =
           new Wrist(
@@ -85,22 +82,22 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
     }
 
     // breifly brings elevator down and resets its position
-    // NamedCommands.registerCommand("E_RESET", elevator.setVoltage(()->-1).alongWith(Commands.run(()->elevator.reset(),elevator)).withTimeout(0.1));
+    // NamedCommands.registerCommand("E_RESET",
+    // elevator.setVoltage(()->-1).alongWith(Commands.run(()->elevator.reset(),elevator)).withTimeout(0.1));
 
     // Intake Auto Commands
     NamedCommands.registerCommand("CORAL_IN", intake.runIntakeAuto());
     NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));
     NamedCommands.registerCommand("L_CORAL_OUT", intake.runOutakeAuto(-1));
-    
-    NamedCommands.registerCommand("L1", wrist.home());//just for hitting limit switch
+
+    NamedCommands.registerCommand("L1", wrist.home()); // just for hitting limit switch
 
     // Command autoSource = Commands.deadline(
-    Command autoSource = Commands.parallel(
-        elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30));
+    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30));
 
     NamedCommands.registerCommand("SOURCE", autoSource);
 
-    // Other levels are with the operator commands 
+    // Other levels are with the operator commands
 
     field = new Field2d();
 
@@ -122,14 +119,13 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
           field.getObject("target pose").setPose(pose);
         });
 
-    
-    //logging autos
+    // logging autos
     autoChooser.addDefaultOption("DEFAULT", AutoBuilder.buildAuto(Constants.PathPlanner.DEFAULT));
     autoChooser.addOption("SYSID-DRIVE", drivebase.sysIdDriveMotorCommand());
     autoChooser.addOption("SYSID-ANGLE", drivebase.sysIdAngleMotorCommand());
-    String[] autos =  AutoBuilder.getAllAutoNames().toArray(new String[0]); 
+    String[] autos = AutoBuilder.getAllAutoNames().toArray(new String[0]);
     for (int i = 0; i < autos.length; i++) {
-        autoChooser.addOption(autos[i], AutoBuilder.buildAuto(autos[i]));
+      autoChooser.addOption(autos[i], AutoBuilder.buildAuto(autos[i]));
     }
 
     SmartDashboard.putData("Auto Chooser", autoChooser.getSendableChooser());
@@ -199,35 +195,43 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
     Command coralSource =
         Commands.parallel(
             elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
-    
+
     Command coralL1 =
         Commands.parallel(
-            elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30+ operatorXbox.getRightY() * 10));
+            elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
 
     Command coralL2 =
         Commands.parallel(
-            elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0+ operatorXbox.getRightY() * 10));
+            elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     NamedCommands.registerCommand("L2", coralL2);
 
     Command algaeL2 =
         Commands.parallel(
-            elevator.setPoint(() -> 7.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30+ operatorXbox.getRightY() * 10));
+            elevator.setPoint(() -> 7.4 + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
     Command coralL3 =
         Commands.parallel(
-            elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0+ operatorXbox.getRightY() * 10));
+            elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     NamedCommands.registerCommand("L3", coralL3);
 
     Command algaeL3 =
-            Commands.parallel(
-                elevator.setPoint(() -> 13 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 0+ operatorXbox.getRightY() * 10));
+        Commands.parallel(
+            elevator.setPoint(() -> 13 + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     Command coralL4 =
         Commands.parallel(
-            elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> -20 + operatorXbox.getRightY() * 10));
-    
-            Command coralL4AUTO =
+            elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> -20 + operatorXbox.getRightY() * 10));
+
+    Command coralL4AUTO =
         Commands.parallel(
-            elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> -20 + operatorXbox.getRightY() * 10)).until(()->!intake.hasCoral());
-        NamedCommands.registerCommand("L4", coralL4);
+                elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
+                wrist.setAngle(() -> -20 + operatorXbox.getRightY() * 10))
+            .until(() -> !intake.hasCoral());
+    NamedCommands.registerCommand("L4", coralL4);
 
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
@@ -242,8 +246,8 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
     // driverXbox.x().whileTrue(Commands.run());
 
     // Season Specififc
-    intake.setDefaultCommand(intake.setVoltage(()->1));
-    driverXbox.rightTrigger().whileTrue(intake.setVoltage(()->2)); // In
+    intake.setDefaultCommand(intake.setVoltage(() -> 1));
+    driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 2)); // In
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
     // switch cam doesnt always work
@@ -269,7 +273,9 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
     // Climber
     operatorXbox
         .rightTrigger(0.5)
-        .whileTrue(climb.setVoltage(() -> 0.5 - operatorXbox.getRightY() * 8)) // quick climb 0.5 is holding voltage
+        .whileTrue(
+            climb.setVoltage(
+                () -> 0.5 - operatorXbox.getRightY() * 8)) // quick climb 0.5 is holding voltage
         .whileFalse(climb.setVoltage(() -> 0)); // POSITIVE IS DOWN
 
     // Elevator & Wrist

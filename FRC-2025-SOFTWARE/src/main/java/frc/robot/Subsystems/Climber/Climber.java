@@ -7,7 +7,6 @@ package frc.robot.Subsystems.Climber;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
@@ -27,11 +26,8 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-        _climbPose =
-        new Pose3d(
-            new Translation3d(-0.065, 0.0, -0.095),
-            new Rotation3d(
-                0, io.getAngleRad(),0));
+    _climbPose =
+        new Pose3d(new Translation3d(-0.065, 0.0, -0.095), new Rotation3d(0, io.getAngleRad(), 0));
 
     Logger.recordOutput("Components/Climber", _climbPose);
 

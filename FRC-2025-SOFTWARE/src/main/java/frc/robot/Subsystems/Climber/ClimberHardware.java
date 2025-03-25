@@ -146,7 +146,7 @@ public class ClimberHardware implements ClimberIO {
 
   // @Override
   // public double getAngleDeg() {
-  //    return ClimberEncoder.getPosition(); 
+  //    return ClimberEncoder.getPosition();
   // }
 
   @Override

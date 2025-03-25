@@ -52,7 +52,9 @@ public class CoralIntakeHardware implements CoralIntakeIO {
     }
     ;
 
-    double output = mBangController.calculate(internalEncoder.getVelocity(), RPM);//getvelo gives rpm not velocity
+    double output =
+        mBangController.calculate(
+            internalEncoder.getVelocity(), RPM); // getvelo gives rpm not velocity
     intakeMotor.set(output);
   }
 

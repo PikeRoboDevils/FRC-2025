@@ -38,17 +38,17 @@ public class ClimberSim implements ClimberIO {
     _Climber.setInputVoltage(volts);
     ;
   }
+
   @Override
   public double getVoltage() {
-    // return _Climber.getCurrentDrawAmps()/0.6; //close enough 
-    return _Climber.getCurrentDrawAmps(); //better info anyways
+    // return _Climber.getCurrentDrawAmps()/0.6; //close enough
+    return _Climber.getCurrentDrawAmps(); // better info anyways
   }
 
-    @Override
+  @Override
   public double getAngleRad() {
-     return _Climber.getAngleRads();
+    return _Climber.getAngleRads();
   }
-
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
