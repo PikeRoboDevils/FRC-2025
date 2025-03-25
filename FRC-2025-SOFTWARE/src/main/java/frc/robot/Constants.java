@@ -102,11 +102,11 @@ public class Constants {
   // For Easier camera setup to be used with already made vision examples
   // Camera initiation can be found on line 376 of Vision swerve
   public static class PoseCameraConstants {
-
+      //TODO
       // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef tags.
       public static String CAM1N = "LEFT_CAM";
 
-      public static Rotation3d CAM1R = new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(45));
+      public static Rotation3d CAM1R = new Rotation3d(0, Units.degreesToRadians(45), Units.degreesToRadians(20));
 
       public static Translation3d CAM1T =
           new Translation3d(
@@ -114,10 +114,10 @@ public class Constants {
               Units.inchesToMeters(-12),
               Units.inchesToMeters(9));
   
-      public static String CAM2N = "RIGHT_CAM";
-
-      public static Rotation3d CAM2R = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(180 + 10));
-
+      public static String CAM2N = "ELEV_CAM";
+      //GOOD
+      public static Rotation3d CAM2R = new Rotation3d(0, Units.degreesToRadians(17.435), Units.degreesToRadians(65.38));
+      //TODO
       public static Translation3d CAM2T =
       new Translation3d(
         Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
@@ -195,12 +195,27 @@ public class Constants {
     public static final int ElevatorChannelB = 3;
     public static final boolean ElevatorReverse = false;
 
+    //OLD ELEVATOR TUNING
+    // public static final double kP_Elev = 7;
+    // public static final double kI_Elev = 0;
+    // public static final double kD_Elev = 0.0007;
+
+    // public static final double kG_Elev = 0.090;
+    // public static final double kV_Elev = 0.2;
+    // public static final double maxVelocityElevator = 15;
+    // public static final double maxAccelerationElevator = 20;
+    // public static final double kS_Elev = 0;
+
+    // NEW ELEVATOR TUNING
     public static final double kP_Elev = 7;
     public static final double kI_Elev = 0;
     public static final double kD_Elev = 0.0007;
 
-    public static final double kG_Elev = 0.090;
+    public static final double kG_Elev = 0.0;// THIS FIRST
     public static final double kV_Elev = 0.2;
+    public static final double maxVelocityElevator = 1;//THESE
+    public static final double maxAccelerationElevator = 5;//NEXT
+    public static final double kS_Elev = 0;// ignore if u want
     ;
   }
 }

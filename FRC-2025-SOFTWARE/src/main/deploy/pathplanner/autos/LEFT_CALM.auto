@@ -5,19 +5,13 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "MID-GH"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "CORALIN"
+                  "name": "CORAL_IN"
                 }
               },
               {
@@ -40,9 +34,9 @@
                 }
               },
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 3.0
+                  "pathName": " LEFT - CD"
                 }
               }
             ]
@@ -51,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "CORALOUT"
+            "name": "CORAL_OUT"
           }
         },
         {
@@ -61,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GH - RIGHT SOURCE"
+                  "pathName": "CD - LEFT SOURCE"
                 }
               },
               {
@@ -77,6 +71,12 @@
           "type": "named",
           "data": {
             "name": "SOURCE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L_SOURCE - REEF"
           }
         }
       ]

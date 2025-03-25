@@ -47,7 +47,7 @@ public class CoralIntake extends SubsystemBase {
   }
 
   public Command runOutakeAuto(double volt) {
-    return run(() -> io.setVoltage(volt)).withTimeout(0.5);
+    return run(() -> io.setVoltage(volt)).withTimeout(2);
   }
 
   public Boolean hasCoral() {

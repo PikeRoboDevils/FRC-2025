@@ -6,8 +6,10 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -83,7 +85,7 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
     }
 
     // breifly brings elevator down and resets its position
-    NamedCommands.registerCommand("E_RESET", elevator.setVoltage(()->-1).alongWith(Commands.run(()->elevator.reset(),elevator)).withTimeout(0.1));
+    // NamedCommands.registerCommand("E_RESET", elevator.setVoltage(()->-1).alongWith(Commands.run(()->elevator.reset(),elevator)).withTimeout(0.1));
 
     // Intake Auto Commands
     NamedCommands.registerCommand("CORAL_IN", intake.runIntakeAuto());
@@ -92,8 +94,9 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
     
     NamedCommands.registerCommand("L1", wrist.home());//just for hitting limit switch
 
-    Command autoSource = Commands.deadline(
-        intake.runIntakeAuto(),elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
+    // Command autoSource = Commands.deadline(
+    Command autoSource = Commands.parallel(
+        elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30));
 
     NamedCommands.registerCommand("SOURCE", autoSource);
 
@@ -122,6 +125,8 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
     
     //logging autos
     autoChooser.addDefaultOption("DEFAULT", AutoBuilder.buildAuto(Constants.PathPlanner.DEFAULT));
+    autoChooser.addOption("SYSID-DRIVE", drivebase.sysIdDriveMotorCommand());
+    autoChooser.addOption("SYSID-ANGLE", drivebase.sysIdAngleMotorCommand());
     String[] autos =  AutoBuilder.getAllAutoNames().toArray(new String[0]); 
     for (int i = 0; i < autos.length; i++) {
         autoChooser.addOption(autos[i], AutoBuilder.buildAuto(autos[i]));
@@ -194,8 +199,6 @@ private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardC
     Command coralSource =
         Commands.parallel(
             elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
-
-    NamedCommands.registerCommand("SOURCE", coralSource.until(()->intake.hasCoral()));
     
     Command coralL1 =
         Commands.parallel(

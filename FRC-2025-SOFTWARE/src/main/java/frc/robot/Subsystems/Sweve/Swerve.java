@@ -30,10 +30,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
+
+import swervelib.SwerveDriveTest;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveDriveConfiguration;
 
@@ -596,7 +599,35 @@ public class Swerve extends SubsystemBase {
     io.getSwerve().setMaximumAllowableSpeeds(speed, speed);
   }
   public void unSlow() {
-    io.getSwerve().setMaximumAllowableSpeeds(Constants.Swerve.MAXSPEED,Math.toRadians(720));//idk abt the angle speed 
+    io.getSwerve().setMaximumAllowableSpeeds(Constants.Swerve.MAXSPEED,Math.toRadians(540));
   }
   
+    /**
+   * Command to characterize the robot drive motors using SysId
+   *
+   * @return SysId Drive Command
+   */
+  public Command sysIdDriveMotorCommand()
+  {
+    return SwerveDriveTest.generateSysIdCommand(
+        SwerveDriveTest.setDriveSysIdRoutine(
+            new Config(),
+            this, io.getSwerve(), 12, true),
+        3.0, 5.0, 3.0);
+  }
+
+  /**
+   * Command to characterize the robot angle motors using SysId
+   *
+   * @return SysId Angle Command
+   */
+  public Command sysIdAngleMotorCommand()
+  {
+    return SwerveDriveTest.generateSysIdCommand(
+        SwerveDriveTest.setAngleSysIdRoutine(
+            new Config(),
+            this, io.getSwerve()),
+        3.0, 5.0, 3.0);
+  }
+
 }

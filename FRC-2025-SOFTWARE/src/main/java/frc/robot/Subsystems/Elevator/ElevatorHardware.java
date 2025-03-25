@@ -64,13 +64,13 @@ public class ElevatorHardware implements ElevatorIO {
     // position control
     _feedforward =
         new ElevatorFeedforward(
-            0,
+          Constants.Encoders.kS_Elev,
             Constants.Encoders.kG_Elev,
             Constants.Encoders.kV_Elev); // based on random numbers in recalc
     positionController =
         new PIDController(
             Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
-    profile = new TrapezoidProfile(new Constraints(15, 20)); // rotations a second
+    profile = new TrapezoidProfile(new Constraints(Constants.Encoders.maxVelocityElevator,Constants.Encoders.maxAccelerationElevator)); // rotations a second
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
