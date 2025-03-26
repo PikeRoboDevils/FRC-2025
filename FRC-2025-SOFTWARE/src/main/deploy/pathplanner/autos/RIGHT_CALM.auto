@@ -5,28 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "CORAL_IN"
-                }
-              },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 5.0
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RIGHT - KL"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -34,9 +27,9 @@
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "RIGHT - KL"
+                  "name": "CORAL_IN"
                 }
               }
             ]
@@ -49,7 +42,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {

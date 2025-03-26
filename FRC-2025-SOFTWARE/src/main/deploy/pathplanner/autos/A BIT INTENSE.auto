@@ -9,6 +9,12 @@
           "data": {
             "commands": [
               {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "MID-GH"
@@ -17,13 +23,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CORAL_IN"
+                  "name": "L4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "CORAL_IN"
                 }
               }
             ]
@@ -36,7 +42,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -52,22 +58,9 @@
                 }
               },
               {
-                "type": "race",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CORAL_IN"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    }
-                  ]
+                  "name": "CORAL_IN"
                 }
               }
             ]
@@ -105,7 +98,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -121,22 +114,9 @@
                 }
               },
               {
-                "type": "race",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CORAL_IN"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    }
-                  ]
+                  "name": "CORAL_IN"
                 }
               }
             ]
@@ -171,6 +151,12 @@
           "type": "named",
           "data": {
             "name": "CORAL_OUT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "STOW"
           }
         }
       ]

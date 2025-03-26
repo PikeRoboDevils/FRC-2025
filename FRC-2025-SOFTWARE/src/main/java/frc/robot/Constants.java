@@ -43,7 +43,7 @@ public class Constants {
 
   public class gearRatios {
 
-    public static double Arm = (11.0 / 42.0) * (1.0 / 5.0); // inverted
+    public static double Arm = (11.0 / 42.0) * (1.0 / 25.0); // inverted
   }
 
   public class Swerve {
@@ -122,9 +122,9 @@ public class Constants {
     // TODO
     public static Translation3d CAM2T =
         new Translation3d(
-            Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
-            Units.inchesToMeters(12), // to right
-            Units.inchesToMeters(9));
+            Units.inchesToMeters(4.5), // transform of camera (dont forget forward+ left+ up+)
+            Units.inchesToMeters(14), // to right
+            Units.inchesToMeters(14));
 
     // public static Object[] CAM3 = new Object[3];
 
@@ -209,15 +209,15 @@ public class Constants {
     // public static final double kS_Elev = 0;
 
     // NEW ELEVATOR TUNING
-    public static final double kP_Elev = 7;
+    public static final double kP_Elev = 5;
     public static final double kI_Elev = 0;
-    public static final double kD_Elev = 0.0007;
+    public static final double kD_Elev = 0.05 ;
 
-    public static final double kG_Elev = 0.0; // THIS FIRST
-    public static final double kV_Elev = 0.2;
-    public static final double maxVelocityElevator = 1; // THESE
-    public static final double maxAccelerationElevator = 5; // NEXT
-    public static final double kS_Elev = 0; // ignore if u want
+    public static final double kG_Elev = 0.3;
+    public static final double kV_Elev = 0.6;
+    public static final double maxVelocityElevator = 35; // THESE
+    public static final double maxAccelerationElevator = 40; // NEXT
+    public static final double kS_Elev = 0.2;
     ;
   }
 }

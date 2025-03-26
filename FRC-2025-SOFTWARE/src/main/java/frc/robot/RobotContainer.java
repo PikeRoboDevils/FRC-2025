@@ -82,8 +82,8 @@ public class RobotContainer {
     }
 
     // breifly brings elevator down and resets its position
-    // NamedCommands.registerCommand("E_RESET",
-    // elevator.setVoltage(()->-1).alongWith(Commands.run(()->elevator.reset(),elevator)).withTimeout(0.1));
+    Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);
+    NamedCommands.registerCommand("E_RESET",home);
 
     // Intake Auto Commands
     NamedCommands.registerCommand("CORAL_IN", intake.runIntakeAuto());
@@ -93,7 +93,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("L1", wrist.home()); // just for hitting limit switch
 
     // Command autoSource = Commands.deadline(
-    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30));
+    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).until(()->intake.hasCoral());
 
     NamedCommands.registerCommand("SOURCE", autoSource);
 
@@ -184,7 +184,7 @@ public class RobotContainer {
                     (-driverXbox.getLeftX()) * 0.5, OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(
-                    driverXbox.getLeftY() * 0.5, OperatorConstants.LEFT_X_DEADBAND),
+                    -driverXbox.getLeftY() * 0.5, OperatorConstants.LEFT_X_DEADBAND),
             () ->
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2);
