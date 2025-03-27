@@ -223,7 +223,7 @@ public class RobotContainer {
     Command algaeL3 =
         Commands.parallel(
             elevator.setPoint(() -> 13 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
     Command coralL4 =
         Commands.parallel(
             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
