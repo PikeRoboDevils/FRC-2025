@@ -42,7 +42,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -54,16 +54,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "STOW"
+                  "name": "SOURCE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SOURCE"
           }
         },
         {

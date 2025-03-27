@@ -85,6 +85,9 @@ public class RobotContainer {
     Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);
     NamedCommands.registerCommand("E_RESET",home);
 
+    // Auto Align to Reef
+    // NamedCommands.registerCommand("AUTO_ALIGN", drivebase.autoAlign(0));
+
     // Intake Auto Commands
     NamedCommands.registerCommand("CORAL_IN", intake.runIntakeAuto());
     NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));

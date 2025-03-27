@@ -12,3 +12,46 @@
 18
 19
 20
+
+
+SYSID: 
+
+BackLeft Angle
+Kp 0.031832
+
+
+BackRight Angle
+Kp 0.050407
+
+
+FrontLeft Angle
+Kp 0.12046 
+
+
+FrontRight Angle
+Kp 0.038014
+
+
+
+BackLeft
+Kp 0.1958
+Kv 2.304
+
+BackRight
+Kp 0.035045
+Kv 2.5647
+
+FrontLeft
+Kp 0.016794
+Kv 2.6103
+
+FrontRight
+Kp 0.10211
+Kv 2.4598
+
+AVG drive
+Kp 0.08743725
+Kv 2.484
+
+AVG Angle
+Kp 0.04008433

@@ -50,7 +50,7 @@ public class Constants {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];
 
-    public static boolean VISION = false;
+    public static boolean VISION = true;
 
     public static final double MAXSPEED =
         Units.feetToMeters(15.1); // Why did we lower the drive speed int teleop?
@@ -102,24 +102,22 @@ public class Constants {
   // For Easier camera setup to be used with already made vision examples
   // Camera initiation can be found on line 376 of Vision swerve
   public static class PoseCameraConstants {
-    // TODO
     // Cam 1 is roughly on top of the lower mount for elevator lokking in towards the reef tags.
     public static String CAM1N = "LEFT_CAM";
 
     public static Rotation3d CAM1R =
-        new Rotation3d(0, Units.degreesToRadians(45), Units.degreesToRadians(20));
+        new Rotation3d(0, Units.degreesToRadians(25), Units.degreesToRadians(40));
 
     public static Translation3d CAM1T =
         new Translation3d(
-            Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
-            Units.inchesToMeters(-12),
-            Units.inchesToMeters(9));
+            Units.inchesToMeters(4.), // transform of camera (dont forget forward+ left+ up+)
+            Units.inchesToMeters(13),
+            Units.inchesToMeters(8));
 
     public static String CAM2N = "ELEV_CAM";
     // GOOD
     public static Rotation3d CAM2R =
-        new Rotation3d(0, Units.degreesToRadians(17.435), Units.degreesToRadians(65.38));
-    // TODO
+        new Rotation3d(Math.PI, 0, Units.degreesToRadians(0));
     public static Translation3d CAM2T =
         new Translation3d(
             Units.inchesToMeters(4.5), // transform of camera (dont forget forward+ left+ up+)

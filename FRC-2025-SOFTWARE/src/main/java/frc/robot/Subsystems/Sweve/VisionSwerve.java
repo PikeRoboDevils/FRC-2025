@@ -383,16 +383,15 @@ public class VisionSwerve {
   }
 
   /** Camera Enum to select each camera */
-  private static double n1StndardDevs = 4.5;
+  private static double n1StndardDevs = 10;
 
-  private static double n2StandardDevs = 4.5;
-  private static double n4StandardDevs = 8.5;
+  private static double n2StandardDevs = 10;
+  private static double n4StandardDevs = 10;
 
   enum Cameras {
     CAM_1(
-        (String) PoseCameraConstants.CAM1N,
-        (Rotation3d) PoseCameraConstants.CAM1R, // rotation of camera
-        (Translation3d)
+        PoseCameraConstants.CAM1N,
+        PoseCameraConstants.CAM1R, // rotation of camera
             PoseCameraConstants.CAM1T, // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
         VecBuilder.fill(
@@ -400,9 +399,9 @@ public class VisionSwerve {
         ),
 
     CAM_2(
-        (String) PoseCameraConstants.CAM2N,
-        (Rotation3d) PoseCameraConstants.CAM2R, // rotation of camera
-        (Translation3d)
+        PoseCameraConstants.CAM2N,
+        PoseCameraConstants.CAM2R, // rotation of camera
+
             PoseCameraConstants.CAM2T, // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
         VecBuilder.fill(

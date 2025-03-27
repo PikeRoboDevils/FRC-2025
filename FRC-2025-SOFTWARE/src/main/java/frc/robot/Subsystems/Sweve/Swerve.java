@@ -9,6 +9,10 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
@@ -16,6 +20,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -33,8 +38,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
+
+import java.util.List;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import swervelib.SwerveDriveTest;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -377,7 +387,7 @@ public class Swerve extends SubsystemBase {
   public Command autoAlign(int position) {
 
     // identify the important face using the bes tag id coming from front camera
-    int tagId = vision.getBestTagId(Cameras.CAM_1);
+    int tagId = vision.getBestTagId(Cameras.CAM_2);
 
     // Identify pose
     Pose2d pose = targetPosition[tagId][position];
@@ -594,13 +604,14 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public void slow(double speed, double angularSpeed) {
-    io.getSwerve().setMaximumAllowableSpeeds(speed, speed);
-  }
+  // never tested already have a better version
+  // public void slow(double speed, double angularSpeed) {
+  //   io.getSwerve().setMaximumAllowableSpeeds(speed, speed);
+  // }
 
-  public void unSlow() {
-    io.getSwerve().setMaximumAllowableSpeeds(Constants.Swerve.MAXSPEED, Math.toRadians(540));
-  }
+  // public void unSlow() {
+  //   io.getSwerve().setMaximumAllowableSpeeds(Constants.Swerve.MAXSPEED, Math.toRadians(540));
+  // }
 
   /**
    * Command to characterize the robot drive motors using SysId
