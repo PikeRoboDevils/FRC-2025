@@ -383,10 +383,10 @@ public class VisionSwerve {
   }
 
   /** Camera Enum to select each camera */
-  private static double n1StndardDevs = 10;
+  private static double n1StndardDevs = 4.5;
 
-  private static double n2StandardDevs = 10;
-  private static double n4StandardDevs = 10;
+  private static double n2StandardDevs = 4.5;
+  private static double n4StandardDevs = 8.5;
 
   enum Cameras {
     CAM_1(
