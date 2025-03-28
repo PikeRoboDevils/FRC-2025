@@ -82,8 +82,8 @@ public class RobotContainer {
     }
 
     // breifly brings elevator down and resets its position
-    Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);
-    NamedCommands.registerCommand("E_RESET",home);
+    // Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);
+    // NamedCommands.registerCommand("E_RESET",home);
 
     // Auto Align to Reef
     // NamedCommands.registerCommand("AUTO_ALIGN", drivebase.autoAlign(0));
