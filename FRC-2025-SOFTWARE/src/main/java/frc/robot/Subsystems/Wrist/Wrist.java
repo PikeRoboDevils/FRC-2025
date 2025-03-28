@@ -61,8 +61,8 @@ public class Wrist extends SubsystemBase {
   }
 
   public Command toggle() {
-    isBad = !isBad;
-    return Commands.none();
+    
+    return Commands.runOnce(()->isBad = !isBad,this);
   }
 
   public Command home() {
