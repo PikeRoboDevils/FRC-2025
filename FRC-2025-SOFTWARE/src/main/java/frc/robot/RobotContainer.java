@@ -192,41 +192,51 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2);
 
-    Command stow = Commands.parallel(elevator.setPoint(() -> 0), wrist.setAngle(() -> 34));
+    Command stow = Commands.parallel(elevator.setPoint(() -> 0),
+    wrist.getIsBad() ? Commands.none() : 
+    wrist.setAngle(() -> 34));
     NamedCommands.registerCommand("STOW", stow);
 
     Command coralSource =
         Commands.parallel(
-            elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
+            elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2),
+            wrist.getIsBad() ? Commands.none() : 
+            wrist.setAngle(() -> 30));
 
     Command coralL1 =
         Commands.parallel(
             elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
+            wrist.getIsBad() ? Commands.none() : 
             wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
 
     Command coralL2 =
         Commands.parallel(
             elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2),
+            wrist.getIsBad() ? Commands.none() : 
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     NamedCommands.registerCommand("L2", coralL2);
 
     Command algaeL2 =
         Commands.parallel(
             elevator.setPoint(() -> 7.4 + operatorXbox.getLeftY() * 2),
+            wrist.getIsBad() ? Commands.none() : 
             wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
     Command coralL3 =
         Commands.parallel(
             elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2),
+            wrist.getIsBad() ? Commands.none() : 
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     NamedCommands.registerCommand("L3", coralL3);
 
     Command algaeL3 =
         Commands.parallel(
             elevator.setPoint(() -> 13 + operatorXbox.getLeftY() * 2),
+            wrist.getIsBad() ? Commands.none() : 
             wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
     Command coralL4 =
         Commands.parallel(
             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
+            wrist.getIsBad() ? Commands.none() : 
             wrist.setAngle(() -> -20 + operatorXbox.getRightY() * 10));
 
     Command coralL4AUTO =

@@ -65,6 +65,10 @@ public class Wrist extends SubsystemBase {
     return Commands.runOnce(()->isBad = !isBad,this);
   }
 
+  public boolean getIsBad(){
+      return isBad;
+  }
+
   public Command home() {
     return run(() -> io.setVoltage(1))
         .withTimeout(0.5)
