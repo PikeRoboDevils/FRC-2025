@@ -184,12 +184,12 @@ public class RobotContainer {
         drivebase.fieldRelativeTeleop(
             () ->
                 MathUtil.applyDeadband(
-                    (driverXbox.getLeftX()) * 0.25, OperatorConstants.LEFT_Y_DEADBAND),
+                    (-driverXbox.getLeftX()) * 0.25, OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(
-                    driverXbox.getLeftY() * 0.25, OperatorConstants.LEFT_X_DEADBAND),
+                    -driverXbox.getLeftY() * 0.25, OperatorConstants.LEFT_X_DEADBAND),
             () ->
-                MathUtil.applyDeadband(driverXbox.getRightX()*.25, OperatorConstants.RIGHT_X_DEADBAND),
+                MathUtil.applyDeadband(-driverXbox.getRightX()*.25, OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2);
 
     Command stow = Commands.parallel(elevator.setPoint(() -> 0),
