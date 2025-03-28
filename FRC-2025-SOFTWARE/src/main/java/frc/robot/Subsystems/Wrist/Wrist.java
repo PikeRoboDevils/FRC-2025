@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.Elevator.Elevator;
+
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -24,6 +26,8 @@ public class Wrist extends SubsystemBase {
   private Pose3d _wristPose;
 
   private boolean isBad;
+
+  public BooleanSupplier wristDisabled = ()->isBad;
 
   /** Creates a new Wrist. */
   public Wrist(WristIO wristIo, Elevator elevatorStage) {
@@ -48,14 +52,14 @@ public class Wrist extends SubsystemBase {
     Logger.recordOutput("Components/Wrist", _wristPose);
 
 
-    Logger.recordOutput("WRIST BAD", isBad);
+    Logger.recordOutput("WRIST BAD", wristDisabled.getAsBoolean());
 
     io.updateInputs(inputs);
     Logger.processInputs("wrist", inputs);
   }
   // so we can set command to null 
   public Command setAngle(DoubleSupplier angle) {
-      if (isBad) { return Commands.none();}// to prevent movement
+      if (wristDisabled.getAsBoolean()) { return Commands.none();}// to prevent movement
       return run(() -> io.setAngle(angle.getAsDouble()));
 
   }
@@ -66,7 +70,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public boolean getIsBad(){
-      return isBad;
+      return wristDisabled.getAsBoolean();
   }
 
   public Command home() {
