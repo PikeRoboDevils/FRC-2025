@@ -36,7 +36,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 4.0
                 }
               },
               {
@@ -65,15 +65,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "IJ - RIGHT SOURCE"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "SOURCE"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "IJ - RIGHT SOURCE"
                 }
               },
               {

@@ -75,7 +75,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void disabled() {
-    io.setVoltage(0);
+   io.setPosition(io.getPosition());
   }
 
   public void reset() {
