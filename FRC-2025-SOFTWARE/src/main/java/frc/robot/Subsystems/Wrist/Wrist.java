@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.Elevator.Elevator;
 import java.util.function.DoubleSupplier;
@@ -21,6 +22,8 @@ public class Wrist extends SubsystemBase {
   private final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
 
   private Pose3d _wristPose;
+
+  private boolean isBad;
 
   /** Creates a new Wrist. */
   public Wrist(WristIO wristIo, Elevator elevatorStage) {
@@ -44,12 +47,21 @@ public class Wrist extends SubsystemBase {
 
     Logger.recordOutput("Components/Wrist", _wristPose);
 
+
+    Logger.recordOutput("WRIST BAD", isBad);
+
     io.updateInputs(inputs);
     Logger.processInputs("wrist", inputs);
   }
-
+  // so we can set command to null 
   public Command setAngle(DoubleSupplier angle) {
-    return run(() -> io.setAngle(angle.getAsDouble()));
+    try { 
+      if (isBad) { return Commands.none();}// to prevent future movement
+      return run(() -> io.setAngle(angle.getAsDouble()));
+    } catch (NullPointerException e) { // To get first disable 
+      isBad = !isBad;
+      return Commands.none();
+    }
   }
 
   public Command home() {
