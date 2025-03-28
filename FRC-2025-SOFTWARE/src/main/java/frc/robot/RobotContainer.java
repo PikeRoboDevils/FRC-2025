@@ -298,7 +298,7 @@ public class RobotContainer {
     operatorXbox.y().onTrue(coralL4);
 
     // Wrist Stop
-    operatorXbox.povRight().onTrue((wrist.setAngle(null)));
+    operatorXbox.povRight().onTrue((wrist.toggle()));
     
 
     // // Drive To pose commands. Might be worth rediong to be a single command

@@ -55,13 +55,14 @@ public class Wrist extends SubsystemBase {
   }
   // so we can set command to null 
   public Command setAngle(DoubleSupplier angle) {
-    try { 
-      if (isBad) { return Commands.none();}// to prevent future movement
+      if (isBad) { return Commands.none();}// to prevent movement
       return run(() -> io.setAngle(angle.getAsDouble()));
-    } catch (NullPointerException e) { // To get first disable 
-      isBad = !isBad;
-      return Commands.none();
-    }
+
+  }
+
+  public Command toggle() {
+    isBad = !isBad;
+    return Commands.none();
   }
 
   public Command home() {
