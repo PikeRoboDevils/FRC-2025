@@ -89,7 +89,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("AUTO_ALIGN", drivebase.autoAlign(0));
 
     // Intake Auto Commands
-    NamedCommands.registerCommand("CORAL_IN", intake.runIntakeAuto());
+    NamedCommands.registerCommand("CORAL_IN", intake.setVoltage(()->1));
     NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));
     NamedCommands.registerCommand("L_CORAL_OUT", intake.runOutakeAuto(-1));
 
