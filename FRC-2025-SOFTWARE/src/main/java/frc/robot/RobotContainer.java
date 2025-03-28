@@ -193,34 +193,29 @@ public class RobotContainer {
             () -> 2);
 
     Command stow = Commands.parallel(elevator.setPoint(() -> 0),
-    wrist.getIsBad() ? Commands.none() : 
-    wrist.setAngle(() -> 34));
+        wrist.setAngle(() -> 34).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("STOW", stow);
 
     Command coralSource =
         Commands.parallel(
             elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2),
-            wrist.getIsBad() ? Commands.none() : 
-            wrist.setAngle(() -> 30));
+            wrist.setAngle(() -> 30).unless(wrist.wristDisabled));
 
     Command coralL1 =
         Commands.parallel(
             elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
-            wrist.getIsBad() ? Commands.none() : 
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
 
     Command coralL2 =
         Commands.parallel(
             elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2),
-            wrist.getIsBad() ? Commands.none() : 
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
+            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("L2", coralL2);
 
     Command algaeL2 =
         Commands.parallel(
             elevator.setPoint(() -> 7.4 + operatorXbox.getLeftY() * 2),
-            wrist.getIsBad() ? Commands.none() : 
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     Command coralL3 =
         Commands.parallel(
             elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2), 
