@@ -155,7 +155,7 @@ public class Constants {
 
     public static final RobotConfig config =
         new RobotConfig(Swerve.ROBOT_MASS, 1, modConfig, FL, FR, BL, BR);
-    public static final PIDConstants TRANSLATION_PID = new PIDConstants(5, 0, 0);
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(5, 0, 0.005);
     public static final PIDConstants ANGLE_PID = new PIDConstants(5, 0, 0);
     public static final PPHolonomicDriveController DRIVE_CONTROLLER =
         new PPHolonomicDriveController(TRANSLATION_PID, ANGLE_PID);
