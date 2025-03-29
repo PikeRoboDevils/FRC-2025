@@ -29,6 +29,11 @@ public class Wrist extends SubsystemBase {
 
   public BooleanSupplier wristDisabled = () -> isBad;
 
+  // public BooleanSupplier wristOutOfBounds = () -> {
+  //     io.getAngleDeg()>35
+
+  //  inputs.
+  // };
   /** Creates a new Wrist. */
   public Wrist(WristIO wristIo, Elevator elevatorStage) {
     this.io = wristIo;
