@@ -53,37 +53,6 @@
           "data": {
             "name": "CORAL_OUT"
           }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "SOURCE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CORAL_IN"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "CD - LEFT SOURCE"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L_SOURCE - REEF"
-          }
         }
       ]
     }

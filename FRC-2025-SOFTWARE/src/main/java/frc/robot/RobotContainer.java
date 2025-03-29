@@ -89,14 +89,13 @@ public class RobotContainer {
     // NamedCommands.registerCommand("AUTO_ALIGN", drivebase.autoAlign(0));
 
     // Intake Auto Commands
-    NamedCommands.registerCommand("CORAL_IN", intake.setVoltage(()->1));
-    NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));
-    NamedCommands.registerCommand("L_CORAL_OUT", intake.runOutakeAuto(-1));
+    NamedCommands.registerCommand("CORAL_IN", intake.setVoltage(()->1)); // NEVER STOPS
+    NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));// ALMOST INSTANT
+    NamedCommands.registerCommand("L_CORAL_OUT", intake.runOutakeAuto(-1)); // ALMOST INSTANT
 
-    NamedCommands.registerCommand("L1", wrist.home()); // just for hitting limit switch
-
+    NamedCommands.registerCommand("L1", wrist.home()); // ALMOST INSTANT
     // Command autoSource = Commands.deadline(
-    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).until(()->intake.hasCoral());
+    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).until(()->intake.hasCoral()); // FIXED
 
     NamedCommands.registerCommand("SOURCE", autoSource);
 
@@ -299,8 +298,9 @@ public class RobotContainer {
 
     operatorXbox.y().onTrue(coralL4);
 
+    // BAD DO NOT USE
     // Wrist Stop
-    operatorXbox.povRight().onTrue((wrist.toggle()));
+    // operatorXbox.povRight().onTrue((wrist.toggle()));
     
 
     // // Drive To pose commands. Might be worth rediong to be a single command

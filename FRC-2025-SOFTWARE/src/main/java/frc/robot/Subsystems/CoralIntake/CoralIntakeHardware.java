@@ -69,6 +69,6 @@ public class CoralIntakeHardware implements CoralIntakeIO {
   }
 
   public boolean hasCoral() {
-    return intakeMotor.getOutputCurrent() > 20;
+    return intakeMotor.getOutputCurrent() > 29;
   }
 }
