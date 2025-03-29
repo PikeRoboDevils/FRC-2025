@@ -95,7 +95,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("L1", wrist.home()); // ALMOST INSTANT
     // Command autoSource = Commands.deadline(
-    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).until(()->intake.hasCoral()); // FIXED
+    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).withTimeout(1);
+    // .until(()->intake.hasCoral()); // FIXED
 
     NamedCommands.registerCommand("SOURCE", autoSource);
 
