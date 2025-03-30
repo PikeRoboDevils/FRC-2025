@@ -154,19 +154,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "STOW"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "LAUNCH"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "STOW"
                 }
               }
             ]
