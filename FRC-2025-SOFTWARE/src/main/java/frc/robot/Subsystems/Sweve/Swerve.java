@@ -323,18 +323,10 @@ public class Swerve extends SubsystemBase {
           double Xvalue;
           double Yvalue;
           if (isLocked) return; // to prevent accidental movement while locked
-          if (DriverStation.getAlliance().isPresent()) {
-            if (DriverStation.getAlliance().get().equals(Alliance.Red)) {
-              Xvalue = -LeftX.getAsDouble();
-              Yvalue = -LeftY.getAsDouble();
-            } else {
-              Xvalue = LeftX.getAsDouble();
-              Yvalue = LeftY.getAsDouble();
-            }
-          } else {
+         
             Xvalue = LeftX.getAsDouble();
             Yvalue = LeftY.getAsDouble();
-          }
+       
 
           ChassisSpeeds desiredSpeeds =
               io.getTargetSpeeds(Yvalue, Xvalue, new Rotation2d(RightX.getAsDouble() * Math.PI));

@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": " LEFT - CD"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -15,28 +21,9 @@
                 }
               },
               {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
                 "type": "named",
                 "data": {
                   "name": "L4"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": " LEFT - CD"
                 }
               }
             ]
@@ -46,37 +33,6 @@
           "type": "named",
           "data": {
             "name": "CORAL_OUT"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "CD - LEFT SOURCE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "STOW"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SOURCE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L_SOURCE - REEF"
           }
         }
       ]

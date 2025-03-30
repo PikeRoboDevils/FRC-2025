@@ -9,12 +9,6 @@
           "data": {
             "pathName": "EXIT"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "E_RESET"
-          }
         }
       ]
     }

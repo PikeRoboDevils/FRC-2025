@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MID-GH"
+                  "pathName": "RIGHT - IJ"
                 }
               },
               {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "GH - RIGHT SOURCE"
+            "pathName": "IJ - RIGHT SOURCE"
           }
         },
         {
@@ -92,13 +92,7 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "KL - RIGHT SOURCE"
-          }
-        },
-        {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -111,6 +105,12 @@
                 "type": "named",
                 "data": {
                   "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "KL - RIGHT SOURCE"
                 }
               }
             ]

@@ -82,21 +82,21 @@ public class RobotContainer {
     }
 
     // breifly brings elevator down and resets its position
-    Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);
-    NamedCommands.registerCommand("E_RESET",home);
+    // Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);
+    // NamedCommands.registerCommand("E_RESET",home);
 
     // Auto Align to Reef
     // NamedCommands.registerCommand("AUTO_ALIGN", drivebase.autoAlign(0));
 
     // Intake Auto Commands
-    NamedCommands.registerCommand("CORAL_IN", intake.runIntakeAuto());
-    NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));
-    NamedCommands.registerCommand("L_CORAL_OUT", intake.runOutakeAuto(-1));
+    NamedCommands.registerCommand("CORAL_IN", intake.setVoltage(()->1)); // NEVER STOPS
+    NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));// ALMOST INSTANT
+    NamedCommands.registerCommand("L_CORAL_OUT", intake.runOutakeAuto(-1)); // ALMOST INSTANT
 
-    NamedCommands.registerCommand("L1", wrist.home()); // just for hitting limit switch
-
+    NamedCommands.registerCommand("L1", wrist.home()); // ALMOST INSTANT
     // Command autoSource = Commands.deadline(
-    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).until(()->intake.hasCoral());
+    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).withTimeout(1);
+    // .until(()->intake.hasCoral()); // FIXED
 
     NamedCommands.registerCommand("SOURCE", autoSource);
 
@@ -173,8 +173,8 @@ public class RobotContainer {
             () -> 4);
     Command driveFieldOrientedHybrid =
         drivebase.fieldRelativeTeleop(
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
             () ->
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2.5);
@@ -184,55 +184,57 @@ public class RobotContainer {
         drivebase.fieldRelativeTeleop(
             () ->
                 MathUtil.applyDeadband(
-                    (-driverXbox.getLeftX()) * 0.5, OperatorConstants.LEFT_Y_DEADBAND),
+                    (-driverXbox.getLeftX()) * 0.25, OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(
-                    -driverXbox.getLeftY() * 0.5, OperatorConstants.LEFT_X_DEADBAND),
+                    -driverXbox.getLeftY() * 0.25, OperatorConstants.LEFT_X_DEADBAND),
             () ->
-                MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
+                MathUtil.applyDeadband(-driverXbox.getRightX()*.25, OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2);
 
-    Command stow = Commands.parallel(elevator.setPoint(() -> 0), wrist.setAngle(() -> 34));
+    Command stow = Commands.parallel(elevator.setPoint(() -> 0),
+        wrist.setAngle(() -> 34).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("STOW", stow);
 
     Command coralSource =
         Commands.parallel(
-            elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2), wrist.setAngle(() -> 30));
+            elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> 30).unless(wrist.wristDisabled));
 
     Command coralL1 =
         Commands.parallel(
             elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
 
     Command coralL2 =
         Commands.parallel(
             elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
+            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("L2", coralL2);
 
     Command algaeL2 =
         Commands.parallel(
             elevator.setPoint(() -> 7.4 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     Command coralL3 =
         Commands.parallel(
-            elevator.setPoint(() -> 14. + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
+            elevator.setPoint(() -> 14.45 + operatorXbox.getLeftY() * 2), 
+            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("L3", coralL3);
 
     Command algaeL3 =
         Commands.parallel(
-            elevator.setPoint(() -> 13 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
+            elevator.setPoint(() -> 13.45 + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     Command coralL4 =
         Commands.parallel(
-            elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> -20 + operatorXbox.getRightY() * 10));
+            elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),            
+            wrist.setAngle(() -> -29.65+ operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
 
     Command coralL4AUTO =
         Commands.parallel(
                 elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
-                wrist.setAngle(() -> -20 + operatorXbox.getRightY() * 10))
+                wrist.setAngle(() -> -29.65 + operatorXbox.getRightY() * 10))
             .until(() -> !intake.hasCoral());
     NamedCommands.registerCommand("L4", coralL4);
 
@@ -296,6 +298,11 @@ public class RobotContainer {
     operatorXbox.x().and(operatorXbox.povUp()).whileTrue(algaeL3);
 
     operatorXbox.y().onTrue(coralL4);
+
+    // BAD DO NOT USE
+    // Wrist Stop
+    // operatorXbox.povRight().onTrue((wrist.toggle()));
+    
 
     // // Drive To pose commands. Might be worth rediong to be a single command
     // if (Constants.Swerve.VISION) {
