@@ -8,12 +8,16 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Subsystems.Simulation;
 import frc.robot.Subsystems.Climber.Climber;
 import frc.robot.Subsystems.Climber.ClimberHardware;
 import frc.robot.Subsystems.Climber.ClimberIO;
@@ -21,6 +25,7 @@ import frc.robot.Subsystems.Climber.ClimberSim;
 import frc.robot.Subsystems.CoralIntake.CoralIntake;
 import frc.robot.Subsystems.CoralIntake.CoralIntakeHardware;
 import frc.robot.Subsystems.CoralIntake.CoralIntakeIO;
+import frc.robot.Subsystems.CoralIntake.CoralIntakeSim;
 import frc.robot.Subsystems.Elevator.Elevator;
 import frc.robot.Subsystems.Elevator.ElevatorHardware;
 import frc.robot.Subsystems.Elevator.ElevatorIO;
@@ -56,12 +61,15 @@ public class RobotContainer {
   private int id = 0;
 
   public RobotContainer() {
-    if (Robot.isReal()) {
+    if (Robot.isReal()) {   
+
       elevator = new Elevator(new ElevatorHardware());
       wrist = new Wrist(new WristHardware(), elevator);
       climb = new Climber(new ClimberHardware());
       intake = new CoralIntake(new CoralIntakeHardware());
+
     } else if (Robot.isSimulation()) {
+
       elevator = new Elevator(new ElevatorSim());
       wrist =
           new Wrist(
@@ -69,8 +77,14 @@ public class RobotContainer {
               elevator); // pass the current location of the wrist due to the stacked dof with
       // seperate subsystems
       climb = new Climber(new ClimberSim());
-      intake = new CoralIntake(new CoralIntakeIO() {}); // still no sim
+
+      // pass swerve sim to intake
+      if (drivebase.getAsSim().isPresent()) {
+      intake = new CoralIntake(new CoralIntakeSim(drivebase.getAsSim().get())); 
+      }
+
     } else {
+
       elevator = new Elevator(new ElevatorIO() {});
       wrist =
           new Wrist(
@@ -80,6 +94,21 @@ public class RobotContainer {
       climb = new Climber(new ClimberIO() {});
       intake = new CoralIntake(new CoralIntakeIO() {});
     }
+
+
+        //Needs to be alerts instead
+    CommandScheduler.getInstance()
+        .onCommandInitialize(
+            command ->
+                Logger.recordOutput("Commands",command.getName()));
+    CommandScheduler.getInstance()
+        .onCommandInterrupt(
+            command ->
+            Logger.recordOutput("Commands",command.getName()));
+    CommandScheduler.getInstance()
+        .onCommandFinish(
+            command ->
+            Logger.recordOutput("Commands",command.getName()));
 
     // breifly brings elevator down and resets its position
     // Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);
@@ -124,8 +153,8 @@ public class RobotContainer {
 
     // logging autos
     autoChooser.addDefaultOption("DEFAULT", AutoBuilder.buildAuto(Constants.PathPlanner.DEFAULT));
-    autoChooser.addOption("SYSID-DRIVE", drivebase.sysIdDriveMotorCommand());
-    autoChooser.addOption("SYSID-ANGLE", drivebase.sysIdAngleMotorCommand());
+    // autoChooser.addOption("PISSID-DRIVE", drivebase.sysIdDriveMotorCommand());
+    // autoChooser.addOption("PISSID-ANGLE", drivebase.sysIdAngleMotorCommand());
     String[] autos = AutoBuilder.getAllAutoNames().toArray(new String[0]);
     for (int i = 0; i < autos.length; i++) {
       autoChooser.addOption(autos[i], AutoBuilder.buildAuto(autos[i]));

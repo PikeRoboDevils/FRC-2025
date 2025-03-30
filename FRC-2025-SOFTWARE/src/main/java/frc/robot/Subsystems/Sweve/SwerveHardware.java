@@ -14,6 +14,9 @@ import frc.robot.Constants;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
@@ -231,6 +234,11 @@ public class SwerveHardware implements SwerveIO {
   @Override
   public Optional<Pose2d> getSimPose() {
     return swerveDrive.getSimulationDriveTrainPose();
+  }
+
+  @Override
+  public Optional<SwerveDriveSimulation> getSim(){
+    return swerveDrive.getMapleSimDrive();
   }
 
   @Override

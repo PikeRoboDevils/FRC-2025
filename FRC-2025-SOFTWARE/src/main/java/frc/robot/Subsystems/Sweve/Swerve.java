@@ -37,10 +37,14 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
+
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -423,18 +427,13 @@ public class Swerve extends SubsystemBase {
     Logger.recordOutput("Odometry/driveToPose/translateYPID", translateY.getPositionError());
     Logger.recordOutput("Odometry/driveToPose/rotatePID", rotateControl.getPositionError());
 
-    // does path planner already log current pose?
-    Logger.recordOutput("Odometry/PathPlanner/CurrentPose", AutoBuilder.getCurrentPose());
 
-    // if (Robot.isSimulation()) {
-    //   if (io.getSimPose()
-    //       .isPresent()) { // might be able to merge the ifs but just to be safe against null
-    // errors
-    //     // it isnt
-    //     Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
-    //     vision.visionSim.update(io.getPose());
-    //   }
-    // }
+    if (Robot.isSimulation()) {
+      if (io.getSimPose().isPresent()) { 
+        Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
+        // vision.visionSim.update(io.getPose());
+      }
+    }
 
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (Constants.Swerve.VISION) {
@@ -467,14 +466,16 @@ public class Swerve extends SubsystemBase {
    * @return The robot's pose
    */
   public Pose2d getPose() {
-    // return !Constants.Swerve.VISION ? io.getPose() : getVisionPose(); // inline if statement
     return io.getPose();
-    // Made it simple, can still use getMesPose for the normal pose
   }
 
   public Pose2d getMesPose() {
     return io.getPose();
     // use getPose() for the default pose
+  }
+  public Pose2d getSimPose() {
+    if (io.getSimPose().isEmpty()) return io.getPose();
+    return io.getSimPose().get();
   }
 
   public void resetPose(Pose2d pose) {
@@ -597,6 +598,7 @@ public class Swerve extends SubsystemBase {
   }
 
   // never tested already have a better version
+
   // public void slow(double speed, double angularSpeed) {
   //   io.getSwerve().setMaximumAllowableSpeeds(speed, speed);
   // }
@@ -605,26 +607,32 @@ public class Swerve extends SubsystemBase {
   //   io.getSwerve().setMaximumAllowableSpeeds(Constants.Swerve.MAXSPEED, Math.toRadians(540));
   // }
 
-  /**
-   * Command to characterize the robot drive motors using SysId
-   *
-   * @return SysId Drive Command
-   */
-  public Command sysIdDriveMotorCommand() {
-    return SwerveDriveTest.generateSysIdCommand(
-        SwerveDriveTest.setDriveSysIdRoutine(new Config(), this, io.getSwerve(), 12, true),
-        3.0,
-        5.0,
-        3.0);
+  // Sys id bad :(
+  // /**
+  //  * Command to characterize the robot drive motors using SysId
+  //  *
+  //  * @return SysId Drive Command
+  //  */
+  // public Command sysIdDriveMotorCommand() {
+  //   return SwerveDriveTest.generateSysIdCommand(
+  //       SwerveDriveTest.setDriveSysIdRoutine(new Config(), this, io.getSwerve(), 12, true),
+  //       3.0,
+  //       5.0,
+  //       3.0);
+  // }
+
+  // /**
+  //  * Command to characterize the robot angle motors using SysId
+  //  *
+  //  * @return SysId Angle Command
+  //  */
+  // public Command sysIdAngleMotorCommand() {
+  //   return SwerveDriveTest.generateSysIdCommand(
+  //       SwerveDriveTest.setAngleSysIdRoutine(new Config(), this, io.getSwerve()), 3.0, 5.0, 3.0);
+  // }
+
+  public Optional<SwerveDriveSimulation> getAsSim(){
+    return io.getSim();
   }
 
-  /**
-   * Command to characterize the robot angle motors using SysId
-   *
-   * @return SysId Angle Command
-   */
-  public Command sysIdAngleMotorCommand() {
-    return SwerveDriveTest.generateSysIdCommand(
-        SwerveDriveTest.setAngleSysIdRoutine(new Config(), this, io.getSwerve()), 3.0, 5.0, 3.0);
-  }
 }

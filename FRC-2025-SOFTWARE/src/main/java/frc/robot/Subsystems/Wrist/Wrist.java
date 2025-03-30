@@ -23,7 +23,7 @@ public class Wrist extends SubsystemBase {
   Elevator elevatorStage;
   private final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
 
-  private Pose3d _wristPose;
+  public Pose3d _wristPose;
 
   private boolean isBad;
 

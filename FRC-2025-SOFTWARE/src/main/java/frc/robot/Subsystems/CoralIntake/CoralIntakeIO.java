@@ -24,6 +24,8 @@ public interface CoralIntakeIO {
 
   public default void setVelocity(double speed) {}
 
+  public default void addCoral() {}
+
   public default double getVelocity() {
     return 0;
   }

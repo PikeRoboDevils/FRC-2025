@@ -10,6 +10,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import java.util.Optional;
+
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.AutoLog;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -129,6 +131,10 @@ public interface SwerveIO {
   }
 
   public default Optional<Pose2d> getSimPose() {
+    return null;
+  }
+
+  public default Optional<SwerveDriveSimulation> getSim() {
     return null;
   }
 

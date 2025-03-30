@@ -154,9 +154,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "AB - RIGHT SOURCE"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "STOW"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LAUNCH"
+                }
+              }
+            ]
           }
         }
       ]

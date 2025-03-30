@@ -6,6 +6,8 @@ package frc.robot.Subsystems.CoralIntake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -44,6 +46,7 @@ public class CoralIntake extends SubsystemBase {
   }
 
   public Command runIntakeAuto() {
+    if (Robot.isSimulation()){addCoralSim();}
     return run(() -> io.setVoltage(3)).until(() -> hasCoral());
   }
 
@@ -53,5 +56,8 @@ public class CoralIntake extends SubsystemBase {
 
   public Boolean hasCoral() {
     return io.hasCoral();
+  }
+  public void addCoralSim(){
+    io.addCoral();
   }
 }

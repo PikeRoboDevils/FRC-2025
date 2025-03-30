@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Simulation;
@@ -22,6 +24,7 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
 
   public Robot() {
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
@@ -64,6 +67,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
   }
 
+  
   // simulation period method in your Robot.java
   @Override
   public void simulationPeriodic() {
@@ -89,6 +93,9 @@ public class Robot extends LoggedRobot {
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
+    }
+    if (Robot.isSimulation()){
+      SimulatedArena.getInstance().resetFieldForAuto();
     }
   }
 
