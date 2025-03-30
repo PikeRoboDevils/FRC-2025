@@ -16,9 +16,10 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.Constants;
-import frc.robot.Constants.PoseCameraConstants;
 import frc.robot.Robot;
+import frc.robot.Utils.Constants;
+import frc.robot.Utils.Constants.PoseCameraConstants;
+
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;

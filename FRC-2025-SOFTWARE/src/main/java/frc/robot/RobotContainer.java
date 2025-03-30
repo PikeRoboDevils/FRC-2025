@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.Subsystems.Simulation;
 import frc.robot.Subsystems.Climber.Climber;
 import frc.robot.Subsystems.Climber.ClimberHardware;
 import frc.robot.Subsystems.Climber.ClimberIO;
@@ -36,7 +34,12 @@ import frc.robot.Subsystems.Wrist.Wrist;
 import frc.robot.Subsystems.Wrist.WristHardware;
 import frc.robot.Subsystems.Wrist.WristIO;
 import frc.robot.Subsystems.Wrist.WristSim;
-import frc.robot.Subsystems.commands.AbsoluteDriveAdv;
+import frc.robot.Utils.Constants;
+import frc.robot.Utils.LoggedCommandScheduler;
+import frc.robot.Utils.Simulation;
+import frc.robot.Utils.Constants.OperatorConstants;
+import frc.robot.Utils.commands.AbsoluteDriveAdv;
+
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -96,19 +99,6 @@ public class RobotContainer {
     }
 
 
-        //Needs to be alerts instead
-    CommandScheduler.getInstance()
-        .onCommandInitialize(
-            command ->
-                Logger.recordOutput("Commands",command.getName()));
-    CommandScheduler.getInstance()
-        .onCommandInterrupt(
-            command ->
-            Logger.recordOutput("Commands",command.getName()));
-    CommandScheduler.getInstance()
-        .onCommandFinish(
-            command ->
-            Logger.recordOutput("Commands",command.getName()));
 
     // breifly brings elevator down and resets its position
     // Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);

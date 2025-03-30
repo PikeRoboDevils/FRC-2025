@@ -10,7 +10,8 @@ import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.Constants;
+import frc.robot.Utils.Constants;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;

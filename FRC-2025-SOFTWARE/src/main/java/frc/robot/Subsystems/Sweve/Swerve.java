@@ -36,9 +36,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
+import frc.robot.Utils.Constants;
 
 import java.util.List;
 import java.util.Optional;

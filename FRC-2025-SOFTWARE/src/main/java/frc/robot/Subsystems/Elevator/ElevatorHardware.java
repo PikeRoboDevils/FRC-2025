@@ -20,7 +20,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Constants;
+import frc.robot.Utils.Constants;
 
 /** Add your docs here. */
 public class ElevatorHardware implements ElevatorIO {
