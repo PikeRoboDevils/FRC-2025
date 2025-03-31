@@ -187,9 +187,13 @@ public class Constants {
     // public static final int WristChannelB = 0;
     public static final boolean WristReverse = false;
 
-    public static final double kP_Wrist = 0.001;
-    public static final double kI_Wrist = 0;
-    public static final double kD_Wrist = 0;
+    public static final double kP_Wrist = 4;
+    public static final double kI_Wrist = 0.00004;// should help with elevator motions
+    public static final double kD_Wrist = 0.0004;//could be better
+
+    public static final double kS_Wrist = 0.02;
+    public static final double kV_Wrist = 0;// KEEP 0
+    public static final double kG_Wrist = -0.05;//trust me here
 
     public static final int ElevatorChannelA = 2;
     public static final int ElevatorChannelB = 3;
@@ -207,15 +211,16 @@ public class Constants {
     // public static final double kS_Elev = 0;
 
     // NEW ELEVATOR TUNING
-    public static final double kP_Elev = 5;
+    public static final double kP_Elev = 12.5;
     public static final double kI_Elev = 0;
-    public static final double kD_Elev = 0.05 ;
+    public static final double kD_Elev = 0.02;
 
-    public static final double kG_Elev = 0.3;
-    public static final double kV_Elev = 0.6;
-    public static final double maxVelocityElevator = 35; // THESE
-    public static final double maxAccelerationElevator = 40; // NEXT
-    public static final double kS_Elev = 0.2;
+    public static final double kG_Elev = 0.7;
+    public static final double kV_Elev = 1;
+    public static final double maxVelocityElevator = 30; 
+    public static final double maxAccelerationElevator = 50;
+    public static final double kS_Elev = 1.041;
+
     ;
   }
 }

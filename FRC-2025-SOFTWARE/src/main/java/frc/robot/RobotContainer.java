@@ -217,42 +217,42 @@ public class RobotContainer {
 
     Command coralSource =
         Commands.parallel(
-            elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 0.533 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 30).unless(wrist.wristDisabled));
 
-    Command coralL1 =
-        Commands.parallel(
-            elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+    // Command coralL1 =
+    //     Commands.parallel(
+    //         elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
+    //         wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
 
     Command coralL2 =
         Commands.parallel(
-            elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 0.6222 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("L2", coralL2);
 
     Command algaeL2 =
         Commands.parallel(
-            elevator.setPoint(() -> 7.4 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 0.5481 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     Command coralL3 =
         Commands.parallel(
-            elevator.setPoint(() -> 14.45 + operatorXbox.getLeftY() * 2), 
+            elevator.setPoint(() -> 1.0704 + operatorXbox.getLeftY() * 2), 
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("L3", coralL3);
 
     Command algaeL3 =
         Commands.parallel(
-            elevator.setPoint(() -> 13.45 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 0.996 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     Command coralL4 =
         Commands.parallel(
-            elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),            
+            elevator.setPoint(() -> 1.8 + operatorXbox.getLeftY() * 2),            
             wrist.setAngle(() -> -29.65+ operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
 
     Command coralL4AUTO =
         Commands.parallel(
-                elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
+                elevator.setPoint(() -> 1.8 + operatorXbox.getLeftY() * 2),
                 wrist.setAngle(() -> -29.65 + operatorXbox.getRightY() * 10))
             .until(() -> !intake.hasCoral());
     NamedCommands.registerCommand("L4", coralL4);
@@ -291,8 +291,8 @@ public class RobotContainer {
 
     // Overides
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 3));
-    wrist.setDefaultCommand(wrist.setVoltage(() -> 0.02));
-    operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 2));
+    // wrist.setDefaultCommand(wrist.setVoltage(() -> 0.02));
+    operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 12));
 
     // Climber
     operatorXbox
@@ -306,7 +306,6 @@ public class RobotContainer {
     operatorXbox.start().onTrue(Commands.runOnce(() -> elevator.reset(), elevator));
 
     operatorXbox.a().onTrue(stow);
-    operatorXbox.a().and(operatorXbox.povUp()).whileTrue(coralL1);
 
     operatorXbox.rightBumper().onTrue(coralSource);
 

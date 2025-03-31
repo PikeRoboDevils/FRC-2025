@@ -46,8 +46,8 @@ public class ElevatorSim implements ElevatorIO {
     // position control
     _feedforward =
         new ElevatorFeedforward(0, Constants.Encoders.kG_Elev, Constants.Encoders.kV_Elev);
-    profile = new TrapezoidProfile(new Constraints(15, 20)); // rotations a second
-    // new Constraints(Units.inchesToMeters(10), Units.inchesToMeters(2))); // m/s
+    // profile = new TrapezoidProfile(new Constraints(15, 20)); // rotations a second
+    profile = new TrapezoidProfile(new Constraints(Constants.Encoders.maxVelocityElevator,Constants.Encoders.maxAccelerationElevator)); // m/s
     positionController =
         new PIDController(
             Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
@@ -97,8 +97,8 @@ public class ElevatorSim implements ElevatorIO {
 
   @Override
   public double getPosition() {
-    return _elevator.getPositionMeters()
-        * 13.5; // TODO: Remove "/13.5" once absolute encoder is added
+    return _elevator.getPositionMeters();
+        // * 13.5; // TODO: Remove "/13.5" once absolute encoder is added
   }
 
   @Override

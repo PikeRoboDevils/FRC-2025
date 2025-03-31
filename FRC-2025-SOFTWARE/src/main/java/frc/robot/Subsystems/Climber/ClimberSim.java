@@ -17,7 +17,7 @@ public class ClimberSim implements ClimberIO {
   public ClimberSim() {
     _Climber = new SingleJointedArmSim(DCMotor.getNEO(1), 2.2, 8, 8, 8, 9, true, 0);
 
-    _feedforward = new ArmFeedforward(1, 1, 1);
+    _feedforward = new ArmFeedforward(0.5, 0, 1);
     _profiledPIDController = new ProfiledPIDController(5, 3, 6, new Constraints(1, 2));
   }
 
@@ -57,8 +57,7 @@ public class ClimberSim implements ClimberIO {
     inputs.ClimberCurrent = _Climber.getCurrentDrawAmps();
     inputs.ClimberEncoderAngle = Units.radiansToDegrees(_Climber.getAngleRads());
     inputs.ClimberVolt =
-        _Climber.getInput(
-            0); // I think this is the reference for voltage. Still needs checked, it would apear to
+        _Climber.getInput(0); // I think this is the reference for voltage. Still needs checked, it would apear to
     // be
     inputs.ClimberVelocity =
         Units.radiansPerSecondToRotationsPerMinute(_Climber.getVelocityRadPerSec());

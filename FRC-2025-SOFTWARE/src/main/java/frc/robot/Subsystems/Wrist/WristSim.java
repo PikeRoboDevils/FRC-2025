@@ -13,6 +13,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.Utils.Constants;
+import frc.robot.Utils.Constants.gearRatios;
 
 /** Add your docs here. */
 public class WristSim implements WristIO {
@@ -28,7 +30,7 @@ public class WristSim implements WristIO {
     _wrist =
         new SingleJointedArmSim(
             DCMotor.getNEO(1),
-            50,
+            1/gearRatios.Arm,
             SingleJointedArmSim.estimateMOI(Units.inchesToMeters(8), 5),
             Units.inchesToMeters(8),
             Units.degreesToRadians(-90),
@@ -36,10 +38,10 @@ public class WristSim implements WristIO {
             true,
             Units.degreesToRadians(90));
 
-    _feedforward = new ArmFeedforward(0.0, 0.0, 1); // not being used
-    profile = new TrapezoidProfile(new Constraints(10, 5)); // deg/s //not being used
+    _feedforward = new ArmFeedforward(Constants.Encoders.kS_Wrist, Constants.Encoders.kG_Wrist, Constants.Encoders.kV_Wrist);
+    profile = new TrapezoidProfile(new Constraints(720, 720)); // deg/s 
 
-    positionController = new PIDController(0.15, 0, 0); // from wrist hardware
+    positionController = new PIDController(Constants.Encoders.kP_Wrist, 0, Constants.Encoders.kD_Wrist); // from wrist hardware
   }
 
   @Override
@@ -77,21 +79,20 @@ public class WristSim implements WristIO {
     goal = new TrapezoidProfile.State(angleDeg, 0.0);
 
     setpoint = profile.calculate(0.02, setpoint, goal);
-    // setpoint = new TrapezoidProfile.State(0, 6);
-    runPosition(angleDeg);
+    runPosition(setpoint);
   }
 
-  // private void runPosition(TrapezoidProfile.State setpoint) {
-  //   double ff = _feedforward.calculate(setpoint.velocity, 0);
-  //   double output = positionController.calculate(getAngleDeg(), setpoint.position);
-  //   setVoltage(output + ff);
-  // }
-
-  private void runPosition(Double setpoint) {
-    double ff = 0.01; // _feedforward.calculate(getAngleRad(), 0);
-    double output = positionController.calculate(getAngleDeg(), setpoint);
+  private void runPosition(TrapezoidProfile.State setpoint) {
+    double ff = _feedforward.calculate(setpoint.position,setpoint.velocity);
+    double output = positionController.calculate(getAngleDeg(), setpoint.position);
     setVoltage(output + ff);
   }
+
+  // private void runPosition(Double setpoint) {
+  //   double ff = 0.01; // _feedforward.calculate(getAngleRad(), 0);
+  //   double output = positionController.calculate(getAngleDeg(), setpoint);
+  //   setVoltage(output + ff);
+  // }
 
   @Override
   public void setVoltage(double speed) {
