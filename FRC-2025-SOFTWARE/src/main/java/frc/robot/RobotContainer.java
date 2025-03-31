@@ -248,7 +248,7 @@ public class RobotContainer {
     Command coralL4 =
         Commands.parallel(
             elevator.setPoint(() -> 1.8 + operatorXbox.getLeftY() * 2),            
-            wrist.setAngle(() -> -29.65+ operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> -35+ operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
 
     Command coralL4AUTO =
         Commands.parallel(
@@ -291,7 +291,6 @@ public class RobotContainer {
 
     // Overides
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 3));
-    // wrist.setDefaultCommand(wrist.setVoltage(() -> 0.02));
     operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 12));
 
     // Climber

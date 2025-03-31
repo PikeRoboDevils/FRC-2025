@@ -20,6 +20,7 @@ import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N0;
 import edu.wpi.first.math.numbers.N1;
@@ -27,6 +28,7 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
@@ -125,7 +127,7 @@ public class CoralIntakeSim implements CoralIntakeIO {
         // Obtain robot position from drive simulation
         drivebaseSim.getSimulatedDriveTrainPose().getTranslation(),
         // The scoring mechanism location at base of robot
-        new Translation2d(intake.getMeasureX(),intake.getMeasureY()),
+        new Translation2d(Units.inchesToMeters(14),0),
         // Obtain robot speed from drive simulation
         drivebaseSim.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
         // Obtain robot facing from drive simulation
@@ -133,9 +135,9 @@ public class CoralIntakeSim implements CoralIntakeIO {
         // The height at which the coral is ejected
         intake.getMeasureZ(),
         // The initial speed of the coral
-        MetersPerSecond.of(-1),
+        MetersPerSecond.of(3),
         // The coral angle
-        intake.getRotation().getMeasureAngle()));
+        new Rotation2d(Units.degreesToRadians(-75)).getMeasure()));
 
   }
   @Override
