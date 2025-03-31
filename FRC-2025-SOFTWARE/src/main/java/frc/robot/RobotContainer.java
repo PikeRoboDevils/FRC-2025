@@ -274,9 +274,9 @@ public class RobotContainer {
     driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 2)); // In
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
-    // switch cam doesnt always work
-    // driverXbox.rightBumper().onTrue(Commands.runOnce(() -> drivebase.switchCamera(), drivebase));
-    // operatorXbox.leftTrigger().onTrue(drivebase.swictchCamera());
+    if (Constants.OperatorConstants.driverPractice){
+     operatorXbox.leftTrigger().onTrue(Commands.runOnce(()->intake.addCoralSim(), intake));
+    }
 
     // Drive Slow
     driverXbox
