@@ -11,6 +11,9 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -39,6 +42,7 @@ import frc.robot.Subsystems.Wrist.WristHardware;
 import frc.robot.Subsystems.Wrist.WristIO;
 import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Utils.AlignToReef;
+import frc.robot.Utils.DriveTo;
 import frc.robot.Utils.Constants;
 import frc.robot.Utils.LoggedCommandScheduler;
 import frc.robot.Utils.Simulation;
@@ -56,7 +60,9 @@ public class RobotContainer {
   private final Swerve drivebase = new Swerve(new SwerveHardware());
 
   private final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+//   private DriveTo otfPathFactory = new DriveTo(drivebase,tagLayout); //do not use will get confusing
   private AlignToReef reefAlignmentFactory = new AlignToReef(drivebase, tagLayout); // we love 4915
+
 
   public static Wrist wrist; // TODO: temp solution
   public static Elevator elevator; // TODO: temp solution
@@ -331,14 +337,20 @@ public class RobotContainer {
 
     // Drive To pose commands.
     if (Constants.Swerve.VISION) {
+        //To Reef
       driverXbox
           .leftBumper()
           .whileTrue(reefAlignmentFactory.generateCommand("L").withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-       driverXbox
-        .leftBumper()
-        .toggleOnFalse(
-            Commands.runOnce(
-                () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
+    //    driverXbox
+    //     .leftBumper()
+    //     .toggleOnFalse(
+    //         Commands.runOnce(
+    //             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
+
+                //To Source
+        // driverXbox.rightBumper()
+        // .whileTrue(otfPathFactory.generateCommand(new Pose2d(1.45,0.6,new Rotation2d(Units.degreesToRadians(-143)))));
+        
     }
   }
 

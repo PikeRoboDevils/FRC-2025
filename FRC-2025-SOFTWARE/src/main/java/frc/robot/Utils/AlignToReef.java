@@ -37,23 +37,19 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import static frc.robot.Utils.Constants.PathPlanner.*;
 import frc.robot.Subsystems.Sweve.*;
 
-public class AlignToReef {
-
-        
-    private static final PathConstraints kAutoPathConstraints = constraints;
-        
-    private static final PathConstraints kTeleopPathConstraints = constraints;//wont change for now
+public class AlignToReef extends DriveTo{
 
     public boolean isPIDLoopRunning = false;
 
-    private final Swerve mSwerve;
-                
-    public static ArrayList<Pose2d> blueReefTagPoses = new ArrayList<>();
-    public static ArrayList<Pose2d> redReefTagPoses = new ArrayList<>();
-    public static ArrayList<Pose2d> allReefTagPoses = new ArrayList<>();
-                
-        public AlignToReef(Swerve mSwerve, AprilTagFieldLayout field) {
-            this.mSwerve = mSwerve;
+    private Swerve mSwerve;
+                    
+        public static ArrayList<Pose2d> blueReefTagPoses = new ArrayList<>();
+        public static ArrayList<Pose2d> redReefTagPoses = new ArrayList<>();
+        public static ArrayList<Pose2d> allReefTagPoses = new ArrayList<>();
+                    
+            public AlignToReef(Swerve mSwerve, AprilTagFieldLayout field) {
+                super(mSwerve, field);//for pathplanner 
+                this.mSwerve = mSwerve;
 
             Arrays.stream(new int[]{6, 7, 8, 9, 10, 11}).forEach((i) -> {
             field.getTagPose(i).ifPresent((p) -> {
@@ -94,7 +90,6 @@ public class AlignToReef {
      //TODO: USE AKIT
     private final StructPublisher<Pose2d> desiredBranchPublisher = NetworkTableInstance.getDefault().getTable("logging").getStructTopic("desired branch", Pose2d.struct).publish();
 
-    private PathConstraints pathConstraints = kAutoPathConstraints;
         
     /**
      * Side can be "L" or "R" and will go to that side of the april tag
@@ -110,69 +105,6 @@ public class AlignToReef {
                 // .finallyDo(()->mSwerve.setDefaultCommand(temp));
 
             }
-        
-private Command getPathFromWaypoint(Pose2d waypoint) {
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-    new Pose2d(mSwerve.getVisionPose().getTranslation(), getPathVelocityHeading(mSwerve.getFieldVelocity(), waypoint)),waypoint);
-        
-        if (waypoints.get(0).anchor().getDistance(waypoints.get(1).anchor()) < 0.01) {
-        return 
-        Commands.sequence(
-        Commands.print("start position PID loop"),
-        PositionPIDCommand.generateCommand(mSwerve, waypoint, kAutoAlignAdjustTimeout,true),
-        Commands.print("end position PID loop")
-     );
-                }
-        
-                PathPlannerPath path = new PathPlannerPath(
-                    waypoints, 
-                    DriverStation.isAutonomous() ? pathConstraints : kTeleopPathConstraints,
-                    new IdealStartingState(getVelocityMagnitude(mSwerve.getFieldVelocity()), mSwerve.getHeading()), 
-                    new GoalEndState(0.0, waypoint.getRotation())
-                );
-        
-                path.preventFlipping = true;
-        
-                return (AutoBuilder.followPath(path).andThen(
-                    Commands.print("start position PID loop"),
-                    PositionPIDCommand.generateCommand(mSwerve, waypoint, (
-                        DriverStation.isAutonomous() ? kAutoAlignAdjustTimeout : kTeleopAlignAdjustTimeout
-            ),DriverStation.isAutonomous() ? true : false)//for teleop at least
-                .beforeStarting(Commands.runOnce(() -> {isPIDLoopRunning = true;}))
-                .finallyDo(() -> {isPIDLoopRunning = false;})
-        )).finallyDo((interupt) -> {
-            if (interupt) { //if this is false then the position pid would've X braked & called the same method
-                Commands.none();// does nothing so we can keep driving
-            }
-        });
-    }
-    
-
-    /**
-     * 
-     * @param cs field relative chassis speeds
-     * @return
-     */
-    private Rotation2d getPathVelocityHeading(ChassisSpeeds cs, Pose2d target){
-        if (getVelocityMagnitude(cs).in(MetersPerSecond) < 0.25) {
-            System.out.println("approach: straight line");
-            var diff = target.getTranslation().minus(mSwerve.getVisionPose().getTranslation());
-            System.out.println("diff calc: \nx: " + diff.getX() + "\ny: " + diff.getY() + "\nDoT: " + diff.getAngle().getDegrees());
-            return (diff.getNorm() < 0.01) ? target.getRotation() : diff.getAngle();//.rotateBy(Rotation2d.k180deg);
-        }
-
-        System.out.println("approach: compensating for velocity");
-
-        var rotation = new Rotation2d(cs.vxMetersPerSecond, cs.vyMetersPerSecond);
-        
-        System.out.println("velocity calc: \nx: " + cs.vxMetersPerSecond + "\ny: " + cs.vyMetersPerSecond + "\nDoT: " + rotation);
-
-        return rotation;
-    }
-
-    private LinearVelocity getVelocityMagnitude(ChassisSpeeds cs){
-        return MetersPerSecond.of(new Translation2d(cs.vxMetersPerSecond, cs.vyMetersPerSecond).getNorm());
-    }
 
     /**
      * 
