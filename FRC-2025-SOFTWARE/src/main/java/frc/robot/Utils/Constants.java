@@ -119,23 +119,23 @@ public class Constants {
             Units.inchesToMeters(13),
             Units.inchesToMeters(8));
 
-    public static String CAM2N = "ELEV_CAM";
+    // public static String CAM3N = "ELEV_CAM";
 
-    public static Rotation3d CAM2R =
-        new Rotation3d(Math.PI, 0, 0);
+    // public static Rotation3d CAM3R =
+    //     new Rotation3d(Math.PI, 0, 0);
 
-    public static Translation3d CAM2T =
-        new Translation3d(
-            Units.inchesToMeters(4.5), // transform of camera (dont forget forward+ left+ up+)
-            Units.inchesToMeters(14), // to right
-            Units.inchesToMeters(14));
+    // public static Translation3d CAM3T =
+    //     new Translation3d(
+    //         Units.inchesToMeters(4.5), // transform of camera (dont forget forward+ left+ up+)
+    //         Units.inchesToMeters(14), // to right
+    //         Units.inchesToMeters(14));
 
-  public static String CAM3N = "RIGHT_CAM";
+  public static String CAM2N = "RIGHT_CAM";
     
-    public static Rotation3d CAM3R =
+    public static Rotation3d CAM2R =
         new Rotation3d(0, Units.degreesToRadians(25), Units.degreesToRadians(180));
 
-    public static Translation3d CAM3T =
+    public static Translation3d CAM2T =
         new Translation3d(
           Units.inchesToMeters(4.), // transform of camera (dont forget forward+ left+ up+)
           Units.inchesToMeters(-13),
