@@ -16,6 +16,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Time;
+
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -166,6 +170,11 @@ public class Constants {
     public static Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
     public static PathConstraints constraints =
         new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    public static Time kEndTriggerDebounce;
+    public static Distance kPositionTolerance;
+    public static Distance kSpeedTolerance;
+    public static Rotation2d kRotationTolerance = Rotation2d.fromDegrees(90);
   }
 
   public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??
