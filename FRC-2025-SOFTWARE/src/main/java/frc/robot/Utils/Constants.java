@@ -170,8 +170,13 @@ public class Constants {
     public static final String DEFAULT = "";
 
     public static Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
-    public static PathConstraints constraints =
-        new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    public static PathConstraints kTeleopPathConstraints =
+        new PathConstraints(5.0, 5.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    public static PathConstraints kAutoPathConstraints =
+        new PathConstraints(2.0, 1.0, Units.degreesToRadians(360), Units.degreesToRadians(180));
+
 
         // AUTO Align 
     public static Time kEndTriggerDebounce = Time.ofBaseUnits(1, Seconds);

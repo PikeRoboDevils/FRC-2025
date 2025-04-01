@@ -1,9 +1,7 @@
 package frc.robot.Utils;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static frc.robot.Utils.Constants.PathPlanner.constraints;
-import static frc.robot.Utils.Constants.PathPlanner.kAutoAlignAdjustTimeout;
-import static frc.robot.Utils.Constants.PathPlanner.kTeleopAlignAdjustTimeout;
+import static frc.robot.Utils.Constants.PathPlanner.*;
 
 import java.util.List;
 import java.util.Set;
@@ -30,11 +28,6 @@ import frc.robot.Subsystems.Sweve.Swerve;
  * A Util Class for making path on the fly for all auto movement with vision or object detection in the future
  */
 public class DriveTo {
-    
-
-        private static final PathConstraints kAutoPathConstraints = constraints;
-        
-    private static final PathConstraints kTeleopPathConstraints = constraints;//wont change for now
 
     public boolean isPIDLoopRunning = false;
 
