@@ -4,10 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "LEFT",
-    "MID",
     "RIGHT",
+    "STARTS",
     "Simulations",
-    "Testing"
+    "TO SOURCE"
   ],
   "autoFolders": [],
   "defaultMaxVel": 5.0,

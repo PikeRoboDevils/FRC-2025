@@ -3,40 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.914959016393443,
-        "y": 4.978022540983606
+        "x": 3.6496022727272726,
+        "y": 2.8633096590909086
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.824959016393443,
-        "y": 4.978022540983606
+        "x": 3.3499096497764533,
+        "y": 2.779395724664679
       },
       "isLocked": false,
-      "linkedName": "WOW"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5413934426229505,
-        "y": 3.407633196721311
+        "x": 1.555568181818182,
+        "y": 0.6097301136363626
       },
       "prevControl": {
-        "x": 1.2826844262295076,
-        "y": 6.236731557377048
+        "x": 1.915199329359165,
+        "y": 2.0962055234724284
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "WOW2"
+      "linkedName": "RIGHT SOURCE"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6212018906144555,
-      "maxWaypointRelativePos": 0.7832545577312633,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.2565833896016183,
       "constraints": {
-        "maxVelocity": 6.0,
+        "maxVelocity": 3.0,
         "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7400405131667752,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -52,17 +65,17 @@
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -127.87498365109822
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "TO SOURCE",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": 56.853004167743954
   },
   "useDefaultConstraints": true
 }

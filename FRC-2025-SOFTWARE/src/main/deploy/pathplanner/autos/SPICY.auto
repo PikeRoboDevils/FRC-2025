@@ -11,63 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RIGHT - IJ"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CORAL_IN"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CORAL_OUT"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "IJ - RIGHT SOURCE"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "SOURCE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CORAL_IN"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "R_SOURCE - KL"
+                  "pathName": "START RIGHT - IJ"
                 }
               },
               {
@@ -110,20 +54,20 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "KL - RIGHT SOURCE"
+                  "pathName": "IJ - RIGHT"
                 }
               }
             ]
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RIGHT SOURCE - AB"
+                  "pathName": "RIGHT - KL"
                 }
               },
               {
@@ -148,9 +92,59 @@
           }
         },
         {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SOURCE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "KL - RIGHT"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RIGHT - AB"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "STOW"
+            "name": "CORAL_OUT"
           }
         },
         {
