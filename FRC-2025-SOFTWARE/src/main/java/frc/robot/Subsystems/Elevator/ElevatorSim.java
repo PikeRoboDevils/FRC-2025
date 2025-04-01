@@ -50,7 +50,7 @@ public class ElevatorSim implements ElevatorIO {
     // new Constraints(Units.inchesToMeters(10), Units.inchesToMeters(2))); // m/s
     positionController =
         new PIDController(
-            Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
+            Constants.Encoders.kP_Elev, 0, Constants.Encoders.kD_Elev);
     // wonky
   }
 
