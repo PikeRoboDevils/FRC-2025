@@ -18,6 +18,7 @@ import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
+import com.reduxrobotics.canand.CanandDeviceDetails.Msg;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -33,15 +34,11 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
-import static frc.robot.Utils.Constants.PathPlanner.constraints;
+import static frc.robot.Utils.Constants.PathPlanner.*;
 import frc.robot.Subsystems.Sweve.*;
 
 public class AlignToReef {
-    
-    //TODO:MOVE TO CONSTANTS
-    private static final Time kAutoAlignAdjustTimeout = null;
-    
-    private static final Time kTeleopAlignAdjustTimeout = null;
+
         
     private static final PathConstraints kAutoPathConstraints = constraints;
         
@@ -103,12 +100,15 @@ public class AlignToReef {
      * Side can be "L" or "R" and will go to that side of the april tag
      */
     public Command generateCommand(String side) {
+        // var temp = mSwerve.getCurrentCommand();
         return Commands.defer(() -> {
             var branch = getClosestBranch(side, mSwerve);
                 desiredBranchPublisher.accept(branch);
             
     return getPathFromWaypoint(getWaypointFromBranch(branch));
                 }, Set.of());
+                // .finallyDo(()->mSwerve.setDefaultCommand(temp));
+
             }
         
 private Command getPathFromWaypoint(Pose2d waypoint) {
@@ -119,7 +119,7 @@ private Command getPathFromWaypoint(Pose2d waypoint) {
         return 
         Commands.sequence(
         Commands.print("start position PID loop"),
-        PositionPIDCommand.generateCommand(mSwerve, waypoint, kAutoAlignAdjustTimeout),
+        PositionPIDCommand.generateCommand(mSwerve, waypoint, kAutoAlignAdjustTimeout,true),
         Commands.print("end position PID loop")
      );
                 }
@@ -137,13 +137,12 @@ private Command getPathFromWaypoint(Pose2d waypoint) {
                     Commands.print("start position PID loop"),
                     PositionPIDCommand.generateCommand(mSwerve, waypoint, (
                         DriverStation.isAutonomous() ? kAutoAlignAdjustTimeout : kTeleopAlignAdjustTimeout
-            ))
+            ),DriverStation.isAutonomous() ? true : false)//for teleop at least
                 .beforeStarting(Commands.runOnce(() -> {isPIDLoopRunning = true;}))
-                .finallyDo(() -> {isPIDLoopRunning = false;}),
-            Commands.print("end position PID loop")
+                .finallyDo(() -> {isPIDLoopRunning = false;})
         )).finallyDo((interupt) -> {
             if (interupt) { //if this is false then the position pid would've X braked & called the same method
-                mSwerve.drive(new Translation2d(),0,false);// stops driving
+                Commands.none();// does nothing so we can keep driving
             }
         });
     }
@@ -183,6 +182,7 @@ private Command getPathFromWaypoint(Pose2d waypoint) {
         return new Pose2d(
             branch.getTranslation(),
             branch.getRotation().rotateBy(Rotation2d.k180deg)
+            // getBranchRotation(mSwerve)
         );
     }
 
@@ -201,8 +201,8 @@ private Command getPathFromWaypoint(Pose2d waypoint) {
         Pose2d tag = getClosestReefAprilTag(swervePose);
         Translation2d branchOffset =
         (branch == "L")?
-        new Translation2d():
-        new Translation2d();
+        new Translation2d(0,0):
+        new Translation2d(0,0);
         return getBranchFromTag(tag, branchOffset);
     }
 
@@ -210,7 +210,8 @@ private Command getPathFromWaypoint(Pose2d waypoint) {
     private static Pose2d getBranchFromTag(Pose2d tag, Translation2d offset) {
         var translation = tag.getTranslation().plus(
             offset
-            ).rotateBy(tag.getRotation());
+            );
+            //.rotateBy(tag.getRotation()); //broke it completely
 
         return new Pose2d(
             translation.getX(),

@@ -83,11 +83,12 @@ public class PositionPIDCommand extends Command{
     }
 
 
-    public static Command generateCommand(Swerve swerve, Pose2d goalPose, Time timeout){
+    public static Command generateCommand(Swerve swerve, Pose2d goalPose, Time timeout,Boolean freeze){
         return new PositionPIDCommand(swerve, goalPose).withTimeout(timeout).finallyDo(() -> {
-            //same as telling it to freeze
-            swerve.drive(new Translation2d(),0,false);
+            if (freeze){
+            swerve.driveRobotRelative(new ChassisSpeeds());
             swerve.lock();
+        }
         });
     }
 
@@ -105,9 +106,7 @@ public class PositionPIDCommand extends Command{
         endTriggerLogger.accept(endTrigger.getAsBoolean());
         ChassisSpeeds speeds = mDriveController.calculateRobotRelativeSpeeds(
             mSwerve.getPose(), goalState);
-        mSwerve.drive( // ROBOT RELATIVE
-            new Translation2d(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond),speeds.omegaRadiansPerSecond,false
-        );
+        mSwerve.driveRobotRelative(speeds);
 
         xErrLogger.accept(mSwerve.getPose().getX() - goalPose.getX());
         yErrLogger.accept(mSwerve.getPose().getY() - goalPose.getY());

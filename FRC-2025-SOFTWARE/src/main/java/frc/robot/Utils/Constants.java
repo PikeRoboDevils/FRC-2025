@@ -2,6 +2,7 @@ package frc.robot.Utils;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.pathplanner.lib.config.ModuleConfig;
@@ -172,10 +173,14 @@ public class Constants {
         new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
         // AUTO Align 
-    public static Time kEndTriggerDebounce;
-    public static Distance kPositionTolerance;
-    public static Distance kSpeedTolerance;
-    public static Rotation2d kRotationTolerance = Rotation2d.fromDegrees(90);
+    public static Time kEndTriggerDebounce = Time.ofBaseUnits(1, Seconds);
+
+    public static Time kTeleopAlignAdjustTimeout = Time.ofBaseUnits(10, Seconds);
+    public static Time kAutoAlignAdjustTimeout = Time.ofBaseUnits(3, Seconds);
+
+    public static Distance kPositionTolerance = Distance.ofBaseUnits(1, Inches);
+    public static Distance kSpeedTolerance = Distance.ofBaseUnits(1, Inches);
+    public static Rotation2d kRotationTolerance = Rotation2d.fromDegrees(1);
   }
 
   public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Subsystems.Climber.Climber;
 import frc.robot.Subsystems.Climber.ClimberHardware;
@@ -272,7 +273,7 @@ public class RobotContainer {
     // Drive Controller Commands
 
     // Generic
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity.withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.a().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
     driverXbox.a().whileFalse(Commands.run(() -> drivebase.unlock()));
@@ -292,11 +293,7 @@ public class RobotContainer {
     //     .leftBumper()
     //     .toggleOnTrue(
     //         Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
-    // driverXbox
-    //     .leftBumper()
-    //     .toggleOnFalse(
-    //         Commands.runOnce(
-    //             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
+ 
 
     // Overides
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 3));
@@ -332,11 +329,16 @@ public class RobotContainer {
     // operatorXbox.povRight().onTrue((wrist.toggle()));
     
 
-    // Drive To pose commands. Might be worth rediong to be a single command
+    // Drive To pose commands.
     if (Constants.Swerve.VISION) {
       driverXbox
           .leftBumper()
-          .whileTrue(reefAlignmentFactory.generateCommand("L"));
+          .whileTrue(reefAlignmentFactory.generateCommand("L").withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+       driverXbox
+        .leftBumper()
+        .toggleOnFalse(
+            Commands.runOnce(
+                () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
     }
   }
 
