@@ -67,10 +67,7 @@ public class WristHardware implements WristIO {
 
     motorConfig.smartCurrentLimit(40);
     motorConfig.idleMode(IdleMode.kCoast);
-    motorConfig.voltageCompensation(
-        12); // may be tweaked depending on voltage drain. Highly reccomended from a consistancy and
-    // smoothness standpoint
-
+    
     /*
      * Configure the encoder. For this specific example, we are using the
      * integrated encoder of the NEO, and we don't need to configure it. If

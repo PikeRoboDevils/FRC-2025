@@ -57,7 +57,7 @@ public class ElevatorHardware implements ElevatorIO {
         new TrapezoidProfile(
             new Constraints(
                 Constants.Encoders.maxVelocityElevator,
-                Constants.Encoders.maxAccelerationElevator)); // rotations a second
+                Constants.Encoders.maxAccelerationElevator));
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
@@ -109,7 +109,8 @@ public class ElevatorHardware implements ElevatorIO {
   @Override
   public void setPosition(double position) {
 
-    goal = new TrapezoidProfile.State(position, 0.0);
+    //TEMP NEW SETPOINTS IN SIM BRANCH
+    goal = new TrapezoidProfile.State(position/13.5, 0.0);
 
     setpoint = profile.calculate(0.02, setpoint, goal);
     // setpoint = new TrapezoidProfile.State(0, 6);
