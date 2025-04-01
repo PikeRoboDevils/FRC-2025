@@ -408,13 +408,12 @@ public class VisionSwerve {
         VecBuilder.fill(
             n1StndardDevs * 0.25, n2StandardDevs * 0.25, n4StandardDevs * 0.25) // std devs
         ),
-  // CAM_3(
-  //     (String) PoseCameraConstants.CAM3[0],
-  //     (Rotation3d) PoseCameraConstants.CAM3[1], // rotation of camera
-  //     (Translation3d)
-  //         PoseCameraConstants.CAM3[2], // transform of camera (dont forget forwatd+ left+ up+)
-  //     VecBuilder.fill(4, 4, 8),
-  //     VecBuilder.fill(0.5, 0.5, 1)),
+  CAM_3(
+    PoseCameraConstants.CAM3N,
+      PoseCameraConstants.CAM3R, // rotation of camera
+      PoseCameraConstants.CAM3T, // transform of camera (dont forget forwatd+ left+ up+)
+      VecBuilder.fill(4, 4, 8),
+      VecBuilder.fill(0.5, 0.5, 1))
   // CAM_4("CAM4",
   // CameraConstants.CAM1R,
   // CameraConstants.CAM1T,
@@ -461,7 +460,7 @@ public class VisionSwerve {
       latencyAlert =
           new Alert("'" + name + "' Camera is experiencing high latency.", AlertType.kWarning);
 
-      camera = new PhotonCamera("LEFT_CAM");
+      camera = new PhotonCamera(name);
 
       // https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html
       robotToCamTransform = new Transform3d(robotToCamTranslation, robotToCamRotation);

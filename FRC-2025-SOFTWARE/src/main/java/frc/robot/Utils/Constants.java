@@ -120,27 +120,28 @@ public class Constants {
             Units.inchesToMeters(8));
 
     public static String CAM2N = "ELEV_CAM";
-    // GOOD
+
     public static Rotation3d CAM2R =
-        new Rotation3d(Math.PI, 0, Units.degreesToRadians(0));
+        new Rotation3d(Math.PI, 0, 0);
+
     public static Translation3d CAM2T =
         new Translation3d(
             Units.inchesToMeters(4.5), // transform of camera (dont forget forward+ left+ up+)
             Units.inchesToMeters(14), // to right
             Units.inchesToMeters(14));
 
-    // public static Object[] CAM3 = new Object[3];
+  public static String CAM3N = "RIGHT_CAM";
+    
+    public static Rotation3d CAM3R =
+        new Rotation3d(0, Units.degreesToRadians(25), Units.degreesToRadians(180));
 
-    // {
-    //   CAM3[0] = "FrontIn";
+    public static Translation3d CAM3T =
+        new Translation3d(
+          Units.inchesToMeters(4.), // transform of camera (dont forget forward+ left+ up+)
+          Units.inchesToMeters(-13),
+          Units.inchesToMeters(8));
 
-    //   CAM3[1] = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20));
-
-    //   CAM3[2] =
-    //       new Translation3d(
-    //           Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
-    //           Units.inchesToMeters(-10.687),
-    //           Units.inchesToMeters(20.915));
+   
     // }
 
     // it goes up to 4 but it is commented out in SwerveVision
