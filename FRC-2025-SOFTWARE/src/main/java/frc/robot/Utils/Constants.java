@@ -43,6 +43,7 @@ public class Constants {
 
   public class gearRatios {
 
+    public static double Climber = 1/2; //TODO
     public static double Arm = (11.0 / 42.0) * (1.0 / 25.0); // inverted
   }
 
@@ -182,18 +183,24 @@ public class Constants {
   }
 
   public static class Encoders {
+    // climber limit switch
+    public static final int ClimbChannel = 0;
 
-    public static final int WristChannel = 8;
-    // public static final int WristChannelB = 0;
-    public static final boolean WristReverse = false;
+    public static final double kP_Climber = 0.001;
+    // public static final double kI_Climber = 0;
+    public static final double kD_Climber = 0;
 
-    public static final double kP_Wrist = 0.001;
-    public static final double kI_Wrist = 0;
+    
+    public static final double kP_Wrist = 0.15;
+    // public static final double kI_Wrist = 0;
     public static final double kD_Wrist = 0;
 
-    public static final int ElevatorChannelA = 2;
-    public static final int ElevatorChannelB = 3;
-    public static final boolean ElevatorReverse = false;
+    public static final double kG_Wrist = 0.032;
+    public static final double kV_Wrist = 0.0;
+    public static final double kS_Wrist = 0.0;
+
+    public static final double maxVelocityWrist = 1; 
+    public static final double maxAccelerationWrist = 1;
 
     // OLD ELEVATOR TUNING
     // public static final double kP_Elev = 7;
@@ -208,14 +215,14 @@ public class Constants {
 
     // NEW ELEVATOR TUNING
     public static final double kP_Elev = 5;
-    public static final double kI_Elev = 0;
+    // public static final double kI_Elev = 0;
     public static final double kD_Elev = 0.05 ;
 
     public static final double kG_Elev = 0.3;
     public static final double kV_Elev = 0.6;
+    public static final double kS_Elev = 0.2;
+
     public static final double maxVelocityElevator = 35; // THESE
     public static final double maxAccelerationElevator = 40; // NEXT
-    public static final double kS_Elev = 0.2;
-    ;
   }
 }
