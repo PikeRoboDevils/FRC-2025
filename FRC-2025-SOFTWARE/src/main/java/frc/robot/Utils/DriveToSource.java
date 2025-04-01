@@ -2,9 +2,16 @@ package frc.robot.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 import static frc.robot.Utils.Constants.PathPlanner.*;
 import frc.robot.Subsystems.Sweve.*;
@@ -15,17 +22,17 @@ public class DriveToSource extends DriveTo{
 
     private Swerve mSwerve;
                     
-        public static ArrayList<Pose2d> blueReefTagPoses = new ArrayList<>();
-        public static ArrayList<Pose2d> redReefTagPoses = new ArrayList<>();
-        public static ArrayList<Pose2d> allReefTagPoses = new ArrayList<>();
+        public static ArrayList<Pose2d> blueSourceTagPoses = new ArrayList<>();
+        public static ArrayList<Pose2d> redSourceTagPoses = new ArrayList<>();
+        public static ArrayList<Pose2d> allSourceTagPoses = new ArrayList<>();
                     
             public DriveToSource(Swerve mSwerve, AprilTagFieldLayout field) {
                 super(mSwerve, field);//for pathplanner 
                 this.mSwerve = mSwerve;
 
-            Arrays.stream(new int[]{6, 7, 8, 9, 10, 11}).forEach((i) -> {
+            Arrays.stream(new int[]{1, 2}).forEach((i) -> {
             field.getTagPose(i).ifPresent((p) -> {
-                blueReefTagPoses.add(new Pose2d(
+                blueSourceTagPoses.add(new Pose2d(
                     p.getMeasureX(),
                     p.getMeasureY(),
                     p.getRotation().toRotation2d()
@@ -33,9 +40,9 @@ public class DriveToSource extends DriveTo{
             });
         });
 
-        Arrays.stream(new int[]{17, 18, 19, 20, 21, 22}).forEach((i) -> {
+        Arrays.stream(new int[]{12, 13}).forEach((i) -> {
             field.getTagPose(i).ifPresent((p) -> {
-                redReefTagPoses.add(new Pose2d(
+                redSourceTagPoses.add(new Pose2d(
                     p.getMeasureX(),
                     p.getMeasureY(),
                     p.getRotation().toRotation2d()
@@ -43,9 +50,9 @@ public class DriveToSource extends DriveTo{
             });
         });
 
-        Arrays.stream((new int[]{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22})).forEach((i) -> {
+        Arrays.stream((new int[]{1,2,12,13})).forEach((i) -> {
             field.getTagPose(i).ifPresent((p) -> {
-                allReefTagPoses.add(new Pose2d(
+                allSourceTagPoses.add(new Pose2d(
                     p.getMeasureX(),
                     p.getMeasureY(),
                     p.getRotation().toRotation2d()
@@ -58,4 +65,53 @@ public class DriveToSource extends DriveTo{
          */
 
 }
+
+    public Command generateCommand() {
+        return Commands.defer(() -> {
+    return getPathFromWaypoint(getWaypointSide(getClosestSide(mSwerve)));
+                }, Set.of());
+                
+
+            }
+
+                /**
+     * Where all the robot tranformations should be done
+     * @return Pathplanner waypoint with direction of travel away from the associated source side
+     */
+    private Pose2d getWaypointSide(Pose2d branch){
+        return new Pose2d(
+            branch.getTranslation(),
+            branch.getRotation().rotateBy(Rotation2d.k180deg)
+            // getBranchRotation(mSwerve)
+        );
+    }
+
+    // combine the two
+    public static Pose2d getClosestSide(Swerve swerve){
+        Pose2d swervePose = swerve.getVisionPose();
+        
+        Pose2d tag = getClosestSide(swervePose);
+        return tag;
+    }
+
+    
+
+        public static Pose2d getClosestSide(Pose2d pose) {
+        var alliance = DriverStation.getAlliance();
+        
+        ArrayList<Pose2d> SourcePoseList;
+        if (alliance.isEmpty()) {
+            SourcePoseList = allSourceTagPoses;
+        } else{
+            SourcePoseList = alliance.get() == Alliance.Blue ? 
+                blueSourceTagPoses :
+                redSourceTagPoses;
+        }
+
+
+        return pose.nearest(SourcePoseList);
+
+    }
+
+
 }

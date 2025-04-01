@@ -42,7 +42,7 @@ import frc.robot.Subsystems.Wrist.WristHardware;
 import frc.robot.Subsystems.Wrist.WristIO;
 import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Utils.AlignToReef;
-import frc.robot.Utils.DriveTo;
+import frc.robot.Utils.DriveToSource;
 import frc.robot.Utils.Constants;
 import frc.robot.Utils.LoggedCommandScheduler;
 import frc.robot.Utils.Simulation;
@@ -62,7 +62,7 @@ public class RobotContainer {
   private final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 //   private DriveTo otfPathFactory = new DriveTo(drivebase,tagLayout); //do not use will get confusing
   private AlignToReef reefAlignmentFactory = new AlignToReef(drivebase, tagLayout); // we love 4915
-
+  private DriveToSource sourcePathFactory = new DriveToSource(drivebase,tagLayout);
 
   public static Wrist wrist; // TODO: temp solution
   public static Elevator elevator; // TODO: temp solution
@@ -347,9 +347,9 @@ public class RobotContainer {
     //         Commands.runOnce(
     //             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
 
-                //To Source
-        // driverXbox.rightBumper()
-        // .whileTrue(otfPathFactory.generateCommand(new Pose2d(1.45,0.6,new Rotation2d(Units.degreesToRadians(-143)))));
+    // To Closest Source
+    driverXbox.rightBumper()
+        .whileTrue(sourcePathFactory.generateCommand());
         
     }
   }
