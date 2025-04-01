@@ -3,7 +3,7 @@
  * https://docs.google.com/document/d/10if4xjAaETTceUVn7l4J-jOCOnm5CJUDS5RAVNIJMQM/edit?tab=t.0
  * ACTUALLY PRETTY COOL SHOULD READ
  */
-package frc.robot.Utils.commands;
+package frc.robot.Utils;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
@@ -35,7 +35,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 import static frc.robot.Utils.Constants.PathPlanner.constraints;
 import frc.robot.Subsystems.Sweve.*;
-import frc.robot.Utils.PositionPIDCommand;
 
 public class AlignToReef {
     
@@ -100,6 +99,9 @@ public class AlignToReef {
 
     private PathConstraints pathConstraints = kAutoPathConstraints;
         
+    /**
+     * Side can be "L" or "R" and will go to that side of the april tag
+     */
     public Command generateCommand(String side) {
         return Commands.defer(() -> {
             var branch = getClosestBranch(side, mSwerve);
@@ -192,12 +194,15 @@ private Command getPathFromWaypoint(Pose2d waypoint) {
         return getClosestReefAprilTag(swerve.getPose()).getRotation().rotateBy(Rotation2d.k180deg);
     }
 
-    public static Pose2d getClosestBranch(String fieldSide, Swerve swerve){
+
+    public static Pose2d getClosestBranch(String branch, Swerve swerve){
         Pose2d swervePose = swerve.getVisionPose();
         
         Pose2d tag = getClosestReefAprilTag(swervePose);
-   
-        Translation2d branchOffset = new Translation2d();
+        Translation2d branchOffset =
+        (branch == "L")?
+        new Translation2d():
+        new Translation2d();
         return getBranchFromTag(tag, branchOffset);
     }
 

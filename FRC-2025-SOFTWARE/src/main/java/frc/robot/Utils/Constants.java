@@ -54,7 +54,7 @@ public class Constants {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];
 
-    public static boolean VISION = false;
+    public static boolean VISION = true;
 
     public static final double MAXSPEED =
         Units.feetToMeters(15.1); // Why did we lower the drive speed int teleop?
@@ -171,6 +171,7 @@ public class Constants {
     public static PathConstraints constraints =
         new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
+        // AUTO Align 
     public static Time kEndTriggerDebounce;
     public static Distance kPositionTolerance;
     public static Distance kSpeedTolerance;

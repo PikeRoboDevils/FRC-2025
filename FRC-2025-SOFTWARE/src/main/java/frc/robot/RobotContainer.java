@@ -7,6 +7,9 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -34,6 +37,7 @@ import frc.robot.Subsystems.Wrist.Wrist;
 import frc.robot.Subsystems.Wrist.WristHardware;
 import frc.robot.Subsystems.Wrist.WristIO;
 import frc.robot.Subsystems.Wrist.WristSim;
+import frc.robot.Utils.AlignToReef;
 import frc.robot.Utils.Constants;
 import frc.robot.Utils.LoggedCommandScheduler;
 import frc.robot.Utils.Simulation;
@@ -50,6 +54,9 @@ public class RobotContainer {
 
   private final Swerve drivebase = new Swerve(new SwerveHardware());
 
+  private final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+  private AlignToReef reefAlignmentFactory = new AlignToReef(drivebase, tagLayout); // we love 4915
+
   public static Wrist wrist; // TODO: temp solution
   public static Elevator elevator; // TODO: temp solution
   private Climber climb;
@@ -63,6 +70,7 @@ public class RobotContainer {
   private boolean debounce = false;
   private int id = 0;
 
+  
   public RobotContainer() {
     if (Robot.isReal()) {   
 
@@ -106,6 +114,7 @@ public class RobotContainer {
 
     // Auto Align to Reef
     // NamedCommands.registerCommand("AUTO_ALIGN", drivebase.autoAlign(0));
+    NamedCommands.registerCommand("AUTO_ALIGN", reefAlignmentFactory.generateCommand("L"));
 
     // Intake Auto Commands
     NamedCommands.registerCommand("CORAL_IN", intake.setVoltage(()->1)); // NEVER STOPS
@@ -278,16 +287,16 @@ public class RobotContainer {
     // driverXbox.rightBumper().onTrue(Commands.runOnce(() -> drivebase.switchCamera(), drivebase));
     // operatorXbox.leftTrigger().onTrue(drivebase.swictchCamera());
 
-    // Drive Slow
-    driverXbox
-        .leftBumper()
-        .toggleOnTrue(
-            Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
-    driverXbox
-        .leftBumper()
-        .toggleOnFalse(
-            Commands.runOnce(
-                () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
+    // // Drive Slow 
+    // driverXbox
+    //     .leftBumper()
+    //     .toggleOnTrue(
+    //         Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
+    // driverXbox
+    //     .leftBumper()
+    //     .toggleOnFalse(
+    //         Commands.runOnce(
+    //             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
 
     // Overides
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 3));
@@ -323,15 +332,12 @@ public class RobotContainer {
     // operatorXbox.povRight().onTrue((wrist.toggle()));
     
 
-    // // Drive To pose commands. Might be worth rediong to be a single command
-    // if (Constants.Swerve.VISION) {
-    //   driverXbox
-    //       .leftBumper()
-    //       .whileTrue(Commands.defer(() -> drivebase.autoAlign(0), Set.of(drivebase)));
-    //   driverXbox
-    //       .rightBumper()
-    //       .whileTrue(Commands.defer(() -> drivebase.autoAlign(1), Set.of(drivebase)));
-    // }
+    // Drive To pose commands. Might be worth rediong to be a single command
+    if (Constants.Swerve.VISION) {
+      driverXbox
+          .leftBumper()
+          .whileTrue(reefAlignmentFactory.generateCommand("L"));
+    }
   }
 
   public Command getAutonomousCommand() {
