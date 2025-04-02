@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Subsystems.Climber.Climber;
@@ -48,6 +49,8 @@ import frc.robot.Utils.LoggedCommandScheduler;
 import frc.robot.Utils.Simulation;
 import frc.robot.Utils.Constants.OperatorConstants;
 import frc.robot.Utils.commands.AbsoluteDriveAdv;
+
+import java.util.Set;
 
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -338,10 +341,11 @@ public class RobotContainer {
 
     // Drive To pose commands.
     if (Constants.Swerve.VISION) {
+
         //To Reef
-      driverXbox
-          .leftBumper()
-          .whileTrue(reefAlignmentFactory.generateCommand("L").withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    //   driverXbox
+    //       .leftBumper()
+    //       .whileTrue(reefAlignmentFactory.generateCommand("L").withInterruptBehavior(InterruptionBehavior.kCancelSelf));
     //    driverXbox
     //     .leftBumper()
     //     .toggleOnFalse(
@@ -349,9 +353,15 @@ public class RobotContainer {
     //             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
 
     // To Closest Source
-    driverXbox.rightBumper()
+    driverXbox.povDown()
         .whileTrue(sourcePathFactory.generateCommand());
+        // im too proud to remove this
         
+    driverXbox.povLeft()
+    .whileTrue(Commands.defer(()->drivebase.autoAlign(0),Set.of()));
+        
+    driverXbox.povRight()
+    .whileTrue(Commands.defer(()->drivebase.autoAlign(1),Set.of()));
     }
   }
 

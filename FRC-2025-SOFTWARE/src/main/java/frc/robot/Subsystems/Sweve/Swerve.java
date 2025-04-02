@@ -127,22 +127,22 @@ public class Swerve extends SubsystemBase {
         new Pose2d(new Translation2d(5.011, 2.802), new Rotation2d(Units.degreesToRadians(121)));
 
     // Setup the closed loop controllers for auto align
-    double TkP = 1;
-    double TkI = 0;
-    double TkD = 0.5;
+    double TkP = 1; // 1.4; // From 868 
+    double TkI = 0; 
+    double TkD = 0.5; // 0.05 // From 868 
     TrapezoidProfile.Constraints tConstraints =
         new TrapezoidProfile.Constraints(
             io.getMaxVelocity(),
-            -io.getMaxVelocity()
+            -io.getMaxVelocity() // triple check this
                 / 2); // not making the accel limit negative causes it to do weird stuff with its
     // first move
 
-    double fS = 0.03;
+    double fS = 0.03; //868 didnt have Feedforward
     double fV = 2;
 
-    double RkP = 6;
-    double RkI = 0;
-    double RkD = 0;
+    double RkP = 6; //1.3 // From 868 
+    double RkI = 0; 
+    double RkD = 0; // 0.05 // From 868 
     TrapezoidProfile.Constraints rConstraints =
         new TrapezoidProfile.Constraints(
             io.getMaxAnglularVelocity(), io.getMaxAnglularVelocity() / 1.5);
@@ -410,6 +410,7 @@ public class Swerve extends SubsystemBase {
           double yS = MathUtil.clamp(y + yF, -io.getMaxVelocity(), io.getMaxVelocity());
 
           // parse field relative chasis speeds
+          // ChassisSpeeds speeds = new ChassisSpeeds(xS, yS, Units.degreesToRadians(rotate));
           ChassisSpeeds speeds = new ChassisSpeeds(xS, yS, Units.degreesToRadians(rotate));
 
           // run chassis speeds
