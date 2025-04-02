@@ -24,7 +24,7 @@ import frc.robot.Utils.Constants;
 public class ElevatorHardware implements ElevatorIO {
   SparkMax Leader;
   SparkMax Follower;
-  AbsoluteEncoder elevatorEncoder;
+  // RelativeEncoder elevatorEncoder;
   RelativeEncoder internalEncoder;
   // SparkClosedLoopController closedLoopController;
   private ElevatorFeedforward _feedforward;
@@ -42,8 +42,9 @@ public class ElevatorHardware implements ElevatorIO {
         50); // defualt is 20 ms. The follower motor should be fine with slightly lower polling
 
     internalEncoder = Leader.getEncoder();
-    elevatorEncoder = Leader.getAbsoluteEncoder();
+    // elevatorEncoder = Leader.getAlternateEncoder();
 
+    
     // position control
     _feedforward =
         new ElevatorFeedforward(
@@ -73,11 +74,10 @@ public class ElevatorHardware implements ElevatorIO {
     motorConfig.smartCurrentLimit(40, 30);
 
   
-    motorConfig.absoluteEncoder
-    .positionConversionFactor(Constants.gearRatios.Elevator)
-    .velocityConversionFactor(Constants.gearRatios.Elevator)
-    .zeroOffset(Constants.Encoders.Offset_Elev)
-    .inverted(Constants.Encoders.invert_Elev);
+    motorConfig.encoder
+    .positionConversionFactor(1)
+    .velocityConversionFactor(1);
+
 
     /*
      * Apply the configuration to the SPARK MAX.
@@ -149,12 +149,12 @@ public class ElevatorHardware implements ElevatorIO {
 
   @Override
   public double getVelocity() {
-    return elevatorEncoder.getVelocity();
+    return internalEncoder.getVelocity();
   }
 
   @Override
   public double getPosition() {
-    return elevatorEncoder.getPosition();
+    return internalEncoder.getPosition();
   }
 
   @Override

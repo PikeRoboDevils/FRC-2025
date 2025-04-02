@@ -73,8 +73,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command setPoint(DoubleSupplier position) {
-  //TODO: REMOVE /13.5 AND USE DIFFRENT SETPOINTS
-    return run(() ->io.setPosition(position.getAsDouble()/13.5));
+    return run(() ->io.setPosition(position.getAsDouble()));
 
   }
 
@@ -84,7 +83,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command hold(){
-    return Commands.runOnce(()->io.setVoltage(1.741),this);
+    return Commands.runOnce(()->io.setVoltage(0),this);
   }
 
   public void disabled() {
