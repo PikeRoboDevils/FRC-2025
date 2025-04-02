@@ -196,7 +196,7 @@ public class Constants {
     // public static final double kI_Wrist = 0;
     public static final double kD_Wrist = 0;
 
-    public static final double kG_Wrist = 0.032;
+    public static final double kG_Wrist = 0.0;
     public static final double kV_Wrist = 0.0;
     public static final double kS_Wrist = 0.0;
 
@@ -206,7 +206,7 @@ public class Constants {
     public static final double Offset_Wrist = 0;
 
     public static final boolean invert_Wrist = false;
-    
+
     // OLD ELEVATOR TUNING
     // public static final double kP_Elev = 7;
     // public static final double kI_Elev = 0;
@@ -219,7 +219,7 @@ public class Constants {
     // public static final double kS_Elev = 0;
 
     // NEW ELEVATOR TUNING
-    public static final double kP_Elev = 5;
+    public static final double kP_Elev = 15;
     // public static final double kI_Elev = 0;
     public static final double kD_Elev = 0.05 ;
 
@@ -233,6 +233,10 @@ public class Constants {
     public static final double Offset_Elev = 0;
 
     public static final boolean invert_Elev = false;
+
+    public static final double Tolerance_Elev = 0.1;
+
+    public static final double Tolerance_Wrist = 0.1;
 
 
   }

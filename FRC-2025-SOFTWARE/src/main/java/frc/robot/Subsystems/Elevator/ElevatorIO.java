@@ -15,6 +15,7 @@ public interface ElevatorIO {
     public double ElevatorVolt = 0.0;
     public double ElevatorCurrent = 0.0;
     public double ElevatorPosition = 0.0;
+    public boolean ElevatorAtSetpoint;
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
@@ -36,6 +37,10 @@ public interface ElevatorIO {
 
   public default double getVoltage() {
     return 0;
+  }
+
+  public default boolean atSetpoint() {
+    return false;
   }
 
   public default void setEncoderPosition(Rotation2d rotations) {}
