@@ -77,10 +77,11 @@ public class WristHardware implements WristIO {
      */
     motorConfig
         .absoluteEncoder
-        .positionConversionFactor(gearRatios.Arm)
-        .velocityConversionFactor(gearRatios.Arm)
+        .positionConversionFactor(360)
+        .velocityConversionFactor(360)
         .zeroOffset(Constants.Encoders.Offset_Wrist)
-        .inverted(Constants.Encoders.invert_Wrist);
+        .inverted(Constants.Encoders.invert_Wrist)
+        .zeroCentered(true);
     // this is actually a "mechanisms" 1/gear (smaller than 1 reduction) ratio
     // would convert it to be in final rotations (I think. CTRE is gear ratio/1
     // [greater than 1 reduction])
@@ -146,13 +147,13 @@ public class WristHardware implements WristIO {
 
   @Override
   public double getAngleDeg() {
-    return wristEncoder.getPosition() * 360;
+    return wristEncoder.getPosition();
   }
 
-  @Override
-  public double getAngleRad() {
-    return wristEncoder.getPosition() * (2 * Math.PI);
-  }
+  // @Override
+  // public double getAngleRad() {
+  //   return wristEncoder.getPosition() * (2 * Math.PI);
+  // }
 
   @Override
   public double getVoltage() {
@@ -160,7 +161,7 @@ public class WristHardware implements WristIO {
   }
 
   public double getVelocityDeg() {
-    return (wristEncoder.getVelocity() * 360)
+    return (wristEncoder.getVelocity())
         / 60; // R/M * (deg/rotation) = Deg/M. Deg/M * M/Sec = Deg/Sec
   }
 }
