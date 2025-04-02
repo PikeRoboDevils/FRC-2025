@@ -61,9 +61,9 @@ public class ClimberHardware implements ClimberIO {
      * needed, we can adjust values like the position or velocity conversion
      * factors.
      */
-    motorConfig.encoder
-    .positionConversionFactor(Constants.gearRatios.Climber)
-    .velocityConversionFactor(Constants.gearRatios.Climber);
+    // motorConfig.encoder
+    // .positionConversionFactor(Constants.gearRatios.Climber)
+    // .velocityConversionFactor(Constants.gearRatios.Climber);
 
     /*
      * Configure the closed loop controller. We want to make sure we set the

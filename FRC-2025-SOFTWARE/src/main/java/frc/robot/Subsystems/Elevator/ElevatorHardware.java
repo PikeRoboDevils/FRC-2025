@@ -72,10 +72,12 @@ public class ElevatorHardware implements ElevatorIO {
 
     motorConfig.smartCurrentLimit(40, 30);
 
-    //TODO: ONLY A ESTIMATE 
+  
     motorConfig.absoluteEncoder
-    .positionConversionFactor(13.5)
-    .velocityConversionFactor(13.5);
+    .positionConversionFactor(Constants.gearRatios.Elevator)
+    .velocityConversionFactor(Constants.gearRatios.Elevator)
+    .zeroOffset(Constants.Encoders.Offset_Elev)
+    .inverted(Constants.Encoders.invert_Elev);
 
     /*
      * Apply the configuration to the SPARK MAX.
@@ -113,7 +115,6 @@ public class ElevatorHardware implements ElevatorIO {
     goal = new TrapezoidProfile.State(position/13.5, 0.0);
 
     setpoint = profile.calculate(0.02, setpoint, goal);
-    // setpoint = new TrapezoidProfile.State(0, 6);
     runPosition(setpoint);
   }
 

@@ -19,6 +19,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Utils.Constants;
 import frc.robot.Utils.Constants.*;
 
 
@@ -75,9 +76,11 @@ public class WristHardware implements WristIO {
      * factors.
      */
     motorConfig
-        .encoder
+        .absoluteEncoder
         .positionConversionFactor(gearRatios.Arm)
-        .velocityConversionFactor(gearRatios.Arm);
+        .velocityConversionFactor(gearRatios.Arm)
+        .zeroOffset(Constants.Encoders.Offset_Wrist)
+        .inverted(Constants.Encoders.invert_Wrist);
     // this is actually a "mechanisms" 1/gear (smaller than 1 reduction) ratio
     // would convert it to be in final rotations (I think. CTRE is gear ratio/1
     // [greater than 1 reduction])

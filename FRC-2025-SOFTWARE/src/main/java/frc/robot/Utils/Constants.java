@@ -43,7 +43,8 @@ public class Constants {
 
   public class gearRatios {
 
-    public static double Climber = 1/2; //TODO
+    public static final double Elevator = 2.5;
+    // public static double Climber = 1/2; 
     public static double Arm = (11.0 / 42.0) * (1.0 / 25.0); // inverted
   }
 
@@ -202,6 +203,10 @@ public class Constants {
     public static final double maxVelocityWrist = 1; 
     public static final double maxAccelerationWrist = 1;
 
+    public static final double Offset_Wrist = 0;
+
+    public static final boolean invert_Wrist = false;
+    
     // OLD ELEVATOR TUNING
     // public static final double kP_Elev = 7;
     // public static final double kI_Elev = 0;
@@ -224,5 +229,11 @@ public class Constants {
 
     public static final double maxVelocityElevator = 35; // THESE
     public static final double maxAccelerationElevator = 40; // NEXT
+
+    public static final double Offset_Elev = 0;
+
+    public static final boolean invert_Elev = false;
+
+
   }
 }

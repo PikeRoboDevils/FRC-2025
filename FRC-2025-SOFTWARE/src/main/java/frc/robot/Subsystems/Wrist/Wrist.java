@@ -25,15 +25,6 @@ public class Wrist extends SubsystemBase {
 
   public Pose3d _wristPose;
 
-  private boolean isBad;
-
-  public BooleanSupplier wristDisabled = () -> isBad;
-
-  // public BooleanSupplier wristOutOfBounds = () -> {
-  //     io.getAngleDeg()>35
-
-  //  inputs.
-  // };
   /** Creates a new Wrist. */
   public Wrist(WristIO wristIo, Elevator elevatorStage) {
     this.io = wristIo;
@@ -54,30 +45,14 @@ public class Wrist extends SubsystemBase {
 
     Logger.recordOutput("Components/Wrist", _wristPose);
 
-    Logger.recordOutput("WRIST BAD", wristDisabled.getAsBoolean());
-
     io.updateInputs(inputs);
     Logger.processInputs("wrist", inputs);
   }
 
   // so we can set command to null
   public Command setAngle(DoubleSupplier angle) {
-    if (wristDisabled.getAsBoolean()) {
-      return Commands.none();
-    } else {// to prevent movement
       return run(() -> io.setAngle(angle.getAsDouble()));
     }
-
-  }
-
-  public Command toggle() {
-
-    return Commands.runOnce(() -> isBad = !isBad, this);
-  }
-
-  public boolean getIsBad() {
-    return wristDisabled.getAsBoolean();
-  }
 
   public Command home() {
     return run(() -> io.setVoltage(1))
