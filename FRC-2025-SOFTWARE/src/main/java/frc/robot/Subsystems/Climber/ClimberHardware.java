@@ -122,7 +122,7 @@ public class ClimberHardware implements ClimberIO {
   @Override
   public void setAngle(double angleDeg) {
 
-    closedLoopController.setReference(angleDeg,ControlType.kPosition);
+    // closedLoopController.setReference(angleDeg,ControlType.kPosition);
   }
 
   @Override
@@ -137,9 +137,9 @@ public class ClimberHardware implements ClimberIO {
 
   @Override
   public double getAngleDeg() {
-    if (limitSwitch.get()) {
-      setEncoderPosition(new Rotation2d(Math.toRadians(35)));
-    }
+    // if (limitSwitch.get()) {
+    //   setEncoderPosition(new Rotation2d(Math.toRadians(35)));
+    // }
     return (internalEncoder.getPosition() * 360);
   }
 

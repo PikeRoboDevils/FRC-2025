@@ -35,9 +35,9 @@ public class Climber extends SubsystemBase {
     Logger.processInputs("Climber", inputs);
   }
 
-  public Command setAngle(DoubleSupplier angle) {
-    return run(() -> io.setAngle(angle.getAsDouble()));
-  }
+  // public Command setAngle(DoubleSupplier angle) {
+  //   return run(() -> io.setAngle(angle.getAsDouble()));
+  // }
 
   public Command setVoltage(DoubleSupplier volts) {
     return run(() -> io.setVoltage(volts.getAsDouble()));
