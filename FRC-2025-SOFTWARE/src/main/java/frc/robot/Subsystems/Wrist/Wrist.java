@@ -64,7 +64,7 @@ public class Wrist extends SubsystemBase {
   public Command setVoltage(DoubleSupplier volts) {
     return run(() -> io.setVoltage(volts.getAsDouble()));
   }
-
+  
   public void disabled() {
     io.setVoltage(0);
   }
