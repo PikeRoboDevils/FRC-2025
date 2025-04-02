@@ -250,12 +250,12 @@ public class RobotContainer {
             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),            
             wrist.setAngle(() -> -29.65+ operatorXbox.getRightY() * 10));
 
-    Command coralL4AUTO =
-        Commands.parallel(
-                elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
-                wrist.setAngle(() -> -29.65 + operatorXbox.getRightY() * 10))
-            .until(() -> !intake.hasCoral());
-    NamedCommands.registerCommand("L4", coralL4);
+    // Command coralL4AUTO =
+    //     Commands.parallel(
+    //             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
+    //             wrist.setAngle(() -> -29.65 + operatorXbox.getRightY() * 10))
+    //         .until(() -> !intake.hasCoral());
+    // NamedCommands.registerCommand("L4", coralL4);
 
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
@@ -270,8 +270,7 @@ public class RobotContainer {
     // driverXbox.x().whileTrue(Commands.run());
 
     // Season Specififc
-    intake.setDefaultCommand(intake.setVoltage(() -> 1));
-    driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 2)); // In
+    driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 2)); // In
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
     // switch cam doesnt always work
