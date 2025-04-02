@@ -342,7 +342,10 @@ public class RobotContainer {
     // Drive To pose commands.
     if (Constants.Swerve.VISION) {
 
-        //To Reef
+    // i want to keep working on this one because this is much easier to drive with
+    // and i think its pretty close but i barely got to test it we will see 
+
+        //To Reef 
     //   driverXbox
     //       .leftBumper()
     //       .whileTrue(reefAlignmentFactory.generateCommand("L").withInterruptBehavior(InterruptionBehavior.kCancelSelf));
@@ -355,8 +358,10 @@ public class RobotContainer {
     // To Closest Source
     driverXbox.povDown()
         .whileTrue(sourcePathFactory.generateCommand());
-        // im too proud to remove this
+        // im too proud to remove this 
         
+    //if not working look at logged commands
+    // if is working but bad uncomment the other PID values
     driverXbox.povLeft()
     .whileTrue(Commands.defer(()->drivebase.autoAlign(0),Set.of()));
         

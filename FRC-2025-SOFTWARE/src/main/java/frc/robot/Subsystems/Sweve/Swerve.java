@@ -379,7 +379,9 @@ public class Swerve extends SubsystemBase {
 
   // TODO: add to robot container
 
-  // Aligns the robot to the requested reef pose automatically
+  /** Aligns the robot to the requested reef pose automatically
+   * Will need the reef in view to work 
+   */
   public Command autoAlign(int position) {
 
     // identify the important face using the bes tag id coming from front camera
