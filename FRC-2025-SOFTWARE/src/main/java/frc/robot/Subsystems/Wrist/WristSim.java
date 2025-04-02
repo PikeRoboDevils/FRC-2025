@@ -13,7 +13,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import frc.robot.Utils.Constants;
 
 /** Add your docs here. */
 public class WristSim implements WristIO {
@@ -49,14 +48,29 @@ public class WristSim implements WristIO {
 
     inputs.WristCurrent = _wrist.getCurrentDrawAmps();
     inputs.WristEncoderAngle = Units.radiansToDegrees(_wrist.getAngleRads());
-    inputs.WristVolt = _wrist.getInput(0); // first index is voltage
-    inputs.WristVelocity = Units.radiansPerSecondToRotationsPerMinute(_wrist.getVelocityRadPerSec());
-        inputs.WristAtSetpoint = atSetpoint();
+    inputs.WristVolt =
+        _wrist.getInput(
+            0); // I think this is the reference for voltage. Still needs checked, it would apear to
+    // be
+    inputs.WristVelocity =
+        Units.radiansPerSecondToRotationsPerMinute(_wrist.getVelocityRadPerSec());
+
     if (DriverStation.isDisabled()) {
       resetController();
     }
   }
 
+  // @Override
+  // public void setAngle(double angleDeg) {
+
+  //   goal = new TrapezoidProfile.State(angleDeg, 0.0);
+
+  //   setpoint = profile.calculate(0.02, setpoint, goal);
+  //   // setpoint = new TrapezoidProfile.State(0, 6);
+  //   runPosition(setpoint);
+  // }
+
+  // set wrist angle in degrees
   @Override
   public void setAngle(double angleDeg) {
 
@@ -64,16 +78,20 @@ public class WristSim implements WristIO {
 
     setpoint = profile.calculate(0.02, setpoint, goal);
     // setpoint = new TrapezoidProfile.State(0, 6);
-    runPosition(setpoint);
+    runPosition(angleDeg);
   }
 
+  // private void runPosition(TrapezoidProfile.State setpoint) {
+  //   double ff = _feedforward.calculate(setpoint.velocity, 0);
+  //   double output = positionController.calculate(getAngleDeg(), setpoint.position);
+  //   setVoltage(output + ff);
+  // }
 
-  private void runPosition(TrapezoidProfile.State setpoint) {
-    double ff = _feedforward.calculate(setpoint.velocity, 0);
-    double output = positionController.calculate(getAngleDeg(), setpoint.position);
+  private void runPosition(Double setpoint) {
+    double ff = 0.01; // _feedforward.calculate(getAngleRad(), 0);
+    double output = positionController.calculate(getAngleDeg(), setpoint);
     setVoltage(output + ff);
   }
-
 
   @Override
   public void setVoltage(double speed) {
@@ -101,12 +119,5 @@ public class WristSim implements WristIO {
 
   private void resetController() {
     setpoint = new TrapezoidProfile.State(getAngleDeg(), 0.0);
-  }
-
-  
-  @Override
-  public boolean atSetpoint(){
-    double offset = Math.abs(getAngleRad() - setpoint.position);
-        return (offset > Constants.Encoders.Tolerance_Wrist);
   }
 }

@@ -111,7 +111,7 @@ public class WristHardware implements WristIO {
     inputs.WristVolt = getVoltage();
     inputs.WristVelocity = wristEncoder.getVelocity();
     inputs.WristInternalAngle = internalEncoder.getPosition();
-    inputs.WristAtSetpoint = atSetpoint();
+
     if (DriverStation.isDisabled()) {
       resetController();
     }
@@ -124,6 +124,7 @@ public class WristHardware implements WristIO {
     goal = new TrapezoidProfile.State(angleDeg, 0.0);
 
     setpoint = profile.calculate(0.02, setpoint, goal);
+    // setpoint = new TrapezoidProfile.State(0, 6);
     runPosition(setpoint);
   }
 
@@ -161,11 +162,5 @@ public class WristHardware implements WristIO {
   public double getVelocityDeg() {
     return (wristEncoder.getVelocity() * 360)
         / 60; // R/M * (deg/rotation) = Deg/M. Deg/M * M/Sec = Deg/Sec
-  }
-
-  @Override
-  public boolean atSetpoint(){
-    double offset = Math.abs(getAngleDeg() - setpoint.position);
-        return (offset > Constants.Encoders.Tolerance_Wrist);
   }
 }
