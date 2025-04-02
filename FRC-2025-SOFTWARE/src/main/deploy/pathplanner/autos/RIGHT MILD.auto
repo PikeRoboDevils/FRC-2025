@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RIGHT - IJ"
+                  "pathName": "START RIGHT - IJ"
                 }
               },
               {
@@ -65,15 +65,15 @@
                 }
               },
               {
-                "type": "path",
-                "data": {
-                  "pathName": "IJ - RIGHT SOURCE"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "IJ - RIGHT"
                 }
               }
             ]
@@ -82,7 +82,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "R_SOURCE - KL"
+            "pathName": "RIGHT - KL"
           }
         }
       ]

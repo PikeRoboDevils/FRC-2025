@@ -4,8 +4,8 @@
 
 package frc.robot.Subsystems.Elevator;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -15,10 +15,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Utils.Constants;
 
@@ -26,7 +24,7 @@ import frc.robot.Utils.Constants;
 public class ElevatorHardware implements ElevatorIO {
   SparkMax Leader;
   SparkMax Follower;
-  RelativeEncoder elevatorEncoder;
+  AbsoluteEncoder elevatorEncoder;
   RelativeEncoder internalEncoder;
   // SparkClosedLoopController closedLoopController;
   private ElevatorFeedforward _feedforward;
@@ -43,38 +41,23 @@ public class ElevatorHardware implements ElevatorIO {
     Follower.setControlFramePeriodMs(
         50); // defualt is 20 ms. The follower motor should be fine with slightly lower polling
 
-    // closedLoopController = Leader.getClosedLoopController();
-
     internalEncoder = Leader.getEncoder();
-    DigitalInput dio = new DigitalInput(0);
-    // elevatorEncoder = new Encoder(0, 0, false);
-    elevatorEncoder = internalEncoder; // TEMPORARY
-
-    //     // Configures the encoder to return a distance of 4 for every 256 pulses
-    // // Also changes the units of getRate
-    // elevatorEncoder.setDistancePerPulse(2/2048);
-    // // Configures the encoder to consider itself stopped when its rate is below 10
-    // elevatorEncoder.setMinRate(10);
-    // // Reverses the direction of the encoder
-    // elevatorEncoder.setReverseDirection(true);
-    // // Configures an encoder to average its period measurement over 5 samples
-    // // Can be between 1 and 127 samples
-    // elevatorEncoder.setSamplesToAverage(5);
+    elevatorEncoder = Leader.getAbsoluteEncoder();
 
     // position control
     _feedforward =
         new ElevatorFeedforward(
             Constants.Encoders.kS_Elev,
             Constants.Encoders.kG_Elev,
-            Constants.Encoders.kV_Elev); // based on random numbers in recalc
+            Constants.Encoders.kV_Elev);
     positionController =
         new PIDController(
-            Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
+            Constants.Encoders.kP_Elev, 0, Constants.Encoders.kD_Elev);
     profile =
         new TrapezoidProfile(
             new Constraints(
                 Constants.Encoders.maxVelocityElevator,
-                Constants.Encoders.maxAccelerationElevator)); // rotations a second
+                Constants.Encoders.maxAccelerationElevator));
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
@@ -88,46 +71,13 @@ public class ElevatorHardware implements ElevatorIO {
     // smoothness standpoint
 
     motorConfig.smartCurrentLimit(40, 30);
-    /*
-     * Configure the encoder. For this specific example, we are using the
-     * integrated encoder of the NEO, and we don't need to configure it. If
-     * needed, we can adjust values like the position or velocity conversion
-     * factors.
-     */
-    motorConfig.encoder.positionConversionFactor(1).velocityConversionFactor(1);
 
-    // /*
-    //  * Configure the closed loop controller. We want to make sure we set the
-    //  * feedback sensor as the primary encoder.
-    //  */
-    // motorConfig
-    //     .closedLoop
-    //     .feedbackSensor()
-    //     // Set PID values for position control. We don't need to pass a closed
-    //     // loop slot, as it will default to slot 0.
-    //     .p(0.4)
-    //     .i(0)
-    //     .d(0)
-    //     .outputRange(-1, 1)
-    //     // Set PID values for velocity control in slot 1
-    //     .p(0.0001, ClosedLoopSlot.kSlot1)
-    //     .i(0, ClosedLoopSlot.kSlot1)
-    //     .d(0, ClosedLoopSlot.kSlot1)
-    //     .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-    //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
-
-    motorConfig
-        .closedLoop
-        .maxMotion
-        // Set MAXMotion parameters for position control. We don't need to pass
-        // a closed loop slot, as it will default to slot 0.
-        .maxVelocity(1000)
-        .maxAcceleration(1000)
-        .allowedClosedLoopError(1)
-        // Set MAXMotion parameters for velocity control in slot 1
-        .maxAcceleration(500, ClosedLoopSlot.kSlot1)
-        .maxVelocity(6000, ClosedLoopSlot.kSlot1)
-        .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
+  
+    motorConfig.absoluteEncoder
+    .positionConversionFactor(Constants.gearRatios.Elevator)
+    .velocityConversionFactor(Constants.gearRatios.Elevator)
+    .zeroOffset(Constants.Encoders.Offset_Elev)
+    .inverted(Constants.Encoders.invert_Elev);
 
     /*
      * Apply the configuration to the SPARK MAX.
@@ -152,6 +102,7 @@ public class ElevatorHardware implements ElevatorIO {
     inputs.ElevatorVolt = getVoltage();
     inputs.ElevatorCurrent = Leader.getOutputCurrent();
     inputs.ElevatorPosition = getPosition();
+    inputs.ElevatorAtSetpoint = atSetpoint();
 
     if (DriverStation.isDisabled()) {
       resetController();
@@ -160,16 +111,16 @@ public class ElevatorHardware implements ElevatorIO {
 
   @Override
   public void setPosition(double position) {
-
-    goal = new TrapezoidProfile.State(position, 0.0);
+    
+    //TEMP NEW SETPOINTS IN SIM BRANCH
+    goal = new TrapezoidProfile.State(position/13.5, 0.0);
 
     setpoint = profile.calculate(0.02, setpoint, goal);
-    // setpoint = new TrapezoidProfile.State(0, 6);
     runPosition(setpoint);
   }
 
   private void runPosition(TrapezoidProfile.State setpoint) {
-    double ff = _feedforward.calculate(setpoint.velocity, 0);
+    double ff = _feedforward.calculate(setpoint.velocity);
     double output = positionController.calculate(getPosition(), setpoint.position);
     setVoltage(output + ff);
   }
@@ -211,7 +162,9 @@ public class ElevatorHardware implements ElevatorIO {
     return Leader.getAppliedOutput();
   }
 
-  public void setEncoderPosition(Rotation2d rotations) {
-    internalEncoder.setPosition(rotations.getRotations());
+  @Override
+  public boolean atSetpoint(){
+    double offset = Math.abs(getPosition() - setpoint.position);
+        return (offset > Constants.Encoders.Tolerance_Elev);
   }
 }

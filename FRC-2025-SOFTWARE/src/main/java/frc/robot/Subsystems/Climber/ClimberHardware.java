@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.Subsystems.Climber;
 
+import java.lang.constant.ConstantDesc;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -13,6 +15,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+
+import frc.robot.Utils.Constants;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /** Add your docs here. */
 public class ClimberHardware implements ClimberIO {
@@ -25,10 +33,13 @@ public class ClimberHardware implements ClimberIO {
 
   SparkMaxConfig motorConfig;
 
+  DigitalInput limitSwitch;
+
   public ClimberHardware() {
     ClimberMotor = new SparkMax(13, MotorType.kBrushless);
     ClimberFollow = new SparkMax(15, MotorType.kBrushless);
 
+    limitSwitch = new DigitalInput(Constants.Encoders.ClimbChannel);
     /*
      * Initialize the SPARK MAX and get its encoder and closed loop controller
      * objects for later use.
@@ -50,40 +61,24 @@ public class ClimberHardware implements ClimberIO {
      * needed, we can adjust values like the position or velocity conversion
      * factors.
      */
-    motorConfig.encoder.positionConversionFactor(1).velocityConversionFactor(1);
+    // motorConfig.encoder
+    // .positionConversionFactor(Constants.gearRatios.Climber)
+    // .velocityConversionFactor(Constants.gearRatios.Climber);
 
     /*
      * Configure the closed loop controller. We want to make sure we set the
      * feedback sensor as the primary encoder.
      */
-    // motorConfig
-    //     .closedLoop
-    //     .feedbackSensor(FeedbackSensor.) //use absolute later
-    //     // Set PID values for position control. We don't need to pass a closed
-    //     // loop slot, as it will default to slot 0.
-    //     .p(0.4)
-    //     .i(0)
-    //     .d(0)
-    //     .outputRange(-1, 1)
-    //     // Set PID values for velocity control in slot 1
-    //     .p(0.0001, ClosedLoopSlot.kSlot1)
-    //     .i(0, ClosedLoopSlot.kSlot1)
-    //     .d(0, ClosedLoopSlot.kSlot1)
-    //     .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-    //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+    motorConfig
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        // Set PID values for position control. We don't need to pass a closed
+        // loop slot, as it will default to slot 0.
+        .p(0.4)
+        .i(0)
+        .d(0)
+        .outputRange(-1, 1);
 
-    // motorConfig
-    //     .closedLoop
-    //     .maxMotion
-    //     // Set MAXMotion parameters for position control. We don't need to pass
-    //     // a closed loop slot, as it will default to slot 0.
-    //     .maxVelocity(1000)
-    //     .maxAcceleration(1000)
-    //     .allowedClosedLoopError(1)
-    //     // Set MAXMotion parameters for velocity control in slot 1
-    //     .maxAcceleration(500, ClosedLoopSlot.kSlot1)
-    //     .maxVelocity(6000, ClosedLoopSlot.kSlot1)
-    //     .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
 
     /*
      * Apply the configuration to the SPARK MAX.
@@ -119,15 +114,15 @@ public class ClimberHardware implements ClimberIO {
     inputs.ClimberCurrent = ClimberMotor.getOutputCurrent();
     inputs.ClimberEncoderAngle = getAngleDeg();
     inputs.ClimberVolt = getVoltage();
-    // inputs.ClimberVelocity = ClimberEncoder.getVelocity();
+    inputs.ClimberVelocity = internalEncoder.getVelocity();
     inputs.ClimberInternalAngle = internalEncoder.getPosition();
   }
 
   // set Climber angle in degrees
   @Override
   public void setAngle(double angleDeg) {
-    closedLoopController.setReference(
-        angleDeg, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+
+    // closedLoopController.setReference(angleDeg,ControlType.kPosition);
   }
 
   @Override
@@ -136,23 +131,21 @@ public class ClimberHardware implements ClimberIO {
     ;
   }
 
-  // cant use rn no encoder on robot
+  public void setEncoderPosition(Rotation2d rotations) {
+    internalEncoder.setPosition(rotations.getRotations());
+  }
 
-  // // set speed from 0-1
-  // @Override
-  // public void setSpeed(double speed) {
-  //   ClimberMotor.set(speed);;
-  // }
-
-  // @Override
-  // public double getAngleDeg() {
-  //    return ClimberEncoder.getPosition();
-  // }
+  @Override
+  public double getAngleDeg() {
+    // if (limitSwitch.get()) {
+    //   setEncoderPosition(new Rotation2d(Math.toRadians(35)));
+    // }
+    return (internalEncoder.getPosition() * 360);
+  }
 
   @Override
   public double getAngleRad() {
-    // double radians = ClimberEncoder.getPosition() * (Math.PI / 180);
-    return 0;
+    return internalEncoder.getPosition() * (2 * Math.PI);
   }
 
   @Override

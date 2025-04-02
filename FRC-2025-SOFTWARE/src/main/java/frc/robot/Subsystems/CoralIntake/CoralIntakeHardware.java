@@ -32,7 +32,8 @@ public class CoralIntakeHardware implements CoralIntakeIO {
     mBangController = new BangBangController(1);
 
     motorConfig.idleMode(IdleMode.kCoast);
-    motorConfig.smartCurrentLimit(30, 20);
+    motorConfig.smartCurrentLimit(28,20);
+    motorConfig.secondaryCurrentLimit(35);
   }
 
   @Override
@@ -69,6 +70,6 @@ public class CoralIntakeHardware implements CoralIntakeIO {
   }
 
   public boolean hasCoral() {
-    return intakeMotor.getOutputCurrent() > 29;
+    return intakeMotor.getOutputCurrent() > 30;
   }
 }

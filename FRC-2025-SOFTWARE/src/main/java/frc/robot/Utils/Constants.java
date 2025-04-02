@@ -43,6 +43,8 @@ public class Constants {
 
   public class gearRatios {
 
+    public static final double Elevator = 2.5;
+    // public static double Climber = 1/2; 
     public static double Arm = (11.0 / 42.0) * (1.0 / 25.0); // inverted
   }
 
@@ -182,10 +184,12 @@ public class Constants {
   }
 
   public static class Encoders {
+    // climber limit switch
+    public static final int ClimbChannel = 0;
 
-    public static final int WristChannel = 8;
-    // public static final int WristChannelB = 0;
-    public static final boolean WristReverse = false;
+    public static final double kP_Climber = 0.001;
+    // public static final double kI_Climber = 0;
+    public static final double kD_Climber = 0;
 
     public static final double kP_Wrist = 4;
     public static final double kI_Wrist = 0.00004;// should help with elevator motions
@@ -195,9 +199,19 @@ public class Constants {
     public static final double kV_Wrist = 0;// KEEP 0
     public static final double kG_Wrist = -0.05;//trust me here
 
-    public static final int ElevatorChannelA = 2;
-    public static final int ElevatorChannelB = 3;
-    public static final boolean ElevatorReverse = false;
+
+    public static final double kG_Wrist = 0.0;
+    public static final double kV_Wrist = 0.0;
+    public static final double kS_Wrist = 0.0;
+
+    public static final double maxVelocityWrist = 1; 
+    public static final double maxAccelerationWrist = 1;
+
+    public static final double Offset_Wrist = 0;
+
+    public static final boolean invert_Wrist = false;
+    
+    public static final double Tolerance_Wrist = 0.1;
 
     // OLD ELEVATOR TUNING
     // public static final double kP_Elev = 7;
@@ -211,8 +225,9 @@ public class Constants {
     // public static final double kS_Elev = 0;
 
     // NEW ELEVATOR TUNING
+
     public static final double kP_Elev = 12.5;
-    public static final double kI_Elev = 0;
+//     public static final double kI_Elev = 0;
     public static final double kD_Elev = 0.02;
 
     public static final double kG_Elev = 0.7;
@@ -221,6 +236,13 @@ public class Constants {
     public static final double maxAccelerationElevator = 50;
     public static final double kS_Elev = 1.041;
 
-    ;
+    public static final double Offset_Elev = 0;
+
+    public static final boolean invert_Elev = false;
+
+    public static final double Tolerance_Elev = 0.1;
+
+
+
   }
 }

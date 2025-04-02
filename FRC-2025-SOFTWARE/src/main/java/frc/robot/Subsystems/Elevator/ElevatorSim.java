@@ -50,7 +50,7 @@ public class ElevatorSim implements ElevatorIO {
     profile = new TrapezoidProfile(new Constraints(Constants.Encoders.maxVelocityElevator,Constants.Encoders.maxAccelerationElevator)); // m/s
     positionController =
         new PIDController(
-            Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
+            Constants.Encoders.kP_Elev, 0, Constants.Encoders.kD_Elev);
     // wonky
   }
 
@@ -63,6 +63,7 @@ public class ElevatorSim implements ElevatorIO {
     inputs.ElevatorVolt = getVoltage();
     inputs.ElevatorCurrent = _elevator.getCurrentDrawAmps();
     inputs.ElevatorPosition = getPosition();
+    inputs.ElevatorAtSetpoint = atSetpoint();
 
     if (DriverStation.isDisabled()) {
       resetController();
@@ -98,7 +99,7 @@ public class ElevatorSim implements ElevatorIO {
   @Override
   public double getPosition() {
     return _elevator.getPositionMeters();
-        // * 13.5; // TODO: Remove "/13.5" once absolute encoder is added
+
   }
 
   @Override
@@ -108,5 +109,11 @@ public class ElevatorSim implements ElevatorIO {
 
   private void resetController() {
     setpoint = new TrapezoidProfile.State(getPosition(), 0.0);
+  }
+
+  @Override
+  public boolean atSetpoint(){
+    double distance = Math.abs(getPosition() - setpoint.position);
+        return (distance < Constants.Encoders.Tolerance_Elev);
   }
 }

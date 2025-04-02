@@ -114,8 +114,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("L1", wrist.home()); // ALMOST INSTANT
     // Command autoSource = Commands.deadline(
-    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).withTimeout(3);
-    // .until(()->intake.hasCoral()); // FIXED
+    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30))//.withTimeout(3);
+    .until(()->intake.hasCoral()); // FIXED
 
     NamedCommands.registerCommand("SOURCE", autoSource);
 
@@ -218,44 +218,47 @@ public class RobotContainer {
     Command coralSource =
         Commands.parallel(
             elevator.setPoint(() -> 0.533 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> 30));
 
     // Command coralL1 =
     //     Commands.parallel(
     //         elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
-    //         wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+    //         wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
 
     Command coralL2 =
         Commands.parallel(
             elevator.setPoint(() -> 0.6222 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
+
     NamedCommands.registerCommand("L2", coralL2);
 
     Command algaeL2 =
         Commands.parallel(
+
             elevator.setPoint(() -> 0.5481 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
     Command coralL3 =
         Commands.parallel(
             elevator.setPoint(() -> 1.0704 + operatorXbox.getLeftY() * 2), 
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     NamedCommands.registerCommand("L3", coralL3);
 
     Command algaeL3 =
         Commands.parallel(
             elevator.setPoint(() -> 0.996 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
     Command coralL4 =
         Commands.parallel(
             elevator.setPoint(() -> 1.8 + operatorXbox.getLeftY() * 2),            
-            wrist.setAngle(() -> -35+ operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> -35+ operatorXbox.getRightY() * 10));
 
-    Command coralL4AUTO =
-        Commands.parallel(
-                elevator.setPoint(() -> 1.8 + operatorXbox.getLeftY() * 2),
-                wrist.setAngle(() -> -29.65 + operatorXbox.getRightY() * 10))
-            .until(() -> !intake.hasCoral());
-    NamedCommands.registerCommand("L4", coralL4);
+//     Command coralL4AUTO =
+//         Commands.parallel(
+//                 elevator.setPoint(() -> 1.8 + operatorXbox.getLeftY() * 2),
+//                 wrist.setAngle(() -> -29.65 + operatorXbox.getRightY() * 10))
+//             .until(() -> !intake.hasCoral());
+//     NamedCommands.registerCommand("L4", coralL4);
+
 
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
@@ -270,8 +273,7 @@ public class RobotContainer {
     // driverXbox.x().whileTrue(Commands.run());
 
     // Season Specififc
-    intake.setDefaultCommand(intake.setVoltage(() -> 1));
-    driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 2)); // In
+    driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 2)); // In
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
     if (Constants.OperatorConstants.driverPractice){
@@ -291,7 +293,8 @@ public class RobotContainer {
 
     // Overides
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 3));
-    operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 12));
+    operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 6));
+
 
     // Climber
     operatorXbox
@@ -316,10 +319,6 @@ public class RobotContainer {
 
     operatorXbox.y().onTrue(coralL4);
 
-    // BAD DO NOT USE
-    // Wrist Stop
-    // operatorXbox.povRight().onTrue((wrist.toggle()));
-    
 
     // // Drive To pose commands. Might be worth rediong to be a single command
     // if (Constants.Swerve.VISION) {

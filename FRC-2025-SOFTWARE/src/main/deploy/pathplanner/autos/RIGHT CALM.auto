@@ -5,13 +5,13 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MID-GH"
+                  "pathName": "START RIGHT - IJ"
                 }
               },
               {
