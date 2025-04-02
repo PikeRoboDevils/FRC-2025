@@ -13,6 +13,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -368,6 +369,13 @@ public class RobotContainer {
     driverXbox.povRight()
     .whileTrue(Commands.defer(()->drivebase.autoAlign(1),Set.of()));
     }
+
+    //hot mess but works
+    driverXbox.povUp().
+    whileTrue(Commands.defer(
+        ()->Commands.run(()->drivebase.drive(new Translation2d(-0.5,0), Math.PI
+, false), drivebase)
+        ,Set.of()));
   }
 
   public Command getAutonomousCommand() {
