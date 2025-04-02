@@ -102,6 +102,7 @@ public class ElevatorHardware implements ElevatorIO {
     inputs.ElevatorVolt = getVoltage();
     inputs.ElevatorCurrent = Leader.getOutputCurrent();
     inputs.ElevatorPosition = getPosition();
+    inputs.ElevatorAtSetpoint = atSetpoint();
 
     if (DriverStation.isDisabled()) {
       resetController();
@@ -110,7 +111,7 @@ public class ElevatorHardware implements ElevatorIO {
 
   @Override
   public void setPosition(double position) {
-
+    
     //TEMP NEW SETPOINTS IN SIM BRANCH
     goal = new TrapezoidProfile.State(position/13.5, 0.0);
 
@@ -159,5 +160,11 @@ public class ElevatorHardware implements ElevatorIO {
   @Override
   public double getVoltage() {
     return Leader.getAppliedOutput();
+  }
+
+  @Override
+  public boolean atSetpoint(){
+    double offset = Math.abs(getPosition() - setpoint.position);
+        return (offset > Constants.Encoders.Tolerance_Elev);
   }
 }

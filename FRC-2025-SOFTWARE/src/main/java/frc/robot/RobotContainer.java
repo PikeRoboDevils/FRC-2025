@@ -291,7 +291,6 @@ public class RobotContainer {
 
     // Overides
     operatorXbox.leftStick().whileTrue(elevator.setVoltage(() -> -operatorXbox.getLeftY() * 3));
-    wrist.setDefaultCommand(wrist.setVoltage(() -> 0.02));
     operatorXbox.rightStick().whileTrue(wrist.setVoltage(() -> operatorXbox.getRightY() * 2));
 
     // Climber
@@ -318,10 +317,6 @@ public class RobotContainer {
 
     operatorXbox.y().onTrue(coralL4);
 
-    // BAD DO NOT USE
-    // Wrist Stop
-    // operatorXbox.povRight().onTrue((wrist.toggle()));
-    
 
     // // Drive To pose commands. Might be worth rediong to be a single command
     // if (Constants.Swerve.VISION) {

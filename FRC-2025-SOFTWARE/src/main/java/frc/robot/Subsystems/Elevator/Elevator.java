@@ -10,13 +10,17 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   ElevatorIO io;
+
+  Trigger holdTrigger;
 
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private Pose3d _stage1Visuals;
@@ -25,6 +29,9 @@ public class Elevator extends SubsystemBase {
 
   public Elevator(ElevatorIO elevatorIO) {
     this.io = elevatorIO;
+
+    holdTrigger = new Trigger(()->io.atSetpoint());
+    holdTrigger.whileTrue(hold());
 
     _stage1Visuals = new Pose3d(new Translation3d(), new Rotation3d());
     _stage2Visuals = new Pose3d(new Translation3d(), new Rotation3d());
@@ -37,27 +44,26 @@ public class Elevator extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
 
-    // TODO: Remove all "/13.5" once absolute encoder is added
     _stage1Visuals =
         new Pose3d(
             new Translation3d(
                 Units.inchesToMeters(3.55),
                 0,
-                (io.getPosition() / 3) / 13.5 + Units.inchesToMeters(5.6)),
+                (io.getPosition() / 3 )  + Units.inchesToMeters(5.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
     _stage2Visuals =
         new Pose3d(
             new Translation3d(
                 Units.inchesToMeters(3.55),
                 0,
-                (io.getPosition() / 1.5 / 13.5) + Units.inchesToMeters(6.6)),
+                (io.getPosition() / 1.5 ) + Units.inchesToMeters(6.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
     stage3Visuals =
         new Pose3d(
             new Translation3d(
                 Units.inchesToMeters(3.55),
                 0,
-                (io.getPosition() / 13.5) + Units.inchesToMeters(7.6)),
+                (io.getPosition()) + Units.inchesToMeters(7.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
 
     Logger.recordOutput("Components/Stage1", _stage1Visuals);
@@ -67,11 +73,18 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command setPoint(DoubleSupplier position) {
-    return run(() -> io.setPosition(position.getAsDouble()));
+  //TODO: REMOVE /13.5 AND USE DIFFRENT SETPOINTS
+    return run(() ->io.setPosition(position.getAsDouble()/13.5));
+
   }
 
   public Command setVoltage(DoubleSupplier volts) {
-    return run(() -> io.setVoltage(volts.getAsDouble())).finallyDo(() -> io.setVoltage(0));
+    return run(() -> io.setVoltage(volts.getAsDouble()))
+    .finallyDo(()->hold());
+  }
+
+  public Command hold(){
+    return Commands.runOnce(()->io.setVoltage(1.741),this);
   }
 
   public void disabled() {
