@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5413934426229505,
-        "y": 3.407633196721311
+        "x": 1.7142418032786886,
+        "y": 7.327612704918032
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0521128438071505,
-        "y": 3.063595598513231
-      },
-      "isLocked": false,
-      "linkedName": "WOW2"
-    },
-    {
-      "anchor": {
-        "x": 5.33452868852459,
-        "y": 1.3457479508196706
-      },
-      "prevControl": {
-        "x": 3.684256338579927,
-        "y": 1.0534928619976256
-      },
-      "nextControl": {
-        "x": 7.487065108608192,
-        "y": 1.7269515277112748
+        "x": 2.7142418032786875,
+        "y": 7.327612704918032
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.775,
-        "y": 6.188780737704917
+        "x": 3.848053278688525,
+        "y": 5.1698258196721305
       },
       "prevControl": {
-        "x": 8.797151730424243,
-        "y": 5.939764069910948
+        "x": 2.848053278688525,
+        "y": 5.1698258196721305
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BARGE"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -59.26451229807999
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "LEFT",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 129.80557109226518
   },
   "useDefaultConstraints": true
 }

@@ -148,19 +148,50 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "LAUNCH"
+                  "name": "SOURCE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "STOW"
+                  "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AB - RIGHT"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RIGHT - AB"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
                 }
               }
             ]
