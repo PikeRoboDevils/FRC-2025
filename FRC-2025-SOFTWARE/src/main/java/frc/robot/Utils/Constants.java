@@ -208,7 +208,7 @@ public class Constants {
     // public static final int WristChannelB = 0;
     public static final boolean WristReverse = false;
 
-    public static final double kP_Wrist = 0.001;
+    public static final double kP_Wrist = 0.15;
     public static final double kI_Wrist = 0;
     public static final double kD_Wrist = 0;
 

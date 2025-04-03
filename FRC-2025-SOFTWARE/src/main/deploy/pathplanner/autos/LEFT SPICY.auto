@@ -5,13 +5,13 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MID-GH"
+                  "pathName": "START LEFT - EF"
                 }
               },
               {
@@ -39,23 +39,23 @@
           "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "GH - RIGHT SOURCE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CORAL_IN"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "SOURCE"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "EF - LEFT"
+                }
               }
             ]
           }
@@ -67,13 +67,50 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "R_SOURCE - KL"
+                  "pathName": "LEFT - CD"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CORAL_OUT"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SOURCE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CD - LEFT"
                 }
               }
             ]
@@ -84,21 +121,21 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
+                  "pathName": "LEFT - AB"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "CORAL_IN"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
                 }
               }
             ]
@@ -108,6 +145,25 @@
           "type": "named",
           "data": {
             "name": "CORAL_OUT"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LEFT LAUNCH"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "STOW"
+                }
+              }
+            ]
           }
         }
       ]

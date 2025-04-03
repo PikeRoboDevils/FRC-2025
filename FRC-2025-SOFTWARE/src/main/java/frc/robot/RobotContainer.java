@@ -233,50 +233,50 @@ public class RobotContainer {
             () -> 2);
 
     Command stow = Commands.parallel(elevator.setPoint(() -> 0),
-        wrist.setAngle(() -> 34));
+        wrist.setAngle(() -> 30));
     NamedCommands.registerCommand("STOW", stow);
 
     Command coralSource =
         Commands.parallel(
-            elevator.setPoint(() -> 7.2 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30).unless(wrist.wristDisabled));
+            elevator.setPoint(() -> 5.4 + operatorXbox.getLeftY() * 2),
+            wrist.setAngle(() -> 26).unless(wrist.wristDisabled));
 
     Command coralL1 =
         Commands.parallel(
             elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> 26 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
 
     Command coralL2 =
         Commands.parallel(
-            elevator.setPoint(() -> 8.4 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 5.4 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("L2", coralL2);
 
     Command algaeL2 =
         Commands.parallel(
-            elevator.setPoint(() -> 7.4 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 3.4 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     Command coralL3 =
         Commands.parallel(
-            elevator.setPoint(() -> 14.45 + operatorXbox.getLeftY() * 2), 
+            elevator.setPoint(() -> 11.76 + operatorXbox.getLeftY() * 2), 
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     NamedCommands.registerCommand("L3", coralL3);
 
     Command algaeL3 =
         Commands.parallel(
             elevator.setPoint(() -> 13.45 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            wrist.setAngle(() -> 26 + operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
     Command coralL4 =
         Commands.parallel(
             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),            
-            wrist.setAngle(() -> -29.65+ operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
-
-    Command coralL4AUTO =
-        Commands.parallel(
-                elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
-                wrist.setAngle(() -> -29.65 + operatorXbox.getRightY() * 10))
-            .until(() -> !intake.hasCoral());
-    NamedCommands.registerCommand("L4", coralL4);
+            wrist.setAngle(() -> -50.65+ operatorXbox.getRightY() * 10).unless(wrist.wristDisabled));
+            NamedCommands.registerCommand("L4", coralL4);
+    // Command coralL4AUTO =
+    //     Commands.parallel(
+    //             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
+    //             wrist.setAngle(() -> -50.65 + operatorXbox.getRightY() * 10))
+    //         .until(() -> !intake.hasCoral());
+    
 
     // im not sure where the inversions are supposed to be but right now
     // it takes inverted controls and returns the correct speeds
