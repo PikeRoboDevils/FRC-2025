@@ -58,7 +58,7 @@ public class Constants {
     public static boolean VISION = true;
 
     public static final double MAXSPEED =
-        Units.feetToMeters(15.1); // Why did we lower the drive speed int teleop?
+        Units.feetToMeters(14); // Why did we lower the drive speed int teleop?
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS =
@@ -115,7 +115,7 @@ public class Constants {
 
     public static Translation3d CAM1T =
         new Translation3d(
-            Units.inchesToMeters(4.), // transform of camera (dont forget forward+ left+ up+)
+            Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
             Units.inchesToMeters(13),
             Units.inchesToMeters(8));
 
@@ -137,7 +137,7 @@ public class Constants {
 
     public static Translation3d CAM2T =
         new Translation3d(
-          Units.inchesToMeters(4.), // transform of camera (dont forget forward+ left+ up+)
+          Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
           Units.inchesToMeters(-13),
           Units.inchesToMeters(8));
 
@@ -172,7 +172,7 @@ public class Constants {
     public static Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
 
     public static PathConstraints kTeleopPathConstraints =
-        new PathConstraints(5.0, 5.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+        new PathConstraints(2.5, 5.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     public static PathConstraints kAutoPathConstraints =
         new PathConstraints(2.0, 1.0, Units.degreesToRadians(360), Units.degreesToRadians(180));
