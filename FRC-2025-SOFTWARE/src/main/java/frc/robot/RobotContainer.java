@@ -299,11 +299,15 @@ public class RobotContainer {
     // driverXbox.rightBumper().onTrue(Commands.runOnce(() -> drivebase.switchCamera(), drivebase));
     // operatorXbox.leftTrigger().onTrue(drivebase.swictchCamera());
 
-    // // Drive Slow 
-    // driverXbox
-    //     .leftBumper()
-    //     .toggleOnTrue(
-    //         Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
+    driverXbox
+    .leftBumper()
+    .toggleOnTrue(
+        Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
+driverXbox
+    .leftBumper()
+    .toggleOnFalse(
+        Commands.runOnce(
+            () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
  
 
     // Overides
@@ -343,21 +347,22 @@ public class RobotContainer {
     // Drive To pose commands.
     if (Constants.Swerve.VISION) {
 
+        //IT WORKED
     // i want to keep working on this one because this is much easier to drive with
     // and i think its pretty close but i barely got to test it we will see 
 
         // To Reef 
       driverXbox
-          .leftBumper()
+          .povUp()
           .whileTrue(reefAlignmentFactory.generateCommand("L").withInterruptBehavior(InterruptionBehavior.kCancelSelf));
        driverXbox
-        .leftBumper()
+        .povUp()
         .toggleOnFalse(
             Commands.runOnce(
                 () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
 
     // To Closest Source
-    driverXbox.povDown()
+    driverXbox.rightBumper()
         .whileTrue(sourcePathFactory.generateCommand());
         // im too proud to remove this 
         
@@ -369,13 +374,6 @@ public class RobotContainer {
     // driverXbox.povRight()
     // .whileTrue(Commands.defer(()->drivebase.autoAlign(1),Set.of()));
 }
-
-    //hot mess but works
-    driverXbox.povUp().
-    whileTrue(Commands.defer(
-        ()->Commands.run(()->drivebase.drive(new Translation2d(-0.5,0), Math.PI
-, false), drivebase)
-        ,Set.of()));
   }
 
   public Command getAutonomousCommand() {
