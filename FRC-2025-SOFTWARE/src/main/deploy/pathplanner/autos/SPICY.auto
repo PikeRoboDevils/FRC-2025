@@ -40,15 +40,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "CORAL_IN"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "IJ - RIGHT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
                 }
               }
             ]
@@ -115,15 +115,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "CORAL_IN"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "KL - RIGHT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
                 }
               }
             ]
