@@ -282,7 +282,7 @@ public class RobotContainer {
     driverXbox
     .leftBumper()
     .onTrue(
-        Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
+        Commands.run(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
 // driverXbox
 //     .leftBumper()
 //     .onFalse(
