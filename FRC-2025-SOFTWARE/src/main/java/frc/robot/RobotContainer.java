@@ -272,7 +272,7 @@ public class RobotContainer {
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.a().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
     driverXbox.a().whileFalse(Commands.run(() -> drivebase.unlock()));
-    // driverXbox.x().whileTrue(Commands.run());
+    driverXbox.x().whileTrue(stow);
 
     // Season Specififc
     driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 3)).toggleOnFalse(intake.setVoltage(()->1.25)); // In
