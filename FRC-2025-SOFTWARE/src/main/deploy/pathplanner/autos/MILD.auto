@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "START MID-GH"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
