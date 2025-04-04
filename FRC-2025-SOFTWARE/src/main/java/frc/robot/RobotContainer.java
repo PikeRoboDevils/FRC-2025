@@ -279,17 +279,14 @@ public class RobotContainer {
     // driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 1.25)); // In
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
-    // driverXbox
-    // .leftBumper()
-    // .whileTrue(driveControlled);
     driverXbox
     .leftBumper()
-    .whileTrue(Commands.defer(null, null));
-// driverXbox
-//     .leftBumper()
-//     .onFalse(
-//         Commands.runOnce(
-//             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
+    .onTrue(driveControlled); 
+driverXbox
+    .leftBumper()
+    .onFalse(
+        Commands.runOnce(
+            () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
  
 
     // Overides
