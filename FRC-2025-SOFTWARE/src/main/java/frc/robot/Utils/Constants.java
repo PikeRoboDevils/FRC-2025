@@ -58,7 +58,7 @@ public class Constants {
     public static boolean VISION = true;
 
     public static final double MAXSPEED =
-        Units.feetToMeters(14.75); //driver wants "tad bit" slower
+        Units.feetToMeters(15); //driver wants "tad bit" slower
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS =
@@ -172,10 +172,10 @@ public class Constants {
     public static Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
 
     public static PathConstraints kTeleopPathConstraints =
-        new PathConstraints(2.5, 5.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+        new PathConstraints(Units.feetToMeters(12), 4.3, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     public static PathConstraints kAutoPathConstraints =
-        new PathConstraints(2.0, 1.0, Units.degreesToRadians(540), Units.degreesToRadians(540));
+        new PathConstraints(Units.feetToMeters(6), 1.0, Units.degreesToRadians(540), Units.degreesToRadians(540));
 
 
         // AUTO Align 
