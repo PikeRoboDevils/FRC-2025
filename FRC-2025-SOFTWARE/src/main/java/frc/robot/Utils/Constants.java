@@ -175,7 +175,7 @@ public class Constants {
         new PathConstraints(2.5, 5.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     public static PathConstraints kAutoPathConstraints =
-        new PathConstraints(2.0, 1.0, Units.degreesToRadians(360), Units.degreesToRadians(180));
+        new PathConstraints(2.0, 1.0, Units.degreesToRadians(540), Units.degreesToRadians(540));
 
 
         // AUTO Align 

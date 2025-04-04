@@ -275,16 +275,16 @@ public class RobotContainer {
     // driverXbox.x().whileTrue(Commands.run());
 
     // Season Specififc
-    driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 2)); // In
+    driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 1.5)); // In
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
     driverXbox
     .leftBumper()
-    .toggleOnTrue(
+    .onTrue(
         Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
 driverXbox
     .leftBumper()
-    .toggleOnFalse(
+    .onFalse(
         Commands.runOnce(
             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
  
