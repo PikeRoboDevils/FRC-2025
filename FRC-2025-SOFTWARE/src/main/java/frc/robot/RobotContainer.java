@@ -281,7 +281,7 @@ public class RobotContainer {
 
     driverXbox
     .leftBumper()
-    .onTrue(driveControlled);
+    .whileTrue(driveControlled);
 // driverXbox
 //     .leftBumper()
 //     .onFalse(
