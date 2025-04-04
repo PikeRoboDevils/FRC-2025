@@ -103,7 +103,7 @@ public class DriveToSource extends DriveTo{
         if (alliance.isEmpty()) {
             SourcePoseList = allSourceTagPoses;
         } else{
-            SourcePoseList = alliance.get() == Alliance.Blue ? 
+            SourcePoseList = alliance.get() == Alliance.Red ? 
                 blueSourceTagPoses :
                 redSourceTagPoses;
         }

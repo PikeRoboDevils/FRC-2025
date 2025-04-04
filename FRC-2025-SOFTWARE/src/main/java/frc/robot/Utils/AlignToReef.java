@@ -165,7 +165,7 @@ public class AlignToReef extends DriveTo{
         if (alliance.isEmpty()) {
             reefPoseList = allReefTagPoses;
         } else{
-            reefPoseList = alliance.get() == Alliance.Blue ? 
+            reefPoseList = alliance.get() == Alliance.Red ? 
                 blueReefTagPoses :
                 redReefTagPoses;
         }

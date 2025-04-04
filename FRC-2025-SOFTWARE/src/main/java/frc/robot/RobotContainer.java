@@ -232,7 +232,7 @@ public class RobotContainer {
 
     Command coralL2 =
         Commands.parallel(
-            elevator.setPoint(() -> 5.4 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 6.0 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     NamedCommands.registerCommand("L2", coralL2);
 
@@ -281,11 +281,11 @@ public class RobotContainer {
 
     driverXbox
     .leftBumper()
-    .whileTrue(
+    .onTrue(
         Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
 driverXbox
     .leftBumper()
-    .whileFalse(
+    .onFalse(
         Commands.runOnce(
             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
  
