@@ -62,7 +62,7 @@ public Command getPathFromWaypoint(Pose2d waypoint) {
                     new GoalEndState(0.0, waypoint.getRotation())
                 );
         
-                path.preventFlipping = false;// check this
+                path.preventFlipping = true;// check this
         
                 return (AutoBuilder.followPath(path).andThen(
                     Commands.print("start position PID loop"),

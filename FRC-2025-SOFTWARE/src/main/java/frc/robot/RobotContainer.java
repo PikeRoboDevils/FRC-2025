@@ -222,7 +222,7 @@ public class RobotContainer {
 
     Command coralSource =
         Commands.parallel(
-            elevator.setPoint(() -> 5.4 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 6.19 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 26));
 
     // Command coralL1 =
