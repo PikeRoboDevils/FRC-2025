@@ -281,11 +281,11 @@ public class RobotContainer {
 
     driverXbox
     .leftBumper()
-    .onTrue(
+    .whileTrue(
         Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
 driverXbox
     .leftBumper()
-    .onFalse(
+    .whileFalse(
         Commands.runOnce(
             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
  
@@ -331,11 +331,6 @@ driverXbox
       driverXbox
           .povUp()
           .whileTrue(reefAlignmentFactory.generateCommand("L").withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-       driverXbox
-        .povUp()
-        .toggleOnFalse(
-            Commands.runOnce(
-                () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
 
     // To Closest Source
     driverXbox.rightBumper()
