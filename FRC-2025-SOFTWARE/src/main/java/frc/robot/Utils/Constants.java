@@ -59,6 +59,7 @@ public class Constants {
 
     public static final double MAXSPEED =
         Units.feetToMeters(14.75); //driver wants "tad bit" slower
+
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS =
