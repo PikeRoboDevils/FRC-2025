@@ -2,6 +2,7 @@ package frc.robot.Utils;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.pathplanner.lib.config.ModuleConfig;
@@ -16,6 +17,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Time;
+
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -50,10 +55,11 @@ public class Constants {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];
 
-    public static boolean VISION = false;
+    public static boolean VISION = true;
 
     public static final double MAXSPEED =
-        Units.feetToMeters(14.75); // driver wants "a tad bit" slower
+        Units.feetToMeters(14.75); //driver wants "tad bit" slower
+
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS =
@@ -114,30 +120,29 @@ public class Constants {
             Units.inchesToMeters(13),
             Units.inchesToMeters(8));
 
-    public static String CAM2N = "RIGHT_CAM";
-    // GOOD
+    // public static String CAM3N = "ELEV_CAM";
+
+    // public static Rotation3d CAM3R =
+    //     new Rotation3d(Math.PI, 0, 0);
+
+    // public static Translation3d CAM3T =
+    //     new Translation3d(
+    //         Units.inchesToMeters(4.5), // transform of camera (dont forget forward+ left+ up+)
+    //         Units.inchesToMeters(14), // to right
+    //         Units.inchesToMeters(14));
+
+  public static String CAM2N = "RIGHT_CAM";
+    
     public static Rotation3d CAM2R =
         new Rotation3d(0, Units.degreesToRadians(25), Units.degreesToRadians(180));
 
     public static Translation3d CAM2T =
         new Translation3d(
-            Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
-            Units.inchesToMeters(-13),
-            Units.inchesToMeters(8));
+          Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
+          Units.inchesToMeters(-13),
+          Units.inchesToMeters(8));
 
-
-    // public static Object[] CAM3 = new Object[3];
-
-    // {
-    //   CAM3[0] = "FrontIn";
-
-    //   CAM3[1] = new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(20));
-
-    //   CAM3[2] =
-    //       new Translation3d(
-    //           Units.inchesToMeters(4), // transform of camera (dont forget forward+ left+ up+)
-    //           Units.inchesToMeters(-10.687),
-    //           Units.inchesToMeters(20.915));
+   
     // }
 
     // it goes up to 4 but it is commented out in SwerveVision
@@ -166,8 +171,23 @@ public class Constants {
     public static final String DEFAULT = "";
 
     public static Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
-    public static PathConstraints constraints =
-        new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    public static PathConstraints kTeleopPathConstraints =
+        new PathConstraints(2.5, 5.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    public static PathConstraints kAutoPathConstraints =
+        new PathConstraints(2.0, 1.0, Units.degreesToRadians(360), Units.degreesToRadians(180));
+
+
+        // AUTO Align 
+    public static Time kEndTriggerDebounce = Time.ofBaseUnits(1, Seconds);
+
+    public static Time kTeleopAlignAdjustTimeout = Time.ofBaseUnits(10, Seconds);
+    public static Time kAutoAlignAdjustTimeout = Time.ofBaseUnits(3, Seconds);
+
+    public static Distance kPositionTolerance = Distance.ofBaseUnits(1, Inches);
+    public static Distance kSpeedTolerance = Distance.ofBaseUnits(1, Inches);
+    public static Rotation2d kRotationTolerance = Rotation2d.fromDegrees(1);
   }
 
   public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??
