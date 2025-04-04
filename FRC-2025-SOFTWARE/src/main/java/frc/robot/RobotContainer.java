@@ -275,8 +275,8 @@ public class RobotContainer {
     // driverXbox.x().whileTrue(Commands.run());
 
     // Season Specififc
-    driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 3)); // In
-    driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 1.25)); // In
+    driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 3)).toggleOnFalse(intake.setVoltage(()->1.25)); // In
+    // driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 1.25)); // In
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
     driverXbox
