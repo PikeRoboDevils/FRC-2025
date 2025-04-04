@@ -330,6 +330,14 @@ public class Swerve extends SubsystemBase {
          
             Xvalue = LeftX.getAsDouble();
             Yvalue = LeftY.getAsDouble();
+            if (DriverStation.getAlliance().isPresent())
+            {
+              if (DriverStation.getAlliance().get() == Alliance.Red)
+              {
+                Xvalue = -Xvalue;
+                Yvalue = -Yvalue;
+              } 
+            }
        
 
           ChassisSpeeds desiredSpeeds =
