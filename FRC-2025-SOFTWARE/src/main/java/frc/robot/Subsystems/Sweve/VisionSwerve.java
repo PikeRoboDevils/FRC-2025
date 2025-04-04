@@ -406,7 +406,7 @@ public class VisionSwerve {
             PoseCameraConstants.CAM2T, // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
         VecBuilder.fill(
-            n1StndardDevs * 0, n2StandardDevs * 0, n4StandardDevs * 0) // std devs
+            n1StndardDevs * 99999999, n2StandardDevs * 99999999, n4StandardDevs * 99999999) // std devs
         ),
   // CAM_3(
   //   PoseCameraConstants.CAM3N,
