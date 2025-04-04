@@ -270,9 +270,9 @@ public class RobotContainer {
     // Generic
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
-    driverXbox.a().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
-    driverXbox.a().whileFalse(Commands.run(() -> drivebase.unlock()));
-    driverXbox.x().whileTrue(stow);
+    driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
+    driverXbox.x().whileFalse(Commands.run(() -> drivebase.unlock()));
+    driverXbox.a().whileTrue(stow);
     // driverXbox.y().whileTrue(coralSource);
 
     // Season Specififc
