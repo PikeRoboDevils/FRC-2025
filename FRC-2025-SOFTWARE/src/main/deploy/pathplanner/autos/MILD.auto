@@ -5,25 +5,25 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "START MID-GH"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 2.0
+                  "pathName": "START MID-GH"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
                 }
               }
             ]
