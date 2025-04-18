@@ -86,7 +86,7 @@ public class SwerveHardware implements SwerveIO {
     // and push the offsets onto it. Throws warning if not possible
     swerveDrive.getGyro().setOffset(new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)));
     swerveDrive.getGyro().setInverted(false);
-    resetOdometry(Constants.Swerve.STARTING_POSE);
+    // resetOdometry(Constants.Swerve.STARTING_POSE);
     modules = swerveDrive.getModules();
 
     lfAngleMotor = modules[0].getAngleMotor();

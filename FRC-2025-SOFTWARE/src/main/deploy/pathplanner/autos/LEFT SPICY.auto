@@ -40,6 +40,25 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "EF - LEFT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
                 "type": "named",
                 "data": {
                   "name": "SOURCE"
@@ -52,9 +71,9 @@
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "EF - LEFT"
+                  "name": "SOURCE_AUTO_ALIGN"
                 }
               }
             ]
@@ -96,6 +115,25 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "CD - LEFT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CORAL_IN"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
                 "type": "named",
                 "data": {
                   "name": "SOURCE"
@@ -108,9 +146,9 @@
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "CD - LEFT"
+                  "name": "SOURCE_AUTO_ALIGN"
                 }
               }
             ]

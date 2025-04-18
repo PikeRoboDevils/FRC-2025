@@ -88,7 +88,7 @@ public class Swerve extends SubsystemBase {
     this.io = swerveIO;
     Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
 
-    // CameraServer.startAutomaticCapture("climb", 0).setResolution(200, 400);
+    CameraServer.startAutomaticCapture().setResolution(400, 800);
 
     // CameraServer.startAutomaticCapture("elev", 1).setResolution(200, 400);
 
@@ -223,18 +223,18 @@ public class Swerve extends SubsystemBase {
           config,
           // The robot configuration
 
-          () -> false, // keep on blue for now
-          // () -> {
-          //   // Boolean supplier that controls when the path will be mirrored for the red alliance
-          //   // This will flip the path being followed to the red side of the field.
-          //   // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          // () -> false, // keep on blue for now
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-          //   var alliance = DriverStation.getAlliance();
-          //   if (alliance.isPresent()) {
-          //     return alliance.get() == DriverStation.Alliance.Red;
-          //   }
-          //   return false;
-          // },
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
           this
           // Reference to this subsystem to set requirements
           );
@@ -330,6 +330,14 @@ public class Swerve extends SubsystemBase {
          
             Xvalue = LeftX.getAsDouble();
             Yvalue = LeftY.getAsDouble();
+            if (DriverStation.getAlliance().isPresent())
+            {
+              if (DriverStation.getAlliance().get() == Alliance.Red)
+              {
+                Xvalue = -Xvalue;
+                Yvalue = -Yvalue;
+              } 
+            }
        
 
           ChassisSpeeds desiredSpeeds =

@@ -222,7 +222,7 @@ public class RobotContainer {
 
     Command coralSource =
         Commands.parallel(
-            elevator.setPoint(() -> 5.4 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 6.19 + operatorXbox.getLeftY() * 2),
             wrist.setAngle(() -> 26));
 
     // Command coralL1 =
@@ -232,7 +232,8 @@ public class RobotContainer {
 
     Command coralL2 =
         Commands.parallel(
-            elevator.setPoint(() -> 5.4 + operatorXbox.getLeftY() * 2),
+            elevator.setPoint(() -> 6.0 + operatorXbox.getLeftY() * 2),
+
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     NamedCommands.registerCommand("L2", coralL2);
 
@@ -270,21 +271,23 @@ public class RobotContainer {
     // Generic
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity.withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
-    driverXbox.a().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
-    driverXbox.a().whileFalse(Commands.run(() -> drivebase.unlock()));
-    // driverXbox.x().whileTrue(Commands.run());
+    driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
+    driverXbox.x().whileFalse(Commands.run(() -> drivebase.unlock()));
+    driverXbox.a().whileTrue(stow);
+    // driverXbox.y().whileTrue(coralSource);
 
     // Season Specififc
-    driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 2)); // In
+    driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 3)).toggleOnFalse(intake.setVoltage(()->1.25)); // In
+    // driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 1.25)); // In
+
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
     driverXbox
     .leftBumper()
-    .toggleOnTrue(
-        Commands.runOnce(() -> drivebase.setDefaultCommand(driveControlled), drivebase));
+    .onTrue(driveControlled); 
 driverXbox
     .leftBumper()
-    .toggleOnFalse(
+    .onFalse(
         Commands.runOnce(
             () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
  
@@ -330,11 +333,6 @@ driverXbox
       driverXbox
           .povUp()
           .whileTrue(reefAlignmentFactory.generateCommand("L").withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-       driverXbox
-        .povUp()
-        .toggleOnFalse(
-            Commands.runOnce(
-                () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
 
     // To Closest Source
     driverXbox.rightBumper()
