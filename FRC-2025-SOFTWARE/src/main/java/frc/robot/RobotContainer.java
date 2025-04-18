@@ -233,6 +233,7 @@ public class RobotContainer {
     Command coralL2 =
         Commands.parallel(
             elevator.setPoint(() -> 6.0 + operatorXbox.getLeftY() * 2),
+
             wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
     NamedCommands.registerCommand("L2", coralL2);
 
@@ -268,7 +269,7 @@ public class RobotContainer {
     // Drive Controller Commands
 
     // Generic
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity.withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
     driverXbox.x().whileFalse(Commands.run(() -> drivebase.unlock()));
@@ -278,6 +279,7 @@ public class RobotContainer {
     // Season Specififc
     driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 3)).toggleOnFalse(intake.setVoltage(()->1.25)); // In
     // driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 1.25)); // In
+
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
     driverXbox
