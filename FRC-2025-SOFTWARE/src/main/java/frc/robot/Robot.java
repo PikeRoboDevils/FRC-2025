@@ -111,7 +111,6 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    RobotContainer.elevator.reset();
   }
 
   @Override
@@ -131,6 +130,5 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
-    RobotContainer.elevator.disabled();
   }
 }

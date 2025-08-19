@@ -19,16 +19,10 @@ public class Elevator extends SubsystemBase {
   ElevatorIO io;
 
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
-  private Pose3d _stage1Visuals;
-  private Pose3d _stage2Visuals;
-  public Pose3d stage3Visuals;
+  public Pose3d stage1Visuals, stage2Visuals, stage3Visuals= new Pose3d(); 
 
   public Elevator(ElevatorIO elevatorIO) {
     this.io = elevatorIO;
-
-    _stage1Visuals = new Pose3d(new Translation3d(), new Rotation3d());
-    _stage2Visuals = new Pose3d(new Translation3d(), new Rotation3d());
-    stage3Visuals = new Pose3d(new Translation3d(), new Rotation3d());
   }
 
   @Override
@@ -38,15 +32,15 @@ public class Elevator extends SubsystemBase {
     Logger.processInputs("Elevator", inputs);
 
     // TODO: Remove all "/13.5" once absolute encoder is added
-    _stage1Visuals =
+    stage1Visuals =
         new Pose3d(
             new Translation3d(
                 Units.inchesToMeters(3.55),
                 0,
                 (io.getPosition() / 3) / 13.5 + Units.inchesToMeters(5.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
-    _stage2Visuals =
-        new Pose3d(
+    stage2Visuals =
+       new Pose3d(
             new Translation3d(
                 Units.inchesToMeters(3.55),
                 0,
@@ -60,10 +54,10 @@ public class Elevator extends SubsystemBase {
                 (io.getPosition() / 13.5) + Units.inchesToMeters(7.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
 
-    Logger.recordOutput("Components/Stage1", _stage1Visuals);
-    Logger.recordOutput("Components/Stage2", _stage2Visuals);
+    Logger.recordOutput("Components/Stage1", stage1Visuals);
+    Logger.recordOutput("Components/Stage2", stage2Visuals);
     Logger.recordOutput("Components/Stage3", stage3Visuals);
-    // This method will be called once per scheduler run
+
   }
 
   public Command setPoint(DoubleSupplier position) {

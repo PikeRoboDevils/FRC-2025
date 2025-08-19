@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +38,7 @@ import frc.robot.Subsystems.Wrist.WristIO;
 import frc.robot.Subsystems.Wrist.WristSim;
 import frc.robot.Utils.AlignToReef;
 import frc.robot.Utils.DriveToSource;
+import frc.robot.Utils.ElevatorWrist;
 import frc.robot.Utils.Constants;
 import frc.robot.Utils.Constants.OperatorConstants;
 import frc.robot.Utils.commands.AbsoluteDriveAdv;
@@ -52,38 +54,37 @@ public class RobotContainer {
   private final Swerve drivebase = new Swerve(new SwerveHardware());
 
   private final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-//   private DriveTo otfPathFactory = new DriveTo(drivebase,tagLayout); //do not use will get confusing
+
   private AlignToReef reefAlignmentFactory = new AlignToReef(drivebase, tagLayout); // we love 4915
   private DriveToSource sourcePathFactory = new DriveToSource(drivebase,tagLayout);
 
-  public static Wrist wrist; // TODO: temp solution
-  public static Elevator elevator; // TODO: temp solution
+  private ElevatorWrist EWHandler;
+
+  public Wrist wrist;
+  public Elevator elevator;
   private Climber climb;
   private CoralIntake intake;
+
+  public static Pose3d WristPose,ElevetorTop;
 
   private final LoggedDashboardChooser<Command> autoChooser =
       new LoggedDashboardChooser<>("Auto Chooser");
 
-  private final Field2d field;
+  private final Field2d field = new Field2d();
   
   public RobotContainer() {
     if (Robot.isReal()) {   
 
       elevator = new Elevator(new ElevatorHardware());
-      wrist = new Wrist(new WristHardware(), elevator);
+      wrist = new Wrist(new WristHardware(), elevator); // Locations depend on each other
       climb = new Climber(new ClimberHardware());
       intake = new CoralIntake(new CoralIntakeHardware());
 
     } else if (Robot.isSimulation()) {
-
+        
       elevator = new Elevator(new ElevatorSim());
-      wrist =
-          new Wrist(
-              new WristSim(),
-              elevator); // pass the current location of the wrist due to the stacked dof with
-      // seperate subsystems
+      wrist = new Wrist(new WristSim(), elevator); 
       climb = new Climber(new ClimberSim());
-
       // pass swerve sim to intake
       if (drivebase.getAsSim().isPresent()) {
       intake = new CoralIntake(new CoralIntakeSim(drivebase.getAsSim().get())); 
@@ -92,20 +93,20 @@ public class RobotContainer {
     } else {
 
       elevator = new Elevator(new ElevatorIO() {});
-      wrist =
-          new Wrist(
-              new WristIO() {},
-              elevator); // pass the current location of the wrist due to the stacked dof with
-      // seperate subsystems
+      wrist = new Wrist(new WristIO() {}, elevator); 
       climb = new Climber(new ClimberIO() {});
       intake = new CoralIntake(new CoralIntakeIO() {});
     }
 
+    WristPose = wrist._wristPose;
+    ElevetorTop =elevator.stage3Visuals;
 
-
-    // breifly brings elevator down and resets its position
-    // Command home = elevator.setVoltage(()->-1).andThen(()->elevator.reset()).withTimeout(0.1);
-    // NamedCommands.registerCommand("E_RESET",home);
+    // handles all Elevator and Wrist movement
+    EWHandler = new ElevatorWrist(
+        elevator,
+        wrist,
+        ()->operatorXbox.getLeftY(),// Shim
+        ()->operatorXbox.getRightY());
 
     // Auto Align
     // NamedCommands.registerCommand("AUTO_ALIGN", drivebase.autoAlign(0));
@@ -114,19 +115,9 @@ public class RobotContainer {
 
     // Intake Auto Commands
     NamedCommands.registerCommand("CORAL_IN", intake.setVoltage(()->1)); // NEVER STOPS
-    NamedCommands.registerCommand("CORAL_OUT", intake.runOutakeAuto(-3));// ALMOST INSTANT
-    NamedCommands.registerCommand("L_CORAL_OUT", intake.runOutakeAuto(-1)); // ALMOST INSTANT
+    NamedCommands.registerCommand("CORAL_OUT", intake.setVoltage(()->-3,0.25));
+    NamedCommands.registerCommand("L_CORAL_OUT", intake.setVoltage(()->-1,0.25));
 
-    NamedCommands.registerCommand("L1", wrist.home()); // ALMOST INSTANT
-    // Command autoSource = Commands.deadline(
-    Command autoSource = Commands.parallel(elevator.setPoint(() -> 7.2), wrist.setAngle(() -> 30)).withTimeout(3);
-    // .until(()->intake.hasCoral()); // FIXED
-
-    NamedCommands.registerCommand("SOURCE", autoSource);
-
-    // Other levels are with the operator commands
-
-    field = new Field2d();
 
     configureBindings();
 
@@ -148,8 +139,6 @@ public class RobotContainer {
 
     // logging autos
     autoChooser.addDefaultOption("DEFAULT", AutoBuilder.buildAuto(Constants.PathPlanner.DEFAULT));
-    // autoChooser.addOption("PISSID-DRIVE", drivebase.sysIdDriveMotorCommand());
-    // autoChooser.addOption("PISSID-ANGLE", drivebase.sysIdAngleMotorCommand());
     String[] autos = AutoBuilder.getAllAutoNames().toArray(new String[0]);
     for (int i = 0; i < autos.length; i++) {
       autoChooser.addOption(autos[i], AutoBuilder.buildAuto(autos[i]));
@@ -158,26 +147,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser.getSendableChooser());
   }
 
-//   private Command SetRobotState(Constants.RobotState robotState) {
-//     return Commands.parallel(
-//         elevator.setPoint(() -> robotState.ElevatorPos),
-//         Commands.waitSeconds(.5).andThen(() -> wrist.setAngle(() -> robotState.WristPos)));
-//   }
-
   private void configureBindings() {
-
-    // closedAbsoluteDriveAdv does not work at least in sim dont use it :)
-    AbsoluteDriveAdv closedAbsoluteDriveAdv =
-        new AbsoluteDriveAdv(
-            drivebase,
-            () -> -MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> -MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () ->
-                -MathUtil.applyDeadband(driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
-            driverXbox.getHID()::getYButtonPressed,
-            driverXbox.getHID()::getAButtonPressed,
-            driverXbox.getHID()::getXButtonPressed,
-            driverXbox.getHID()::getBButtonPressed);
 
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle =
@@ -195,13 +165,6 @@ public class RobotContainer {
             () ->
                 MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             () -> 4);
-    Command driveFieldOrientedHybrid =
-        drivebase.fieldRelativeTeleop(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
-            () ->
-                MathUtil.applyDeadband(-driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
-            () -> 2.5);
 
     // same as driveFieldOrientedAnglularVelocity but slower
     Command driveControlled =
@@ -216,56 +179,10 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverXbox.getRightX()*.25, OperatorConstants.RIGHT_X_DEADBAND),
             () -> 2);
 
-    Command stow = Commands.parallel(elevator.setPoint(() -> 0),
-        wrist.setAngle(() -> 30));
-    NamedCommands.registerCommand("STOW", stow);
 
-    Command coralSource =
-        Commands.parallel(
-            elevator.setPoint(() -> 6.19 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 26));
 
-    // Command coralL1 =
-    //     Commands.parallel(
-    //         elevator.setPoint(() -> 3 + operatorXbox.getLeftY() * 2),
-    //         wrist.setAngle(() -> 26 + operatorXbox.getRightY() * 10));
 
-    Command coralL2 =
-        Commands.parallel(
-            elevator.setPoint(() -> 6.0 + operatorXbox.getLeftY() * 2),
-
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
-    NamedCommands.registerCommand("L2", coralL2);
-
-    Command algaeL2 =
-        Commands.parallel(
-            elevator.setPoint(() -> 3.4 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 30 + operatorXbox.getRightY() * 10));
-    Command coralL3 =
-        Commands.parallel(
-            elevator.setPoint(() -> 11.76 + operatorXbox.getLeftY() * 2), 
-            wrist.setAngle(() -> 0 + operatorXbox.getRightY() * 10));
-    NamedCommands.registerCommand("L3", coralL3);
-
-    Command algaeL3 =
-        Commands.parallel(
-            elevator.setPoint(() -> 13.45 + operatorXbox.getLeftY() * 2),
-            wrist.setAngle(() -> 26 + operatorXbox.getRightY() * 10));
-    Command coralL4 =
-        Commands.parallel(
-            elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),            
-            wrist.setAngle(() -> -50.65+ operatorXbox.getRightY() * 10));
-            NamedCommands.registerCommand("L4", coralL4);
-    // Command coralL4AUTO =
-    //     Commands.parallel(
-    //             elevator.setPoint(() -> 25.4 + operatorXbox.getLeftY() * 2),
-    //             wrist.setAngle(() -> -50.65 + operatorXbox.getRightY() * 10))
-    //         .until(() -> !intake.hasCoral());
     
-
-    // im not sure where the inversions are supposed to be but right now
-    // it takes inverted controls and returns the correct speeds
-
     // Drive Controller Commands
 
     // Generic
@@ -273,23 +190,21 @@ public class RobotContainer {
     driverXbox.b().whileTrue(Commands.runOnce(() -> drivebase.zeroGyro()));
     driverXbox.x().whileTrue(Commands.runOnce(() -> drivebase.lock()).repeatedly());
     driverXbox.x().whileFalse(Commands.run(() -> drivebase.unlock()));
-    driverXbox.a().whileTrue(stow);
-    // driverXbox.y().whileTrue(coralSource);
+    driverXbox.a().whileTrue(EWHandler.stow());
 
     // Season Specififc
     driverXbox.rightTrigger().whileTrue(intake.setVoltage(() -> 3)).toggleOnFalse(intake.setVoltage(()->1.25)); // In
-    // driverXbox.rightTrigger().toggleOnTrue(intake.setVoltage(() -> 1.25)); // In
 
     driverXbox.leftTrigger().whileTrue(intake.setVoltage(() -> -3)); // Out
 
     driverXbox
-    .leftBumper()
-    .onTrue(driveControlled); 
-driverXbox
-    .leftBumper()
-    .onFalse(
-        Commands.runOnce(
-            () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
+        .leftBumper()
+        .onTrue(driveControlled); 
+    driverXbox
+        .leftBumper()
+        .onFalse(
+            Commands.runOnce(
+                () -> drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity), drivebase));
  
 
     // Overides
@@ -306,19 +221,25 @@ driverXbox
         .whileFalse(climb.setVoltage(() -> 0)); // POSITIVE IS DOWN
 
     // Elevator & Wrist
-    operatorXbox.start().onTrue(Commands.runOnce(() -> elevator.reset(), elevator));
+    operatorXbox.start().onTrue(Commands.runOnce(() -> elevator.reset(), elevator)); // manual zero
 
-    operatorXbox.a().onTrue(stow);
+    NamedCommands.registerCommand("STOW",EWHandler.stow(1));
+    operatorXbox.a().onTrue(EWHandler.stow());
 
-    operatorXbox.rightBumper().onTrue(coralSource);
+    NamedCommands.registerCommand("SOURCE",EWHandler.coralSource(1) );
+    operatorXbox.rightBumper().onTrue(EWHandler.coralSource());
 
-    operatorXbox.b().onTrue(coralL2);
-    operatorXbox.b().and(operatorXbox.povUp()).whileTrue(algaeL2);
+    NamedCommands.registerCommand("L2",EWHandler.coralL2(1) );
+    operatorXbox.b().onTrue(EWHandler.coralL2());
+    // operatorXbox.b().and(operatorXbox.povUp()).whileTrue(EWHandler.algaeL2());
 
-    operatorXbox.x().onTrue(coralL3);
-    operatorXbox.x().and(operatorXbox.povUp()).whileTrue(algaeL3);
+    NamedCommands.registerCommand("L3",EWHandler.coralL3(1) );
+    operatorXbox.x().onTrue(EWHandler.coralL3());
+    // operatorXbox.x().and(operatorXbox.povUp()).whileTrue(EWHandler.algaeL3());
 
-    operatorXbox.y().onTrue(coralL4);
+    NamedCommands.registerCommand("L4",EWHandler.coralL4(1) );
+    operatorXbox.y().onTrue(EWHandler.coralL4());
+
 
 
 
@@ -338,14 +259,6 @@ driverXbox
     driverXbox.rightBumper()
         .whileTrue(sourcePathFactory.generateCommand());
         // im too proud to remove this 
-        
-    // //if not working look at logged commands
-    // // if is working but bad uncomment the other PID values
-    // driverXbox.povLeft()
-    // .whileTrue(Commands.defer(()->drivebase.autoAlign(0),Set.of()));
-        
-    // driverXbox.povRight()
-    // .whileTrue(Commands.defer(()->drivebase.autoAlign(1),Set.of()));
 }
   }
 

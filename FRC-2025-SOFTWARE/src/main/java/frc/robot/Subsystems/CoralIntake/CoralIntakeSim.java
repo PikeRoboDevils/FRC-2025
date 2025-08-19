@@ -67,7 +67,7 @@ public class CoralIntakeSim implements CoralIntakeIO {
     flywheel.setInputVoltage(speed);
 
     //could be better
-    Double elev = RobotContainer.elevator.stage3Visuals.getMeasureZ().abs(Meters);
+    Double elev = RobotContainer.ElevetorTop.getMeasureZ().abs(Meters);
 
     if (speed > 1 && elev > 0.5){
       intakeSim.startIntake();
@@ -115,7 +115,7 @@ public class CoralIntakeSim implements CoralIntakeIO {
 
   public void tryScore() {
     //intake pose
-    Pose3d intake = RobotContainer.wrist._wristPose;
+    Pose3d intake = RobotContainer.WristPose;
     if (!hasCoral()) {return;}
 
     intakeSim.obtainGamePieceFromIntake();

@@ -87,12 +87,15 @@ public class Swerve extends SubsystemBase {
   public Swerve(SwerveIO swerveIO) {
     this.io = swerveIO;
     Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
-
+    
+    if (Robot.isReal()) {
     CameraServer.startAutomaticCapture().setResolution(400, 800);
 
     // CameraServer.startAutomaticCapture("elev", 1).setResolution(200, 400);
 
     //  Camera = CameraServer.addSwitchedCamera("DriverCam");
+    }
+
 
     // Set Pose for tag ID and location (0 = alliance wall left 1 = alliance wall right) //this is
     // blue alliance

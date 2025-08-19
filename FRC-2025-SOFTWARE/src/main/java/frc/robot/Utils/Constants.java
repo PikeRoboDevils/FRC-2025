@@ -55,7 +55,7 @@ public class Constants {
 
     public static Pose2d[][] targetPosition = new Pose2d[23][3];
 
-    public static boolean VISION = true;
+    public static boolean VISION = false;
 
     public static final double MAXSPEED =
         Units.feetToMeters(15); //driver wants "tad bit" slower
