@@ -11,13 +11,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Utils.Constants;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
-
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
@@ -238,7 +235,7 @@ public class SwerveHardware implements SwerveIO {
   }
 
   @Override
-  public Optional<SwerveDriveSimulation> getSim(){
+  public Optional<SwerveDriveSimulation> getSim() {
     return swerveDrive.getMapleSimDrive();
   }
 

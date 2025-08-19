@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Robot;
 import frc.robot.Utils.Constants;
 import frc.robot.Utils.Constants.PoseCameraConstants;
-
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -393,20 +392,17 @@ public class VisionSwerve {
     CAM_1(
         PoseCameraConstants.CAM1N,
         PoseCameraConstants.CAM1R, // rotation of camera
-            PoseCameraConstants.CAM1T, // transform of camera (dont forget forwatd+ left+ up+)
+        PoseCameraConstants.CAM1T, // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
-        VecBuilder.fill(
-            n1StndardDevs * 0, n2StandardDevs * 0, n4StandardDevs * 0) // std devs
+        VecBuilder.fill(n1StndardDevs * 0, n2StandardDevs * 0, n4StandardDevs * 0) // std devs
         ),
 
     CAM_2(
         PoseCameraConstants.CAM2N,
         PoseCameraConstants.CAM2R, // rotation of camera
-
-            PoseCameraConstants.CAM2T, // transform of camera (dont forget forwatd+ left+ up+)
+        PoseCameraConstants.CAM2T, // transform of camera (dont forget forwatd+ left+ up+)
         VecBuilder.fill(n1StndardDevs, n2StandardDevs, n4StandardDevs),
-        VecBuilder.fill(
-            n1StndardDevs * 0, n2StandardDevs * 0, n4StandardDevs * 0) // std devs
+        VecBuilder.fill(n1StndardDevs * 0, n2StandardDevs * 0, n4StandardDevs * 0) // std devs
         ),
   // CAM_3(
   //   PoseCameraConstants.CAM3N,

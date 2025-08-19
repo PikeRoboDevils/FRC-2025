@@ -9,10 +9,6 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
@@ -20,7 +16,6 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -35,21 +30,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Robot;
 import frc.robot.Subsystems.Sweve.VisionSwerve.Cameras;
 import frc.robot.Utils.Constants;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
-
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
-import swervelib.SwerveDriveTest;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveDriveConfiguration;
 
@@ -87,15 +74,14 @@ public class Swerve extends SubsystemBase {
   public Swerve(SwerveIO swerveIO) {
     this.io = swerveIO;
     Constants.Swerve.targetPosition[17][0] = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
-    
+
     if (Robot.isReal()) {
-    CameraServer.startAutomaticCapture().setResolution(400, 800);
+      CameraServer.startAutomaticCapture().setResolution(400, 800);
 
-    // CameraServer.startAutomaticCapture("elev", 1).setResolution(200, 400);
+      // CameraServer.startAutomaticCapture("elev", 1).setResolution(200, 400);
 
-    //  Camera = CameraServer.addSwitchedCamera("DriverCam");
+      //  Camera = CameraServer.addSwitchedCamera("DriverCam");
     }
-
 
     // Set Pose for tag ID and location (0 = alliance wall left 1 = alliance wall right) //this is
     // blue alliance
@@ -130,9 +116,9 @@ public class Swerve extends SubsystemBase {
         new Pose2d(new Translation2d(5.011, 2.802), new Rotation2d(Units.degreesToRadians(121)));
 
     // Setup the closed loop controllers for auto align
-    double TkP = 1; // 1.4; // From 868 
-    double TkI = 0; 
-    double TkD = 0.5; // 0.05 // From 868 
+    double TkP = 1; // 1.4; // From 868
+    double TkI = 0;
+    double TkD = 0.5; // 0.05 // From 868
     TrapezoidProfile.Constraints tConstraints =
         new TrapezoidProfile.Constraints(
             io.getMaxVelocity(),
@@ -140,12 +126,12 @@ public class Swerve extends SubsystemBase {
                 / 2); // not making the accel limit negative causes it to do weird stuff with its
     // first move
 
-    double fS = 0.03; //868 didnt have Feedforward
+    double fS = 0.03; // 868 didnt have Feedforward
     double fV = 2;
 
-    double RkP = 6; //1.3 // From 868 
-    double RkI = 0; 
-    double RkD = 0; // 0.05 // From 868 
+    double RkP = 6; // 1.3 // From 868
+    double RkI = 0;
+    double RkD = 0; // 0.05 // From 868
     TrapezoidProfile.Constraints rConstraints =
         new TrapezoidProfile.Constraints(
             io.getMaxAnglularVelocity(), io.getMaxAnglularVelocity() / 1.5);
@@ -330,18 +316,15 @@ public class Swerve extends SubsystemBase {
           double Xvalue;
           double Yvalue;
           if (isLocked) return; // to prevent accidental movement while locked
-         
-            Xvalue = LeftX.getAsDouble();
-            Yvalue = LeftY.getAsDouble();
-            if (DriverStation.getAlliance().isPresent())
-            {
-              if (DriverStation.getAlliance().get() == Alliance.Red)
-              {
-                Xvalue = -Xvalue;
-                Yvalue = -Yvalue;
-              } 
+
+          Xvalue = LeftX.getAsDouble();
+          Yvalue = LeftY.getAsDouble();
+          if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == Alliance.Red) {
+              Xvalue = -Xvalue;
+              Yvalue = -Yvalue;
             }
-       
+          }
 
           ChassisSpeeds desiredSpeeds =
               io.getTargetSpeeds(Yvalue, Xvalue, new Rotation2d(RightX.getAsDouble() * Math.PI));
@@ -390,8 +373,8 @@ public class Swerve extends SubsystemBase {
 
   // TODO: add to robot container
 
-  /** Aligns the robot to the requested reef pose automatically
-   * Will need the reef in view to work 
+  /**
+   * Aligns the robot to the requested reef pose automatically Will need the reef in view to work
    */
   public Command autoAlign(int position) {
 
@@ -441,9 +424,8 @@ public class Swerve extends SubsystemBase {
     Logger.recordOutput("Odometry/driveToPose/translateYPID", translateY.getPositionError());
     Logger.recordOutput("Odometry/driveToPose/rotatePID", rotateControl.getPositionError());
 
-
     if (Robot.isSimulation()) {
-      if (io.getSimPose().isPresent()) { 
+      if (io.getSimPose().isPresent()) {
         Logger.recordOutput("Odometry/SimPose", io.getSimPose().get());
         // vision.visionSim.update(io.getPose());
       }
@@ -487,6 +469,7 @@ public class Swerve extends SubsystemBase {
     return io.getPose();
     // use getPose() for the default pose
   }
+
   public Pose2d getSimPose() {
     if (io.getSimPose().isEmpty()) return io.getPose();
     return io.getSimPose().get();
@@ -645,8 +628,7 @@ public class Swerve extends SubsystemBase {
   //       SwerveDriveTest.setAngleSysIdRoutine(new Config(), this, io.getSwerve()), 3.0, 5.0, 3.0);
   // }
 
-  public Optional<SwerveDriveSimulation> getAsSim(){
+  public Optional<SwerveDriveSimulation> getAsSim() {
     return io.getSim();
   }
-
 }

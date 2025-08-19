@@ -17,10 +17,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
-
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -57,8 +55,7 @@ public class Constants {
 
     public static boolean VISION = false;
 
-    public static final double MAXSPEED =
-        Units.feetToMeters(15); //driver wants "tad bit" slower
+    public static final double MAXSPEED = Units.feetToMeters(15); // driver wants "tad bit" slower
 
     // taken from offseason swerve
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
@@ -131,19 +128,17 @@ public class Constants {
     //         Units.inchesToMeters(14), // to right
     //         Units.inchesToMeters(14));
 
-  public static String CAM2N = "RIGHT_CAM";
-    
+    public static String CAM2N = "RIGHT_CAM";
+
     public static Rotation3d CAM2R =
         new Rotation3d(0, Units.degreesToRadians(25), Units.degreesToRadians(180));
 
     public static Translation3d CAM2T =
         new Translation3d(
-          Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
-          Units.inchesToMeters(-13),
-          Units.inchesToMeters(8));
+            Units.inchesToMeters(-4), // transform of camera (dont forget forward+ left+ up+)
+            Units.inchesToMeters(-13),
+            Units.inchesToMeters(8));
 
-
-   
     // }
 
     // it goes up to 4 but it is commented out in SwerveVision
@@ -174,13 +169,14 @@ public class Constants {
     public static Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
 
     public static PathConstraints kTeleopPathConstraints =
-        new PathConstraints(Units.feetToMeters(12), 4.3, Units.degreesToRadians(540), Units.degreesToRadians(720));
+        new PathConstraints(
+            Units.feetToMeters(12), 4.3, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     public static PathConstraints kAutoPathConstraints =
-        new PathConstraints(Units.feetToMeters(6), 1.0, Units.degreesToRadians(540), Units.degreesToRadians(540));
+        new PathConstraints(
+            Units.feetToMeters(6), 1.0, Units.degreesToRadians(540), Units.degreesToRadians(540));
 
-
-        // AUTO Align 
+    // AUTO Align
     public static Time kEndTriggerDebounce = Time.ofBaseUnits(1, Seconds);
 
     public static Time kTeleopAlignAdjustTimeout = Time.ofBaseUnits(10, Seconds);
@@ -192,7 +188,7 @@ public class Constants {
   }
 
   public static final Mode currentMode = Mode.SIM; // TODO:IS MODE SET CURRECTLY??
-  
+
   public static enum Mode {
     /** Running on a real robot. */
     REAL,
@@ -232,7 +228,7 @@ public class Constants {
     // NEW ELEVATOR TUNING
     public static final double kP_Elev = 5;
     public static final double kI_Elev = 0;
-    public static final double kD_Elev = 0.05 ;
+    public static final double kD_Elev = 0.05;
 
     public static final double kG_Elev = 0.3;
     public static final double kV_Elev = 0.6;

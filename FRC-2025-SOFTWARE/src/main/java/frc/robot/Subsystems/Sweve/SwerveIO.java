@@ -10,7 +10,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Force;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import java.util.Optional;
-
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.AutoLog;
 import swervelib.SwerveController;

@@ -7,14 +7,11 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Utils.AutoDrive.Simulation;
 import frc.robot.Utils.Constants;
 import frc.robot.Utils.LoggedCommandScheduler;
-import frc.robot.Utils.Simulation;
-
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -27,7 +24,6 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
 
   public Robot() {
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
@@ -74,7 +70,6 @@ public class Robot extends LoggedRobot {
     LoggedCommandScheduler.periodic();
   }
 
-  
   // simulation period method in your Robot.java
   @Override
   public void simulationPeriodic() {
@@ -101,7 +96,7 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    if (Robot.isSimulation()){
+    if (Robot.isSimulation()) {
       SimulatedArena.getInstance().resetFieldForAuto();
     }
   }
@@ -129,6 +124,5 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void disabledInit() {
-  }
+  public void disabledInit() {}
 }

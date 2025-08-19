@@ -19,7 +19,7 @@ public class Elevator extends SubsystemBase {
   ElevatorIO io;
 
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
-  public Pose3d stage1Visuals, stage2Visuals, stage3Visuals= new Pose3d(); 
+  public Pose3d stage1Visuals, stage2Visuals, stage3Visuals = new Pose3d();
 
   public Elevator(ElevatorIO elevatorIO) {
     this.io = elevatorIO;
@@ -40,7 +40,7 @@ public class Elevator extends SubsystemBase {
                 (io.getPosition() / 3) / 13.5 + Units.inchesToMeters(5.6)),
             new Rotation3d(Units.degreesToRadians(90), 0, Units.degreesToRadians(90)));
     stage2Visuals =
-       new Pose3d(
+        new Pose3d(
             new Translation3d(
                 Units.inchesToMeters(3.55),
                 0,
@@ -57,7 +57,6 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Components/Stage1", stage1Visuals);
     Logger.recordOutput("Components/Stage2", stage2Visuals);
     Logger.recordOutput("Components/Stage3", stage3Visuals);
-
   }
 
   public Command setPoint(DoubleSupplier position) {
@@ -69,7 +68,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void disabled() {
-   io.setPosition(io.getPosition());
+    io.setPosition(io.getPosition());
   }
 
   public void reset() {

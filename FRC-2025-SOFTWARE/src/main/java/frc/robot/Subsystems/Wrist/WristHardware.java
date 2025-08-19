@@ -10,18 +10,13 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Utils.Constants;
 import frc.robot.Utils.Constants.*;
-
 
 /** Add your docs here. */
 public class WristHardware implements WristIO {
@@ -38,7 +33,6 @@ public class WristHardware implements WristIO {
 
   SparkMaxConfig motorConfig;
 
-
   public WristHardware() {
 
     wristMotor = new SparkMax(16, MotorType.kBrushless);
@@ -51,7 +45,6 @@ public class WristHardware implements WristIO {
      */
     internalEncoder = wristMotor.getEncoder();
     wristEncoder = wristMotor.getAbsoluteEncoder();
-
 
     // profile = new TrapezoidProfile(new Constraints(, )); // deg/s
 
@@ -67,7 +60,7 @@ public class WristHardware implements WristIO {
 
     motorConfig.smartCurrentLimit(40);
     motorConfig.idleMode(IdleMode.kCoast);
-    
+
     /*
      * Configure the encoder. For this specific example, we are using the
      * integrated encoder of the NEO, and we don't need to configure it. If
@@ -99,7 +92,6 @@ public class WristHardware implements WristIO {
      */
     wristMotor.configure(
         motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-
   }
 
   @Override
@@ -129,8 +121,8 @@ public class WristHardware implements WristIO {
   }
 
   private void runPosition(double angleDeg) {
-      double ff = 0;//_feedforward.calculate(setpoint.position,setpoint.velocity);
-      double output = positionController.calculate(getAngleDeg(), angleDeg);
+    double ff = 0; // _feedforward.calculate(setpoint.position,setpoint.velocity);
+    double output = positionController.calculate(getAngleDeg(), angleDeg);
     setVoltage(output + ff);
   }
 

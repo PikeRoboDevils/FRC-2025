@@ -6,7 +6,6 @@ package frc.robot.Subsystems.CoralIntake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -28,23 +27,20 @@ public class CoralIntake extends SubsystemBase {
 
   public Command setVoltage(DoubleSupplier volts) {
     // StartEnd is more suitable here then run
-    return startEnd(
-    () -> io.setVoltage(volts.getAsDouble()),
-    () -> io.setVoltage(0));
+    return startEnd(() -> io.setVoltage(volts.getAsDouble()), () -> io.setVoltage(0));
   }
 
   // Override for optional timeout (autonomous)
   public Command setVoltage(DoubleSupplier volts, double timeout) {
-    return startEnd(
-    () -> io.setVoltage(volts.getAsDouble()),
-    () -> io.setVoltage(0))
-    .withTimeout(timeout);
+    return startEnd(() -> io.setVoltage(volts.getAsDouble()), () -> io.setVoltage(0))
+        .withTimeout(timeout);
   }
 
   public Boolean hasCoral() {
     return io.hasCoral();
   }
-  public void addCoralSim(){
+
+  public void addCoralSim() {
     io.addCoral();
   }
 }
