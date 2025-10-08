@@ -100,6 +100,8 @@ public class Constants {
     public static final boolean driverPractice =
         false; // advantage scope has peformance issues when running mutiple robots change rendering
     // mode to standard or low
+    public static final double ElevMinVolt = -12;
+    public static final double ElevMaxVolt = 12;
   }
 
   // For Easier camera setup to be used with already made vision examples

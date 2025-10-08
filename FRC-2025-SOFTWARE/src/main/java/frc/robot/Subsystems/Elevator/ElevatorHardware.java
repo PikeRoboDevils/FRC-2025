@@ -41,7 +41,8 @@ public class ElevatorHardware implements ElevatorIO {
     Follower = new SparkMax(14, MotorType.kBrushless);
 
     Follower.setControlFramePeriodMs(
-        50); // defualt is 20 ms. The follower motor should be fine with slightly lower polling
+        50); // defualt is 20 ms. The follower motor should be fine with slightly lower
+             // polling
 
     // closedLoopController = Leader.getClosedLoopController();
 
@@ -50,10 +51,11 @@ public class ElevatorHardware implements ElevatorIO {
     // elevatorEncoder = new Encoder(0, 0, false);
     elevatorEncoder = internalEncoder; // TEMPORARY
 
-    //     // Configures the encoder to return a distance of 4 for every 256 pulses
+    // // Configures the encoder to return a distance of 4 for every 256 pulses
     // // Also changes the units of getRate
     // elevatorEncoder.setDistancePerPulse(2/2048);
-    // // Configures the encoder to consider itself stopped when its rate is below 10
+    // // Configures the encoder to consider itself stopped when its rate is below
+    // 10
     // elevatorEncoder.setMinRate(10);
     // // Reverses the direction of the encoder
     // elevatorEncoder.setReverseDirection(true);
@@ -62,19 +64,16 @@ public class ElevatorHardware implements ElevatorIO {
     // elevatorEncoder.setSamplesToAverage(5);
 
     // position control
-    _feedforward =
-        new ElevatorFeedforward(
-            Constants.Encoders.kS_Elev,
-            Constants.Encoders.kG_Elev,
-            Constants.Encoders.kV_Elev); // based on random numbers in recalc
-    positionController =
-        new PIDController(
-            Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
-    profile =
-        new TrapezoidProfile(
-            new Constraints(
-                Constants.Encoders.maxVelocityElevator,
-                Constants.Encoders.maxAccelerationElevator)); // rotations a second
+    _feedforward = new ElevatorFeedforward(
+        Constants.Encoders.kS_Elev,
+        Constants.Encoders.kG_Elev,
+        Constants.Encoders.kV_Elev); // based on random numbers in recalc
+    positionController = new PIDController(
+        Constants.Encoders.kP_Elev, Constants.Encoders.kI_Elev, Constants.Encoders.kD_Elev);
+    profile = new TrapezoidProfile(
+        new Constraints(
+            Constants.Encoders.maxVelocityElevator,
+            Constants.Encoders.maxAccelerationElevator)); // rotations a second
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
@@ -84,7 +83,8 @@ public class ElevatorHardware implements ElevatorIO {
 
     motorConfig.idleMode(IdleMode.kBrake);
     motorConfig.voltageCompensation(
-        12); // may be tweaked depending on voltage drain. Highly reccomended from a consistancy and
+        12); // may be tweaked depending on voltage drain. Highly reccomended from a
+             // consistancy and
     // smoothness standpoint
 
     motorConfig.smartCurrentLimit(40, 30);
@@ -97,28 +97,26 @@ public class ElevatorHardware implements ElevatorIO {
     motorConfig.encoder.positionConversionFactor(1).velocityConversionFactor(1);
 
     // /*
-    //  * Configure the closed loop controller. We want to make sure we set the
-    //  * feedback sensor as the primary encoder.
-    //  */
+    // * Configure the closed loop controller. We want to make sure we set the
+    // * feedback sensor as the primary encoder.
+    // */
     // motorConfig
-    //     .closedLoop
-    //     .feedbackSensor()
-    //     // Set PID values for position control. We don't need to pass a closed
-    //     // loop slot, as it will default to slot 0.
-    //     .p(0.4)
-    //     .i(0)
-    //     .d(0)
-    //     .outputRange(-1, 1)
-    //     // Set PID values for velocity control in slot 1
-    //     .p(0.0001, ClosedLoopSlot.kSlot1)
-    //     .i(0, ClosedLoopSlot.kSlot1)
-    //     .d(0, ClosedLoopSlot.kSlot1)
-    //     .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-    //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+    // .closedLoop
+    // .feedbackSensor()
+    // // Set PID values for position control. We don't need to pass a closed
+    // // loop slot, as it will default to slot 0.
+    // .p(0.4)
+    // .i(0)
+    // .d(0)
+    // .outputRange(-1, 1)
+    // // Set PID values for velocity control in slot 1
+    // .p(0.0001, ClosedLoopSlot.kSlot1)
+    // .i(0, ClosedLoopSlot.kSlot1)
+    // .d(0, ClosedLoopSlot.kSlot1)
+    // .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+    // .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-    motorConfig
-        .closedLoop
-        .maxMotion
+    motorConfig.closedLoop.maxMotion
         // Set MAXMotion parameters for position control. We don't need to pass
         // a closed loop slot, as it will default to slot 0.
         .maxVelocity(1000)
@@ -169,9 +167,12 @@ public class ElevatorHardware implements ElevatorIO {
   }
 
   private void runPosition(TrapezoidProfile.State setpoint) {
-    double ff = _feedforward.calculate(setpoint.velocity, 0);
+    // double ff = _feedforward.calculate(setpoint.velocity, 0);
     double output = positionController.calculate(getPosition(), setpoint.position);
-    setVoltage(output + ff);
+
+    if (output > Constants.OperatorConstants.ElevMinVolt && output < Constants.OperatorConstants.ElevMaxVolt ) {
+      setVoltage(output);
+    }
   }
 
   // set voltage from 0-1
@@ -189,11 +190,11 @@ public class ElevatorHardware implements ElevatorIO {
   @Deprecated // TODO: un depreciate it
   public void setVelocity(double speed) {
     // double volts =
-    //     MathUtil.clamp(
-    //         _profiledPIDController.calculate(speed, getVelocity()),
-    //         0,
-    //         0); // im lazy (also dont know if we need a set velocity)
-    //     Leader.setVoltage(volts);
+    // MathUtil.clamp(
+    // _profiledPIDController.calculate(speed, getVelocity()),
+    // 0,
+    // 0); // im lazy (also dont know if we need a set velocity)
+    // Leader.setVoltage(volts);
   }
 
   @Override
